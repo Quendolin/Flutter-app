@@ -73,12 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     
     return homePage2(callback1: _refreshMeals, callback2: _meals);
-      
-        
-      
   }
- 
-
-  
  }
 
