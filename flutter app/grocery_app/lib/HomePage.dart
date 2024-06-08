@@ -1,17 +1,14 @@
 import 'dart:async';
-import 'package:awesome_ripple_animation/awesome_ripple_animation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/create_new_meal.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:grocery_app/meal_page.dart';
 import 'package:grocery_app/new_selecting_shopping_list.dart';
 import 'package:grocery_app/search_page_meal.dart';
-import 'package:grocery_app/shopping_list_homescreen.dart';
+
 import 'package:hexcolor/hexcolor.dart';
-import 'package:touch_ripple_effect/touch_ripple_effect.dart';
+
 
 
 class homePage2 extends StatefulWidget {

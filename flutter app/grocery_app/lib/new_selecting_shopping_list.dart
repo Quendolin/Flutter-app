@@ -109,7 +109,93 @@ class _selecting_shoppingcardState extends State<selecting_shoppingcard> {
                               padding: const EdgeInsets.all(20.0),
                               child: InkWell(
                                 onTap: () {
-                                  
+                                  showModalBottomSheet(
+                                    context: context, 
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        height: MediaQuery.of(context).size.height / 2.5,
+                                        decoration: BoxDecoration(
+                                          color: HexColor("#d6e2de"),
+                                          borderRadius: BorderRadius.circular(15)
+                                        ),
+                                        child:  Center(
+                                          child: Row(
+                                            
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child: InkWell(
+                                                    child: Container(
+                                                      height: MediaQuery.of(context).size.height / 7,
+                                                      width: MediaQuery.of(context).size.width / 10,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(),
+                                                        borderRadius: BorderRadius.circular(12)
+                                                      ),
+                                                      alignment: Alignment.center,
+                                                      child: Text("Liste verwerfen", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                    )
+                                                  ),
+                                                )
+                                                 ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child: InkWell(
+                                                    onTap: () => showDialog(
+                                                      context: context, 
+                                                      builder: (context) =>  AlertDialog(
+                                                        title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
+                                                        content: TextField(
+                                                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                                          decoration: InputDecoration(
+                                                            
+                                                          fillColor: HexColor("#d6e2de"),
+                                                          filled: true,
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.black, width: 1), 
+                                                            borderRadius: BorderRadius.circular(12)
+                                                            ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.circular(12),
+                                                            borderSide: BorderSide(color: Colors.black, width: 2)
+                                                            )
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed:() {
+                                                              // Funktion für Speicherung der Liste 
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                            },
+                                                            child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
+                                                            )
+                                                        ],
+                                                      )),
+                                                    child: Container(
+                                                      alignment: Alignment.center,
+                                                      height: MediaQuery.of(context).size.height / 7,
+                                                      width: MediaQuery.of(context).size.width / 10,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(),
+                                                        borderRadius: BorderRadius.circular(12)
+                                                      ),
+                                                      child: Text("Liste speichern", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                    )
+                                                  ),
+                                                )
+                                                 )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    } 
+                                    );
                                 },
                                 child: Container(
                                   height: MediaQuery.of(context).size.height / 15,
