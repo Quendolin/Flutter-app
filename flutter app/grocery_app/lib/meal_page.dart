@@ -17,6 +17,8 @@ class _meal_pageState extends State<meal_page> {
    Get_ingridients_List() async {
     
       List<Map> list = await widget.db_ingridents_List;
+      print(list);
+      print(list.runtimeType);
       //txtcon_name_neuer_Mahlzeit.text = list[0]["title"];
 
   
@@ -29,6 +31,8 @@ class _meal_pageState extends State<meal_page> {
           Ingridient_mass_unit: instance["Ingridient_mass_unit"]
         );
        }).toList();
+       print(ingridients_list_from_meal);
+       print(ingridients_list_from_meal.runtimeType);
        name = list[0]["title"];
       
 

@@ -6,6 +6,7 @@ import 'package:grocery_app/meal_model.dart';
 import 'package:grocery_app/meal_page.dart';
 import 'package:grocery_app/new_selecting_shopping_list.dart';
 import 'package:grocery_app/search_page_meal.dart';
+import 'package:grocery_app/select_meals_for_shopping.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
@@ -468,7 +469,10 @@ class _meal_pageState extends State<homePage2> {
                                     Expanded(
                                       flex: 1,
                                       child: GestureDetector(
-                                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard(new_: true,)))),
+                                        onTap: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getItem,))));
+                                          
+                                        }, 
                                         child: Container(
                                           color: Colors.transparent,
                                           height: MediaQuery.of(context).size.height / 7,
