@@ -7,8 +7,6 @@ import 'package:hexcolor/hexcolor.dart';
 class selecting_shoppingcard extends StatefulWidget {
   const selecting_shoppingcard({super.key, required this.new_});
   final bool new_;
-
-
   @override
   State<selecting_shoppingcard> createState() => _selecting_shoppingcardState();
 }
@@ -25,8 +23,7 @@ class _selecting_shoppingcardState extends State<selecting_shoppingcard> {
     
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        
+      child: Scaffold(  
           appBar: AppBar(
             backgroundColor: HexColor("#31473A"),
             title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
@@ -59,7 +56,7 @@ class _selecting_shoppingcardState extends State<selecting_shoppingcard> {
              
             
                 Expanded(
-                  flex: 4,
+                  flex: 6,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Container(
@@ -107,38 +104,33 @@ class _selecting_shoppingcardState extends State<selecting_shoppingcard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: HexColor("#d6e2de"),
-                                  border:Border.all(),
-                                  borderRadius: BorderRadius.circular(12)
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(12.0),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: InkWell(
+                                onTap: () {
                                   
-                                    child: Text("Zutatenliste"),
-                                )),
+                                },
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height / 15,
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  decoration: BoxDecoration(
+                                    
+                                    color: HexColor("#d6e2de"),
+                                    border:Border.all(),
+                                    borderRadius: BorderRadius.circular(12)
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                      child: Center(
+                                        child: Text("Fertig", style: TextStyle(fontWeight: FontWeight.bold,))
+                                        ),
+                                  )),
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: HexColor("#d6e2de"),
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(12)
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: Text("Alle Zutaten", style: TextStyle(decoration: TextDecoration.underline),),
-                              )),
-                          )
+                          
+                          
                       ],
                     ),
                   ),

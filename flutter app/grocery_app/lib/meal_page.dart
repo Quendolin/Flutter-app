@@ -47,12 +47,18 @@ class _meal_pageState extends State<meal_page> {
     
   }
 
-  double DetermineContainerSize() {
+  double DetermineContainerSize_ingredients() {
     double containerHeight = (MediaQuery.of(context).size.height / 15) * ingridients_list_from_meal.length;
     return containerHeight;
   }
+   double DetermineContainerSize_spices() {
+    double containerHeight = (MediaQuery.of(context).size.height / 15) * spices_list_from_meal.length;
+    return containerHeight;
+   }
   String name = "name";
   late double containerHeight;
+  // ignore: non_constant_identifier_names
+  late double containerHeight_spcices;
   int second = 0; 
   // ignore: non_constant_identifier_names
   List<add_ingridients_list> ingridients_list_from_meal = [];
@@ -63,13 +69,18 @@ class _meal_pageState extends State<meal_page> {
     
     if (first == true) {
       containerHeight = 2;
+      containerHeight_spcices =2;
       Get_ingridients_List();
       
       
       first = false; 
       
     }
-    if (second == 1) {containerHeight = DetermineContainerSize() + (MediaQuery.of(context).size.height / (MediaQuery.of(context).size.height / 13));}
+    if (second == 1) {
+      containerHeight = DetermineContainerSize_ingredients() + (MediaQuery.of(context).size.height / (MediaQuery.of(context).size.height / 13));
+      containerHeight_spcices = DetermineContainerSize_spices() + (MediaQuery.of(context).size.height / (MediaQuery.of(context).size.height / 13));
+    }
+
     
 
     return Scaffold(
@@ -156,7 +167,7 @@ class _meal_pageState extends State<meal_page> {
              Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: containerHeight,
+                height: containerHeight_spcices,
                 decoration: BoxDecoration(
                   //color: HexColor("#3c634c"),
                   border: Border.all(width: 1.5, color: Colors.black),
@@ -171,7 +182,7 @@ class _meal_pageState extends State<meal_page> {
                   primary: false,
                   
                   
-                  itemCount: ingridients_list_from_meal.length,
+                  itemCount: spices_list_from_meal.length,
                   itemBuilder: (context, index) => Container(
                     height: MediaQuery.of(context).size.height / 15,
                     decoration: BoxDecoration( 
