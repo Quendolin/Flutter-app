@@ -1,6 +1,8 @@
 import 'dart:convert';
-
+import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
+import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class select_meals_for_shopping extends StatefulWidget {
@@ -16,15 +18,22 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
    select_meal(var data) async {
     List<Map> list = await data;
+    
     var dbItem = list.first;
+    
    // list = json.decode(list[0]["title"]);
     //selected_meals_list = list.map((instance) {String id = list["id"] }).toList();
-    var resid = dbItem["id"];
-    print(resid);
-    
-    
+    int id = dbItem["id"];
+    String name = dbItem["title"];
+
+    selectedMeal instance = selectedMeal(meal_title: name, meal_id: id);
+    selected_meals_list.add(instance); 
+    setState(() {});
   }
 
+
+
+  int mealSize = 1;
   List selected_meals_list = []; 
   @override
   Widget build(BuildContext context) {
@@ -106,14 +115,68 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
             ),
             child: ListView.builder(
               itemCount: selected_meals_list.length,
-              itemBuilder: (context, index) => Container(
-                child: ListTile(
-                  title: selected_meals_list[index]["title"],
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 13,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.5, color: Colors.black),
+                      borderRadius: BorderRadius.circular(12),
+                      color: HexColor("#d6e2de"),
+                    ),                     
+                  child: Center(
+                    child: ListTile(
+                      title: Text(selected_meals_list[index].meal_title!),
+                      trailing: CupertinoButton(
+                         
+                         onPressed:() => showCupertinoModalPopup(
+                          context: context, 
+                          builder: (_) => SizedBox(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height / 5,
+                            child: CupertinoPicker(
+                              backgroundColor: HexColor("#d6e2de"),
+                              itemExtent: 30,
+                              scrollController: FixedExtentScrollController(
+                                initialItem: 1
+                              ),
+                              children: const [
+                                Text("1"),
+                                Text("2"),
+                                Text("3"),
+                                Text("4"),
+                                Text("5"),
+                                
+                              ],
+                              onSelectedItemChanged: (int value) {
+                                setState(() {
+                                  mealSize = value + 1; 
+                                });
+                              },
+                            ),
+                          )
+                         ),
+                          
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: MediaQuery.of(context).size.height / 19,
+                          width: MediaQuery.of(context).size.width / 9,
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(8)
+                          ),
+                          child: Text(mealSize.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15) )
+                        ),
+                       )
+                      )
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-          ),
+          
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(

@@ -51,6 +51,7 @@ dependencies:
   flutter_floating_bottom_bar: ^1.2.0
   touch_ripple_effect: ^2.4.0
   awesome_ripple_animation: ^2.0.0
+  flutter_material_pickers: ^3.6.0
   
   
 

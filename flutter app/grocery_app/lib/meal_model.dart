@@ -101,5 +101,17 @@ class add_ingridients_list {
     required this.Ingridient_mass_unit
    }
   );
-
 } 
+
+  class selectedMeal {
+    String meal_title;
+    int meal_id;
+
+    selectedMeal({
+      required this.meal_title,
+      required this.meal_id,
+    });
+
+    
+  }
+
