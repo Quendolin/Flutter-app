@@ -106,10 +106,12 @@ class add_ingridients_list {
   class selectedMeal {
     String meal_title;
     int meal_id;
+    int meal_size; 
 
     selectedMeal({
       required this.meal_title,
       required this.meal_id,
+      required this.meal_size
     });
 
     

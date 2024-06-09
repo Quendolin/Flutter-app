@@ -26,7 +26,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     int id = dbItem["id"];
     String name = dbItem["title"];
 
-    selectedMeal instance = selectedMeal(meal_title: name, meal_id: id);
+    selectedMeal instance = selectedMeal(meal_title: name, meal_id: id, meal_size: 1);
     selected_meals_list.add(instance); 
     setState(() {});
   }
@@ -128,47 +128,52 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                   child: Center(
                     child: ListTile(
                       title: Text(selected_meals_list[index].meal_title!),
-                      trailing: CupertinoButton(
-                         
-                         onPressed:() => showCupertinoModalPopup(
-                          context: context, 
-                          builder: (_) => SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height / 5,
-                            child: CupertinoPicker(
-                              backgroundColor: HexColor("#d6e2de"),
-                              itemExtent: 30,
-                              scrollController: FixedExtentScrollController(
-                                initialItem: 1
+                      trailing: Row(
+                        children: [
+                          Text("Anzahl"),
+                          CupertinoButton(
+                             
+                             onPressed:() => showCupertinoModalPopup(
+                              context: context, 
+                              builder: (_) => SizedBox(
+                                width: double.infinity,
+                                height: MediaQuery.of(context).size.height / 5,
+                                child: CupertinoPicker(
+                                  backgroundColor: HexColor("#d6e2de"),
+                                  itemExtent: 30,
+                                  scrollController: FixedExtentScrollController(
+                                    initialItem: 1
+                                  ),
+                                  children: const [
+                                    Text("1"),
+                                    Text("2"),
+                                    Text("3"),
+                                    Text("4"),
+                                    Text("5"),
+                                    
+                                  ],
+                                  onSelectedItemChanged: (int value) {
+                                    setState(() {
+                                      selected_meals_list[index].meal_size = value + 1; 
+                                    });
+                                  },
+                                ),
+                              )
+                             ),
+                              
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: MediaQuery.of(context).size.height / 19,
+                              width: MediaQuery.of(context).size.width / 9,
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(8)
                               ),
-                              children: const [
-                                Text("1"),
-                                Text("2"),
-                                Text("3"),
-                                Text("4"),
-                                Text("5"),
-                                
-                              ],
-                              onSelectedItemChanged: (int value) {
-                                setState(() {
-                                  mealSize = value + 1; 
-                                });
-                              },
+                              child: Text(selected_meals_list[index].meal_size.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15) )
                             ),
-                          )
-                         ),
-                          
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: MediaQuery.of(context).size.height / 19,
-                          width: MediaQuery.of(context).size.width / 9,
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: Text(mealSize.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15) )
-                        ),
-                       )
+                           ),
+                        ],
+                      )
                       )
                     ),
                   ),
