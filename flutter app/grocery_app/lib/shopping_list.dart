@@ -4,14 +4,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class selecting_shoppingcard extends StatefulWidget {
-  const selecting_shoppingcard({super.key, required this.new_});
+class shoppingcard extends StatefulWidget {
+  const shoppingcard({super.key, required this.new_});
   final bool new_;
   @override
-  State<selecting_shoppingcard> createState() => _selecting_shoppingcardState();
+  State<shoppingcard> createState() => shoppingcardState();
 }
 
-class _selecting_shoppingcardState extends State<selecting_shoppingcard> {
+class shoppingcardState extends State<shoppingcard> {
 
   //late bool existing_shopping_list;
   bool first = true; 
@@ -46,11 +46,16 @@ class _selecting_shoppingcardState extends State<selecting_shoppingcard> {
           backgroundColor: HexColor("31473A"),
           body: Column( children: [
             
-            const Align(
+             Container(
                 alignment: Alignment.centerLeft,
-                child: Padding(
+                child: const Padding(
                 padding: EdgeInsets.only(left: 22),
-                child: Text("Einkaufliste", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))
+                child: Row(
+                  children:  [
+                    Text("Zutaten"),
+                    Text("Gewürze", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  ],
+                )
               )
              ),
              

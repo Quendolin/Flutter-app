@@ -4,7 +4,7 @@ import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/create_new_meal.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:grocery_app/meal_page.dart';
-import 'package:grocery_app/new_selecting_shopping_list.dart';
+import 'package:grocery_app/shopping_list.dart';
 import 'package:grocery_app/search_page_meal.dart';
 import 'package:grocery_app/select_meals_for_shopping.dart';
 
@@ -418,7 +418,7 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard(new_: false,))));
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(

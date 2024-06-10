@@ -3,7 +3,7 @@ import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:grocery_app/meal_model.dart';
-import 'package:grocery_app/new_selecting_shopping_list.dart';
+import 'package:grocery_app/shopping_list.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class select_meals_for_shopping extends StatefulWidget {
@@ -243,7 +243,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               child: InkWell(
                 onTap: () {
                   generateShoppinglist();
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard(new_: false,))));
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false,))));
                 },
                  
                 child: Container(
