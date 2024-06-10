@@ -25,6 +25,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
          
          List<Map> list = await widget.getItem(id);
+         print(list);
 
     }
 
