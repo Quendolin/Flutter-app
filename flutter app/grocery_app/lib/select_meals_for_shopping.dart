@@ -45,10 +45,10 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
           return spices(spices_title: instance["spices_title"]);
         }).toList();
     }
-    shoppingListDone(temporaryIngriedientlist, temporarySpicesList); 
+    ingredientsShoppingListDone(temporaryIngriedientlist,); 
   }
 
-  shoppingListDone(List<add_ingridients_list> Ingredients, List Spcies, ) {
+  ingredientsShoppingListDone(List<add_ingridients_list> Ingredients) {
     
 
     Map<String, add_ingridients_list> finalIngredientMap ={};
@@ -58,7 +58,17 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
         double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass!);
         double additionalMass = double.parse(ingredients.Ingridient_mass!);
-        finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (existingMass + additionalMass).toString();
+        double combinedMass = (existingMass + additionalMass);
+        var newCombinedMass;
+        try {
+          newCombinedMass = combinedMass.round();
+          
+        } catch (e) {
+          newCombinedMass = double.parse(newCombinedMass);
+          
+        } 
+
+        finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (newCombinedMass).toString();
       } else {
         // wenn Zuatat noch nicht Existiert 
         finalIngredientMap[ingredients.Ingridient_name!] = ingredients;
@@ -243,7 +253,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               child: InkWell(
                 onTap: () {
                   generateShoppinglist();
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false,))));
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, finalIngredientList: finalIngredientList,))));
                 },
                  
                 child: Container(

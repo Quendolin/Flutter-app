@@ -5,8 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class shoppingcard extends StatefulWidget {
-  const shoppingcard({super.key, required this.new_});
+  const shoppingcard({super.key, required this.new_, required this.finalIngredientList});
   final bool new_;
+  final List finalIngredientList;
   @override
   State<shoppingcard> createState() => shoppingcardState();
 }
@@ -16,10 +17,15 @@ class shoppingcardState extends State<shoppingcard> {
   //late bool existing_shopping_list;
   bool first = true; 
   bool button1 = true;
-  final PageController _pageController = PageController();
+  int currentPage = 0;
+  final PageController _pageController = PageController( initialPage: 0);
+
+
+
   @override
- 
+  
   Widget build(BuildContext context) {
+    
     
     return PopScope(
       canPop: false,
@@ -48,16 +54,51 @@ class shoppingcardState extends State<shoppingcard> {
             
              Container(
                 alignment: Alignment.centerLeft,
-                child: const Padding(
-                padding: EdgeInsets.only(left: 22),
+                
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:  [
-                    Text("Zutaten"),
-                    Text("Gewürze", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                    Padding(
+                      padding: const EdgeInsets.only(right:40.0),
+                      child: InkWell(
+                        onTap: () {
+                          _pageController.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.easeIn);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: MediaQuery.of(context).size.height /18,
+                          width: MediaQuery.of(context).size.width / 5,
+                          decoration: BoxDecoration(
+                            color: currentPage  ==  0 ? HexColor("#d6e2de") : HexColor("#3c634c") ,
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12)
+                          ),
+                          child: Text("Zutaten", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left:40.0),
+                      child: InkWell(
+                        onTap: () {
+                          _pageController.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.easeIn);
+                          
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: MediaQuery.of(context).size.height /18,
+                          width: MediaQuery.of(context).size.width / 5,
+                          decoration: BoxDecoration(
+                            color: currentPage == 0 ? HexColor("#3c634c") : HexColor("#d6e2de")  ,
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12)
+                          ),
+                          child: Text("Gewürze", style: TextStyle(fontWeight: FontWeight.bold, color:  Colors.black))),
+                      ),
+                    ),
                   ],
                 )
-              )
-             ),
+              ),
+             
              
             
                 Expanded(
@@ -66,19 +107,46 @@ class shoppingcardState extends State<shoppingcard> {
                     padding: const EdgeInsets.all(15.0),
                     child: Container(
                     decoration: BoxDecoration(
+                      color: HexColor("#3c634c"),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all()
                       ),
                     child: PageView(
+                      pageSnapping: true,
+                      onPageChanged:(value) {
+                        setState(() {
+                          currentPage = value; 
+                        });
+                      }, 
                       controller: _pageController,
-                      children: [
+                      children:  [
                         ListView.builder(
-                          itemCount: 20,
-                          itemBuilder: (context, index) => const ListTile(
-                          
-                            title: Text("data"),
+                          itemCount: widget.finalIngredientList.length,
+                          itemBuilder: (context, index) =>  
+                            
+                            ListTile(
+                            
+                              title: Row( 
+                                children: [
+                                  Expanded(
+                                  flex:3, 
+                                    child: Container(
+                                      child: Text(widget.finalIngredientList[index].Ingridient_name!, style: TextStyle(color: Colors.white),)
+                                )),
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    child: Text("${widget.finalIngredientList[index].Ingridient_mass!} ${widget.finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white), )
+                                    ),
+                                ),
+                                
+                            ] ),
+                              
+                              
+                              
+                            ),
                           ),
-                      ),
+                      
                         ListView.builder(
                           itemCount: 20,
                           itemBuilder: (context, index) => const ListTile(

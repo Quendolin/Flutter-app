@@ -418,7 +418,7 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false,))));
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, finalIngredientList: [],))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(
