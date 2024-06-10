@@ -14,9 +14,9 @@ class Apicall extends StatefulWidget {
 class _ApicallState extends State<Apicall> {
   
 
-  Future<Product> fetchData() async { 
-    final product = await OpenFoodAPIClient().searchProductByBarcode();
-    return product;
+   fetchData() async { 
+    
+    
   }
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:grocery_app/meal_model.dart';
+import 'package:grocery_app/new_selecting_shopping_list.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class select_meals_for_shopping extends StatefulWidget {
@@ -16,7 +17,22 @@ class select_meals_for_shopping extends StatefulWidget {
 
 class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
-   select_meal(var data) async {
+
+
+  generateShoppinglist() async {
+    for (var i in selected_meals_list ) {
+         int id = i.meal_id;
+
+         
+         List<Map> list = await widget.getItem(id);
+
+    }
+
+
+
+
+  }
+  select_meal(var data) async {
     List<Map> list = await data;
     
     var dbItem = list.first;
@@ -32,7 +48,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   }
 
 
-
+  List<add_ingridients_list> temporaryIngriedientlist = [];
   int mealSize = 1;
   List selected_meals_list = []; 
   @override
@@ -187,17 +203,27 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: HexColor("#d6e2de"),
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(12)
-                ),
-                
-                height: MediaQuery.of(context).size.height /15,
-                width: MediaQuery.of(context).size.width /5,
-                child: Text("Fertig", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+              child: InkWell(
+                onTap: () {
+                  generateShoppinglist();
+                  //Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard(new_: false,))))
+                },
+                 
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 15,
+                  width: MediaQuery.of(context).size.width / 4,
+                  decoration: BoxDecoration(
+                    color: HexColor("#d6e2de"),
+                    border:Border.all(),
+                    borderRadius: BorderRadius.circular(12)
+                   ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(12.0),
+                      child: Center(
+                          child: Text("Fertig", style: TextStyle(fontWeight: FontWeight.bold,))
+                         ),
+                        )
+                       )
               ),
             ),
           )
