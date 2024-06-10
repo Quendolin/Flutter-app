@@ -22,15 +22,51 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   generateShoppinglist() async {
     for (var i in selected_meals_list ) {
          int id = i.meal_id;
+         int size = i.meal_size;
 
          
          List<Map> list = await widget.getItem(id);
          print(list);
 
+          // Zutaten Liste 
+         List tempIngredientList = json.decode(list[0]["ingridientsJson"]);
+         temporaryIngriedientlist.addAll(tempIngredientList.map((instance) {
+          return add_ingridients_list(
+            Ingridient_name: instance["Ingridient_name"],
+            Ingridient_mass: (double.parse(instance["Ingridient_mass"]) * size).toString(),
+            Ingridient_mass_unit: instance["Ingridient_mass_unit"]
+          );
+         }).toList());
+
+         //Gewürze Liste 
+
+         List tempSpicesList = json.decode(list[0]["spicesJson"]);
+          temporarySpicesList = tempSpicesList.map((instance) {
+          return spices(spices_title: instance["spices_title"]);
+        }).toList();
     }
+    shoppingListDone(temporaryIngriedientlist, temporarySpicesList); 
+  }
 
+  shoppingListDone(List<add_ingridients_list> Ingredients, List Spcies, ) {
+    
 
+    Map<String, add_ingridients_list> finalIngredientMap ={};
 
+    for (var ingredients in Ingredients) {
+      // Wenn Zutat doppelt ist 
+      if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
+        double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass!);
+        double additionalMass = double.parse(ingredients.Ingridient_mass!);
+        finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (existingMass + additionalMass).toString();
+      } else {
+        // wenn Zuatat noch nicht Existiert 
+        finalIngredientMap[ingredients.Ingridient_name!] = ingredients;
+      }
+      
+    }
+      finalIngredientList = finalIngredientMap.values.toList();
+      print(finalIngredientList);
 
   }
   select_meal(var data) async {
@@ -47,8 +83,8 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     selected_meals_list.add(instance); 
     setState(() {});
   }
-
-
+  List<add_ingridients_list> finalIngredientList = [];
+  List<spices> temporarySpicesList = [];
   List<add_ingridients_list> temporaryIngriedientlist = [];
   int mealSize = 1;
   List selected_meals_list = []; 
@@ -160,7 +196,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                                     backgroundColor: HexColor("#d6e2de"),
                                     itemExtent: 30,
                                     scrollController: FixedExtentScrollController(
-                                      initialItem: 1
+                                      initialItem: selected_meals_list[index].meal_size! -1 
                                     ),
                                     children: const [
                                       Text("1"),
@@ -189,7 +225,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                                 ),
                                 child: Text(selected_meals_list[index].meal_size.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15) )
                               ),
-                                                       ),
+                              ),
                             ],
                           
                       )
@@ -207,7 +243,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               child: InkWell(
                 onTap: () {
                   generateShoppinglist();
-                  //Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard(new_: false,))))
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard(new_: false,))));
                 },
                  
                 child: Container(
