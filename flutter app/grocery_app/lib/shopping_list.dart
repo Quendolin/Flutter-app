@@ -9,7 +9,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 class shoppingcard extends StatefulWidget {
   shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList});
-  final bool new_;
+  bool new_;
   
   Function getItem;
   final List selectesMealList; 
@@ -54,10 +54,13 @@ class shoppingcardState extends State<shoppingcard> {
           temporarySpicesList = tempSpicesList.map((instance) {
           return spices(spices_title: instance["spices_title"]);
         }).toList();
+        
     }
     ingredientsShoppingListDone(temporaryIngriedientlist);
-    generated = true;  
-    
+    widget.new_ = false;  
+    setState(() {
+      
+    });
   }
   ingredientsShoppingListDone(List<add_ingridients_list> Ingredients) {
     
@@ -70,9 +73,19 @@ class shoppingcardState extends State<shoppingcard> {
         double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass!);
         double additionalMass = double.parse(ingredients.Ingridient_mass!);
         double combinedMass = (existingMass + additionalMass);
+        // check ob switch zu int
+        if (combinedMass == combinedMass.toInt()) {
+           int combinedMassNew = combinedMass.toInt();
+           finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (combinedMassNew).toString();
+           } else {
+            finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (combinedMass).toString();
+           }
+          
         
 
-        finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (combinedMass).toString();
+        
+
+        
       } else {
         // wenn Zuatat noch nicht Existiert 
         finalIngredientMap[ingredients.Ingridient_name!] = ingredients;
@@ -84,6 +97,9 @@ class shoppingcardState extends State<shoppingcard> {
 
   }
 
+  
+
+
   List<add_ingridients_list> finalIngredientList = [];
   List<spices> temporarySpicesList = [];
   List<add_ingridients_list> temporaryIngriedientlist = [];
@@ -92,12 +108,10 @@ class shoppingcardState extends State<shoppingcard> {
   Widget build(BuildContext context)  {
       
     if (widget.new_ == true) {
+      
       generateShoppinglist();
     }
-    if (widget.new_ && generated == true) {
-      setState(() {
-      });
-    }
+    
     
     return PopScope(
       canPop: false,
