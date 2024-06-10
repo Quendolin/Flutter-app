@@ -1,13 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class shoppingcard extends StatefulWidget {
-  const shoppingcard({super.key, required this.new_, required this.finalIngredientList});
+  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList});
   final bool new_;
-  final List finalIngredientList;
+  
+  Function getItem;
+  final List selectesMealList; 
   @override
   State<shoppingcard> createState() => shoppingcardState();
 }
@@ -22,10 +27,77 @@ class shoppingcardState extends State<shoppingcard> {
 
 
 
-  @override
-  
-  Widget build(BuildContext context) {
+
+
+   generateShoppinglist() async {
+    for (var i in widget.selectesMealList ) {
+         int id = i.meal_id;
+         int size = i.meal_size;
+
+         
+         List<Map> list = await widget.getItem(id);
+         print(list);
+
+          // Zutaten Liste 
+         List tempIngredientList = json.decode(list[0]["ingridientsJson"]);
+         temporaryIngriedientlist.addAll(tempIngredientList.map((instance) {
+          return add_ingridients_list(
+            Ingridient_name: instance["Ingridient_name"],
+            Ingridient_mass: (double.parse(instance["Ingridient_mass"]) * size).toString(),
+            Ingridient_mass_unit: instance["Ingridient_mass_unit"]
+          );
+         }).toList());
+
+         //Gewürze Liste 
+
+         List tempSpicesList = json.decode(list[0]["spicesJson"]);
+          temporarySpicesList = tempSpicesList.map((instance) {
+          return spices(spices_title: instance["spices_title"]);
+        }).toList();
+    }
+    ingredientsShoppingListDone(temporaryIngriedientlist);
+    generated = true;  
     
+  }
+  ingredientsShoppingListDone(List<add_ingridients_list> Ingredients) {
+    
+
+    Map<String, add_ingridients_list> finalIngredientMap ={};
+
+    for (var ingredients in Ingredients) {
+      // Wenn Zutat doppelt ist 
+      if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
+        double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass!);
+        double additionalMass = double.parse(ingredients.Ingridient_mass!);
+        double combinedMass = (existingMass + additionalMass);
+        
+
+        finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (combinedMass).toString();
+      } else {
+        // wenn Zuatat noch nicht Existiert 
+        finalIngredientMap[ingredients.Ingridient_name!] = ingredients;
+      }
+      
+    }
+      finalIngredientList = finalIngredientMap.values.toList();
+      
+
+  }
+
+  List<add_ingridients_list> finalIngredientList = [];
+  List<spices> temporarySpicesList = [];
+  List<add_ingridients_list> temporaryIngriedientlist = [];
+  bool generated = false;
+  @override
+  Widget build(BuildContext context)  {
+      
+    if (widget.new_ == true) {
+      generateShoppinglist();
+    }
+    if (widget.new_ && generated == true) {
+      setState(() {
+      });
+    }
     
     return PopScope(
       canPop: false,
@@ -121,7 +193,7 @@ class shoppingcardState extends State<shoppingcard> {
                       controller: _pageController,
                       children:  [
                         ListView.builder(
-                          itemCount: widget.finalIngredientList.length,
+                          itemCount: finalIngredientList.length,
                           itemBuilder: (context, index) =>  
                             
                             ListTile(
@@ -131,12 +203,12 @@ class shoppingcardState extends State<shoppingcard> {
                                   Expanded(
                                   flex:3, 
                                     child: Container(
-                                      child: Text(widget.finalIngredientList[index].Ingridient_name!, style: TextStyle(color: Colors.white),)
+                                      child: Text(finalIngredientList[index].Ingridient_name!, style: TextStyle(color: Colors.white),)
                                 )),
                                 Expanded(
                                   flex: 4,
                                   child: Container(
-                                    child: Text("${widget.finalIngredientList[index].Ingridient_mass!} ${widget.finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white), )
+                                    child: Text("${finalIngredientList[index].Ingridient_mass!} ${finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white), )
                                     ),
                                 ),
                                 

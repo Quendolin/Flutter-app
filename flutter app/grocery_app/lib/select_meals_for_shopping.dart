@@ -19,66 +19,9 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
 
 
-  generateShoppinglist() async {
-    for (var i in selected_meals_list ) {
-         int id = i.meal_id;
-         int size = i.meal_size;
+  
 
-         
-         List<Map> list = await widget.getItem(id);
-         print(list);
-
-          // Zutaten Liste 
-         List tempIngredientList = json.decode(list[0]["ingridientsJson"]);
-         temporaryIngriedientlist.addAll(tempIngredientList.map((instance) {
-          return add_ingridients_list(
-            Ingridient_name: instance["Ingridient_name"],
-            Ingridient_mass: (double.parse(instance["Ingridient_mass"]) * size).toString(),
-            Ingridient_mass_unit: instance["Ingridient_mass_unit"]
-          );
-         }).toList());
-
-         //Gewürze Liste 
-
-         List tempSpicesList = json.decode(list[0]["spicesJson"]);
-          temporarySpicesList = tempSpicesList.map((instance) {
-          return spices(spices_title: instance["spices_title"]);
-        }).toList();
-    }
-    ingredientsShoppingListDone(temporaryIngriedientlist,); 
-  }
-
-  ingredientsShoppingListDone(List<add_ingridients_list> Ingredients) {
-    
-
-    Map<String, add_ingridients_list> finalIngredientMap ={};
-
-    for (var ingredients in Ingredients) {
-      // Wenn Zutat doppelt ist 
-      if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
-        double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass!);
-        double additionalMass = double.parse(ingredients.Ingridient_mass!);
-        double combinedMass = (existingMass + additionalMass);
-        var newCombinedMass;
-        try {
-          newCombinedMass = combinedMass.round();
-          
-        } catch (e) {
-          newCombinedMass = double.parse(newCombinedMass);
-          
-        } 
-
-        finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (newCombinedMass).toString();
-      } else {
-        // wenn Zuatat noch nicht Existiert 
-        finalIngredientMap[ingredients.Ingridient_name!] = ingredients;
-      }
-      
-    }
-      finalIngredientList = finalIngredientMap.values.toList();
-      print(finalIngredientList);
-
-  }
+  
   select_meal(var data) async {
     List<Map> list = await data;
     
@@ -93,11 +36,10 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     selected_meals_list.add(instance); 
     setState(() {});
   }
-  List<add_ingridients_list> finalIngredientList = [];
-  List<spices> temporarySpicesList = [];
-  List<add_ingridients_list> temporaryIngriedientlist = [];
+  
   int mealSize = 1;
   List selected_meals_list = []; 
+  bool genrated = false; 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -252,8 +194,10 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
             child: Center(
               child: InkWell(
                 onTap: () {
-                  generateShoppinglist();
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, finalIngredientList: finalIngredientList,))));
+
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, getItem: widget.getItem, selectesMealList: selected_meals_list,))));
+                  
+                  
                 },
                  
                 child: Container(

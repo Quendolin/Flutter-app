@@ -27,7 +27,9 @@ class _meal_pageState extends State<homePage2> {
     
    
    
+  PlaceholderFunction() {
 
+  }
   
 
 
@@ -418,7 +420,7 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, finalIngredientList: [],))));
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], getItem: PlaceholderFunction ,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(
