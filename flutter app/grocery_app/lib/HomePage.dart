@@ -72,12 +72,12 @@ class _meal_pageState extends State<homePage2> {
 
   }
 
-  Future<void> _getItems() async {
+  Future<void> _getAllMeals() async {
     final data = await SQLHelper.getAllMeals();
     print(data);
     }
 
-  Future<List<Map<String, dynamic>>> _getItem(int id) async {
+  Future<List<Map<String, dynamic>>> _getOneMeal(int id) async {
     final data = await SQLHelper.getOneMeal(id);
     print(data);
     return data;
@@ -235,7 +235,7 @@ class _meal_pageState extends State<homePage2> {
                   child: Center(
                     child: ListTile(
                       onTap:() {
-                        data =_getItem(widget.callback2[index]["id"]);
+                        data =_getOneMeal(widget.callback2[index]["id"]);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => meal_page(db_ingridents_List: data,)));
                       },
                       
@@ -261,7 +261,7 @@ class _meal_pageState extends State<homePage2> {
                               icon: Icon(Icons.edit, color: Colors.black,),
                               onPressed: () {
                               //checkIdDatabase(widget.callback2[index]["id"], test),
-                              data =_getItem(widget.callback2[index]["id"]);
+                              data =_getOneMeal(widget.callback2[index]["id"]);
                                
                               
                               Navigator.push(
@@ -473,7 +473,7 @@ class _meal_pageState extends State<homePage2> {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getItem, savedShoppingList: saveShoppingListToSavedLists,))));
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getOneMeal, savedShoppingList: saveShoppingListToSavedLists,))));
                                           
                                         }, 
                                         child: Container(
