@@ -11,8 +11,12 @@ class SQLHelper {
       description TEXT,
       ingridientsJson TEXT,
       spicesJson TEXT
-
-    ) """);
+      ) """
+      """CREATE TABLE shoppingLists(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+      name TEXT, 
+      savedShoppingListsJson, Text
+      ) """);
   }
 
 
@@ -35,27 +39,45 @@ class SQLHelper {
     return id; 
   }
 
+  static Future<int> createSavesShppongList(String name, String savedShoppingListsJson) async {
+    final db = await SQLHelper.db();
+    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson};
+    final id = await db.insert("shoppingLists", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    return id; 
+  }
+
   // initializing at the start 
-  static Future<List<Map<String, dynamic>>> getItems() async {
+  static Future<List<Map<String, dynamic>>> getAllMeals() async {
     final db = await SQLHelper.db();
     return db.query("items", orderBy: "id");
+  }
+  
+   // initializing at the start 
+  static Future<List<Map<String, dynamic>>> getAllsavedShoppingLists() async {
+    final db = await SQLHelper.db();
+    return db.query("shoppingLists", orderBy: "id");
   }
 
   
   
-  static Future<List<Map<String, dynamic>>> getItem(int id) async {
+  static Future<List<Map<String, dynamic>>> getOneMeal(int id) async {
     final db = await SQLHelper.db();
     return db.query("items", where: "id = ?", whereArgs: [id], limit: 1);
   }
 
-  static Future<int> updateItem(int id, String? title, String? description, String? ingridientsJson, String spicesJson) async {
+  static Future<List<Map<String, dynamic>>> getOneSavedShoppingList(int id) async {
+    final db = await SQLHelper.db();
+    return db.query("shoppingLists", where: "id=?", whereArgs: [id], limit: 1);
+  }
+
+  static Future<int> updateMeal(int id, String? title, String? description, String? ingridientsJson, String spicesJson) async {
     final db = await SQLHelper.db();
     final data = {"title": title, "description": description, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
     final result = await db.update("items", data, where: "id = ?", whereArgs: [id]);
     return result;
   }
 
-  static Future<void> deleteItem(int id) async {
+  static Future<void> deleteMeal(int id) async {
     final db = await SQLHelper.db();
     try { 
       await db.delete("items", where: "id = ?", whereArgs: [id]);

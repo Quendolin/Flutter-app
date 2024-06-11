@@ -8,8 +8,10 @@ import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class shoppingcard extends StatefulWidget {
-  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList});
+  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists});
   bool new_;
+  bool new_2;
+  Function saveShoppingListToSavedLists;
   
   Function getItem;
   final List selectesMealList; 
@@ -28,8 +30,10 @@ class shoppingcardState extends State<shoppingcard> {
 
 
 
-  crossedOutIngredient(int index) {
-
+  checkCrossedOutIngredient(int index) {
+        setState(() {
+          finalIngredientList[index].crossedOff = !finalIngredientList[index].crossedOff;
+        });
   }
 
    generateShoppinglist() async {
@@ -44,10 +48,11 @@ class shoppingcardState extends State<shoppingcard> {
           // Zutaten Liste 
          List tempIngredientList = json.decode(list[0]["ingridientsJson"]);
          temporaryIngriedientlist.addAll(tempIngredientList.map((instance) {
-          return add_ingridients_list(
+          return shoppingIngredient(
             Ingridient_name: instance["Ingridient_name"],
             Ingridient_mass: (double.parse(instance["Ingridient_mass"]) * size).toString(),
-            Ingridient_mass_unit: instance["Ingridient_mass_unit"]
+            Ingridient_mass_unit: instance["Ingridient_mass_unit"],
+            crossedOff: false,
           );
          }).toList());
 
@@ -65,10 +70,10 @@ class shoppingcardState extends State<shoppingcard> {
       
     });
   }
-  ingredientsShoppingListDone(List<add_ingridients_list> Ingredients) {
+  ingredientsShoppingListDone(List<shoppingIngredient> Ingredients) {
     
 
-    Map<String, add_ingridients_list> finalIngredientMap ={};
+    Map<String, shoppingIngredient> finalIngredientMap ={};
 
     for (var ingredients in Ingredients) {
       // Wenn Zutat doppelt ist 
@@ -110,10 +115,12 @@ class shoppingcardState extends State<shoppingcard> {
 
   
 
+  
 
-  List<add_ingridients_list> finalIngredientList = [];
+
+  List<shoppingIngredient> finalIngredientList = [];
   List<spices> temporarySpicesList = [];
-  List<add_ingridients_list> temporaryIngriedientlist = [];
+  List<shoppingIngredient> temporaryIngriedientlist = [];
   bool generated = false;
   @override
   Widget build(BuildContext context)  {
@@ -222,18 +229,18 @@ class shoppingcardState extends State<shoppingcard> {
                           itemBuilder: (context, index) =>  
                             
                             ListTile(
-                              onTap: () => crossedOutIngredient(index),
+                              onTap: () => checkCrossedOutIngredient(index),
                               title: Row( 
                                 children: [
                                   Expanded(
                                   flex:3, 
                                     child: Container(
-                                      child: Text(finalIngredientList[index].Ingridient_name!, style: TextStyle(color: Colors.white),)
+                                      child: Text(finalIngredientList[index].Ingridient_name!, style: TextStyle(color: Colors.white, decoration: finalIngredientList[index].crossedOff == false ? null : TextDecoration.lineThrough, decorationThickness: finalIngredientList[index].crossedOff == false ? null : 3 ),)
                                 )),
                                 Expanded(
                                   flex: 4,
                                   child: Container(
-                                    child: Text("${finalIngredientList[index].Ingridient_mass!} ${finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white, decoration: TextDecoration.lineThrough ),  )
+                                    child: Text("${finalIngredientList[index].Ingridient_mass!} ${finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white, decoration: finalIngredientList[index].crossedOff == false ? null : TextDecoration.lineThrough, decorationThickness: finalIngredientList[index].crossedOff == false ? null : 3  ),  )
                                     ),
                                 ),
                                 
@@ -279,7 +286,10 @@ class shoppingcardState extends State<shoppingcard> {
                               padding: const EdgeInsets.all(20.0),
                               child: InkWell(
                                 onTap: () {
-                                  showModalBottomSheet(
+                                    if (widget.new_2 == true)  {
+
+
+                                      showModalBottomSheet(
                                     context: context, 
                                     builder: (BuildContext context) {
                                       return Container(
@@ -296,6 +306,19 @@ class shoppingcardState extends State<shoppingcard> {
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(12.0),
                                                   child: InkWell(
+                                                    onTap: () {
+                                                      
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        
+                                                        
+                                                      
+                                                      
+                                                      
+                                                      
+                                                    },
                                                     child: Container(
                                                       height: MediaQuery.of(context).size.height / 7,
                                                       width: MediaQuery.of(context).size.width / 10,
@@ -321,8 +344,8 @@ class shoppingcardState extends State<shoppingcard> {
                                                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                                                           decoration: InputDecoration(
                                                             
-                                                          fillColor: HexColor("#d6e2de"),
-                                                          filled: true,
+                                                          
+                                                          filled: false,
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: BorderSide(color: Colors.black, width: 1), 
                                                             borderRadius: BorderRadius.circular(12)
@@ -336,6 +359,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                         actions: [
                                                           TextButton(
                                                             onPressed:() {
+                                                              saveShoppingListToSavedLists(finalIngredientList);
                                                               // Funktion für Speicherung der Liste 
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
@@ -366,6 +390,11 @@ class shoppingcardState extends State<shoppingcard> {
                                       );
                                     } 
                                     );
+                                    } else {Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);}
+                                    
+                                    
                                 },
                                 child: Container(
                                   height: MediaQuery.of(context).size.height / 15,

@@ -117,3 +117,24 @@ class add_ingridients_list {
     
   }
 
+
+  class shoppingIngredient {
+    String Ingridient_name;
+    String Ingridient_mass; 
+    String Ingridient_mass_unit;
+    bool crossedOff; 
+  
+
+    shoppingIngredient({ 
+    required this.Ingridient_name,
+    required this.Ingridient_mass, 
+    required this.Ingridient_mass_unit,
+    required this.crossedOff
+   }
+  );
+  }
+
+
+  
+  
+

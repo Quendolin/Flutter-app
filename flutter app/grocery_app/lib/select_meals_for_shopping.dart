@@ -195,7 +195,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               child: InkWell(
                 onTap: () {
 
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, getItem: widget.getItem, selectesMealList: selected_meals_list,))));
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true,))));
                   
                   
                 },

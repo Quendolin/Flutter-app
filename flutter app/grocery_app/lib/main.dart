@@ -53,10 +53,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   List<Map<String, dynamic>> _meals = [];
+  List<Map<String, dynamic>> _savedShoppingLists = [];
   bool _isLoading = true; 
 
+  void _refreshSavedShoppingLists() async {
+    final data = await SQLHelper.getAllsavedShoppingLists();
+
+    setState(() {
+      _savedShoppingLists = data;
+      _isLoading = false;
+    });
+    
+  }
+
   void _refreshMeals() async {
-    final data = await SQLHelper.getItems();
+    final data = await SQLHelper.getAllMeals();
     setState(() {
       _meals = data;
       _isLoading = false;
@@ -72,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     
-    return homePage2(callback1: _refreshMeals, callback2: _meals);
+    return homePage2(callback1: _refreshMeals, callback2: _meals, getSavedShoppingLists: _savedShoppingLists,);
   }
  }
 

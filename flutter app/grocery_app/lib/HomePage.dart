@@ -15,8 +15,9 @@ import 'package:hexcolor/hexcolor.dart';
 class homePage2 extends StatefulWidget {
   final Function callback1;
   final List callback2;
+  final List getSavedShoppingLists;
   
-  const homePage2({super.key, required this.callback1, required this.callback2,});
+   const homePage2({super.key, required this.callback1, required this.callback2, required this.getSavedShoppingLists});
 
   @override
   State<homePage2> createState() => _meal_pageState();
@@ -78,12 +79,12 @@ class _meal_pageState extends State<homePage2> {
   }
 
   Future<void> _getItems() async {
-    final data = await SQLHelper.getItems();
+    final data = await SQLHelper.getAllMeals();
     print(data);
     }
 
   Future<List<Map<String, dynamic>>> _getItem(int id) async {
-    final data = await SQLHelper.getItem(id);
+    final data = await SQLHelper.getOneMeal(id);
     print(data);
     return data;
   }
@@ -105,10 +106,16 @@ class _meal_pageState extends State<homePage2> {
     return containerHeight;
   }
   
+
+
+  saveShoppingListToSavedLists(List<shoppingIngredient> list) {
+
+    listOfSavedShoppingLists.add(list);
+  }
   
   List<MealModel> displayed_meal_list = List.from(main_meal_list);
 
- 
+   late List<List<shoppingIngredient>> listOfSavedShoppingLists;
    int selected_Index_Nav = 0; 
    bool HomePage = true;
    var data;
@@ -331,7 +338,7 @@ class _meal_pageState extends State<homePage2> {
                         scrollDirection: Axis.vertical,
                         physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: saved_shoppings_lists.length,
+                        itemCount: listOfSavedShoppingLists.length,
                         itemBuilder: (context, index) => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -420,7 +427,7 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], getItem: PlaceholderFunction ,))));
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], getItem: PlaceholderFunction, new_2: false,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(
