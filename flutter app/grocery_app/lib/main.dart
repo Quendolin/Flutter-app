@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _refreshSavedShoppingLists() async {
     final data = await SQLHelper.getAllsavedShoppingLists();
-
     setState(() {
       _savedShoppingLists = data;
       _isLoading = false;
@@ -83,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     
-    return homePage2(callback1: _refreshMeals, callback2: _meals, getSavedShoppingLists: _savedShoppingLists,);
+    return homePage2(callback1: _refreshMeals, callback2: _meals, getSavedShoppingLists: _savedShoppingLists, refreshShoppingLists: _refreshSavedShoppingLists,);
   }
  }
 

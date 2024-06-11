@@ -31,7 +31,7 @@ class SQLHelper {
     );
   }
 // Button --> create instance of a sql table
-  static Future<int> createItem(String title, String description, String ingridientsJson, String spicesJson) async {
+  static Future<int> createMeal(String title, String description, String ingridientsJson, String spicesJson) async {
     final db = await SQLHelper.db();
     final data = {"title": title, "description": description, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
     final id = await db.insert("items", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);

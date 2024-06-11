@@ -15,9 +15,10 @@ import 'package:hexcolor/hexcolor.dart';
 class homePage2 extends StatefulWidget {
   final Function callback1;
   final List callback2;
+  final Function refreshShoppingLists;
   final List getSavedShoppingLists;
   
-   const homePage2({super.key, required this.callback1, required this.callback2, required this.getSavedShoppingLists});
+   const homePage2({super.key, required this.callback1, required this.callback2, required this.getSavedShoppingLists, required this.refreshShoppingLists});
 
   @override
   State<homePage2> createState() => _meal_pageState();
@@ -28,8 +29,9 @@ class _meal_pageState extends State<homePage2> {
     
    
 
-  addSavedShoppingListtoLists() {
-
+  addSavedShoppingListtoLists(String name, String savedShoppingListsJson) async {
+    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
+    widget.refreshShoppingLists();
   } 
    
   PlaceholderFunction() {
@@ -38,7 +40,7 @@ class _meal_pageState extends State<homePage2> {
   
 
 
-  Future<void> _updateItem(int id, String title_name, String description, ingridientsJson, String spicesJson) async {
+  Future<void> _updateMeal(int id, String title_name, String description, ingridientsJson, String spicesJson) async {
     await SQLHelper.updateMeal(id, title_name, description, ingridientsJson, spicesJson);
     widget.callback1();
   }
@@ -47,7 +49,7 @@ class _meal_pageState extends State<homePage2> {
   
 
   // delete item from database 
-  void _deleteItem(int id) async {
+  void _deleteMeal(int id) async {
     await SQLHelper.deleteMeal(id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("succesfully deleted")));
     widget.callback1();
@@ -57,10 +59,10 @@ class _meal_pageState extends State<homePage2> {
    
   
   // add meal to sql database 
-  Future<void> _addItem(String meal_title, String meal_description, String ingridientsJson, String spicesJson) async {
+  Future<void> _addMeal(String meal_title, String meal_description, String ingridientsJson, String spicesJson) async {
      
       
-      await SQLHelper.createItem(meal_title, meal_description, ingridientsJson, spicesJson);
+      await SQLHelper.createMeal(meal_title, meal_description, ingridientsJson, spicesJson);
       widget.callback1();
       
       
@@ -264,13 +266,13 @@ class _meal_pageState extends State<homePage2> {
                               
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => create_new_meal(callback: _addItem, callback2: _updateItem, ItemValues: data, update: true,  )));
+                                MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: data, update: true,  )));
                                
                             },    
                            ),  
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.black),
-                              onPressed: () => _deleteItem(widget.callback2[index]["id"])
+                              onPressed: () => _deleteMeal(widget.callback2[index]["id"])
                          )
                         ],
                       ),
@@ -287,7 +289,7 @@ class _meal_pageState extends State<homePage2> {
                   onPressed:() {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => create_new_meal(callback: _addItem, callback2: _updateItem, ItemValues: _future_list(), update: false,  )));
+                      MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: _future_list(), update: false,  )));
                   }, 
                   autofocus: true,
                   heroTag: "btn3",
