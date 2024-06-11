@@ -90,9 +90,9 @@ List<Ingridients> Ingridients_name_list = [
 
 
 class add_ingridients_list {
-  String? Ingridient_name;
-  String? Ingridient_mass; 
-  String? Ingridient_mass_unit;
+  String Ingridient_name;
+  String Ingridient_mass; 
+  String Ingridient_mass_unit;
   
 
   add_ingridients_list({ 

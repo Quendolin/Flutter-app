@@ -87,8 +87,16 @@ class shoppingcardState extends State<shoppingcard> {
 
         
       } else {
+        
+        double toInt = double.parse(ingredients.Ingridient_mass);
+        if (toInt == toInt.toInt()) {
+          int Int = toInt.toInt();
+          ingredients.Ingridient_mass = Int.toString();
+        }
+        
+        
         // wenn Zuatat noch nicht Existiert 
-        finalIngredientMap[ingredients.Ingridient_name!] = ingredients;
+        finalIngredientMap[ingredients.Ingridient_name] = ingredients;
       }
       
     }
