@@ -8,8 +8,9 @@ import 'package:hexcolor/hexcolor.dart';
 
 class select_meals_for_shopping extends StatefulWidget {
   final List callback; 
+  final Function savedShoppingList;
   final Function getItem;
-  const select_meals_for_shopping({super.key, required this.callback, required this.getItem});
+  const select_meals_for_shopping({super.key, required this.callback, required this.getItem, required this.savedShoppingList});
 
   @override
   State<select_meals_for_shopping> createState() => _select_meals_for_shoppingState();
@@ -195,7 +196,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               child: InkWell(
                 onTap: () {
 
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true,))));
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList  ,))));
                   
                   
                 },

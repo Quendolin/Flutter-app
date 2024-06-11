@@ -27,6 +27,10 @@ class _meal_pageState extends State<homePage2> {
 
     
    
+
+  addSavedShoppingListtoLists() {
+
+  } 
    
   PlaceholderFunction() {
 
@@ -35,28 +39,16 @@ class _meal_pageState extends State<homePage2> {
 
 
   Future<void> _updateItem(int id, String title_name, String description, ingridientsJson, String spicesJson) async {
-    await SQLHelper.updateItem(id, title_name, description, ingridientsJson, spicesJson);
+    await SQLHelper.updateMeal(id, title_name, description, ingridientsJson, spicesJson);
     widget.callback1();
   }
-
-  //check if meal already exists than replace it
-
-  //void checkIdDatabase(int id) async {
-    
-    
-
-    //if (id != null) {
-      //final existingMeal = widget.callback2.firstWhere((element) => element["id"] == id); 
-      //result![0] = existingMeal["title"];
-      //result[1] = existingMeal["descrition"];
-    //}
 
   
   
 
   // delete item from database 
   void _deleteItem(int id) async {
-    await SQLHelper.deleteItem(id);
+    await SQLHelper.deleteMeal(id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("succesfully deleted")));
     widget.callback1();
   }
@@ -427,7 +419,7 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], getItem: PlaceholderFunction, new_2: false,))));
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: saveShoppingListToSavedLists,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(
@@ -479,7 +471,7 @@ class _meal_pageState extends State<homePage2> {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getItem,))));
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getItem, savedShoppingList: saveShoppingListToSavedLists,))));
                                           
                                         }, 
                                         child: Container(

@@ -70,6 +70,13 @@ class SQLHelper {
     return db.query("shoppingLists", where: "id=?", whereArgs: [id], limit: 1);
   }
 
+  static Future<int> updateSavedShoppingList(int id, String name, String savedShoppingListsJson) async {
+    final db = await SQLHelper.db();
+    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson}; 
+    final result = await db.update("shoppingLists", data, where: "id = ?", whereArgs: [id]);
+    return result; 
+  }
+
   static Future<int> updateMeal(int id, String? title, String? description, String? ingridientsJson, String spicesJson) async {
     final db = await SQLHelper.db();
     final data = {"title": title, "description": description, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
@@ -77,6 +84,15 @@ class SQLHelper {
     return result;
   }
 
+
+  static Future<void> deleteSavedShoppingList(int id) async {
+    final db = await SQLHelper.db();
+    try {
+      await db.delete("shoppingLists", where: "id = ?", whereArgs: [id]);
+    } catch (err) {
+      debugPrint("something went wrong when deleting an item: $err");
+    }
+  }
   static Future<void> deleteMeal(int id) async {
     final db = await SQLHelper.db();
     try { 

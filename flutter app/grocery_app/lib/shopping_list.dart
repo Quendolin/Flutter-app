@@ -359,7 +359,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                         actions: [
                                                           TextButton(
                                                             onPressed:() {
-                                                              saveShoppingListToSavedLists(finalIngredientList);
+                                                              widget.saveShoppingListToSavedLists(finalIngredientList);
                                                               // Funktion für Speicherung der Liste 
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
