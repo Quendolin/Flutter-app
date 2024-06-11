@@ -28,6 +28,9 @@ class shoppingcardState extends State<shoppingcard> {
 
 
 
+  crossedOutIngredient(int index) {
+
+  }
 
    generateShoppinglist() async {
     for (var i in widget.selectesMealList ) {
@@ -219,7 +222,7 @@ class shoppingcardState extends State<shoppingcard> {
                           itemBuilder: (context, index) =>  
                             
                             ListTile(
-                            
+                              onTap: () => crossedOutIngredient(index),
                               title: Row( 
                                 children: [
                                   Expanded(
@@ -230,7 +233,7 @@ class shoppingcardState extends State<shoppingcard> {
                                 Expanded(
                                   flex: 4,
                                   child: Container(
-                                    child: Text("${finalIngredientList[index].Ingridient_mass!} ${finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white), )
+                                    child: Text("${finalIngredientList[index].Ingridient_mass!} ${finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white, decoration: TextDecoration.lineThrough ),  )
                                     ),
                                 ),
                                 
