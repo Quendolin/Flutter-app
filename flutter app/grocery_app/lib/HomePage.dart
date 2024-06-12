@@ -482,7 +482,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                                   return Container(
                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
                                                   color: HexColor("#d6e2de")),
-                                                height: MediaQuery.of(context).size.height / 2,
+                                                height: MediaQuery.of(context).size.height / 2.5,
                                                 child: Center(
                                                   child: Column(
                                                    children: [

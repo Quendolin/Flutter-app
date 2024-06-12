@@ -123,6 +123,14 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       backgroundColor: HexColor("#31473A"),
       title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
       centerTitle: true,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        icon: Icon(Icons.arrow_back, 
+        color: Colors.white,
+        )),
       actions: <Widget> [
         IconButton(
           icon: Icon(Icons.search), 
