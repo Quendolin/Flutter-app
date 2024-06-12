@@ -43,6 +43,7 @@ datatoAcessebleData(int index) async {
   );
   }).toList());
 
+  huan = true;
  setState(() {
    
  });
@@ -162,6 +163,10 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
    late bool gespeicherte_liste = false;
    bool first = true;
    
+
+  bool huan = false; 
+
+
    //Future<List<Map<String, dynamic>>> await placeholder =  [{}]; 
   int myIndex =  0; 
 
@@ -472,7 +477,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                                                        datatoAcessebleData(index);
                                                                        
                                                                        
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: _addSavedShoppingListtoLists, old: true,))));
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, huan: huan, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: _addSavedShoppingListtoLists, old: true,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(

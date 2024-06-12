@@ -8,13 +8,13 @@ import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class shoppingcard extends StatefulWidget {
-  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists, required this.oldShoppingList, required this.old});
+  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists, required this.oldShoppingList, required this.old, required this.huan});
   bool new_;
   bool new_2;
   Function saveShoppingListToSavedLists;
   final List<shoppingIngredient> oldShoppingList;
   bool old; 
-  
+  bool huan; 
   Function getItem;
   final List selectesMealList; 
   @override
@@ -137,7 +137,7 @@ class shoppingcardState extends State<shoppingcard> {
       
       generateShoppinglist();
     }
-    if (widget.old = true) {
+    if (widget.old = true && widget.huan == true) {
       
       
       finalIngredientList = List.from(widget.oldShoppingList);
