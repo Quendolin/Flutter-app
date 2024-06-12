@@ -8,10 +8,12 @@ import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class shoppingcard extends StatefulWidget {
-  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists});
+  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists, required this.oldShoppingList, required this.old});
   bool new_;
   bool new_2;
   Function saveShoppingListToSavedLists;
+  final List<shoppingIngredient> oldShoppingList;
+  bool old; 
   
   Function getItem;
   final List selectesMealList; 
@@ -30,23 +32,6 @@ class shoppingcardState extends State<shoppingcard> {
 
 
 
-  AddorUpdateShoppingList(String name) async {
-    var objectsOfIngredients = finalIngredientList.map((instance) {
-      return shoppingIngredient(
-        Ingridient_name: instance.Ingridient_name,
-        Ingridient_mass: instance.Ingridient_mass, 
-        Ingridient_mass_unit: instance.Ingridient_mass_unit,
-        crossedOff: instance.crossedOff
-        );
-    }).toList();
-
-  // Objects of Ingredients to String 
-  String stringList = json.encode(objectsOfIngredients); 
-
-  widget.saveShoppingListToSavedLists(name, stringList);
-
-
-  }
 
   checkCrossedOutIngredient(int index) {
         setState(() {
@@ -145,11 +130,20 @@ class shoppingcardState extends State<shoppingcard> {
 
   @override
   Widget build(BuildContext context)  {
+
+    
       
     if (widget.new_ == true) {
       
       generateShoppinglist();
     }
+    if (widget.old = true) {
+      
+      
+      finalIngredientList = List.from(widget.oldShoppingList);
+      widget.old = false; 
+    }
+    
     
     
     return PopScope(
@@ -382,7 +376,8 @@ class shoppingcardState extends State<shoppingcard> {
                                                           TextButton(
                                                             onPressed:() {
                                                               String name = _controller.text;
-                                                              AddorUpdateShoppingList(name);
+                                                              widget.saveShoppingListToSavedLists(name, finalIngredientList);
+                                                              
                                                               
                                                               // Funktion für Speicherung der Liste 
                                                               Navigator.pop(context);
@@ -390,9 +385,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
-                                                              setState(() {
-                                                                
-                                                              });
+                                                              
                                                             },
                                                             child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
                                                             )

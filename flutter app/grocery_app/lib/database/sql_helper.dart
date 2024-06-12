@@ -12,18 +12,22 @@ class SQLHelper {
       ingridientsJson TEXT,
       spicesJson TEXT
       ) """
+    );
+
+    await database.execute(
       """CREATE TABLE shoppingLists(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
       name TEXT, 
       savedShoppingListsJson, Text
-      ) """);
+      ) """
+    );
   }
 
 
   static Future<sql.Database> db() async {
 
     return sql.openDatabase(
-      "db_meals6.1.db",
+      "db_meals7.db",
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);

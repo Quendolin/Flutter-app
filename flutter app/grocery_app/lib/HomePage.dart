@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/create_new_meal.dart';
@@ -30,7 +31,27 @@ class _meal_pageState extends State<homePage2> {
    
 
   
+  _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients) {
 
+    var objectsOfIngredients = ingredients.map((instance) {
+      return {
+        "Ingridient_name": instance.Ingridient_name,
+        "Ingridient_mass": instance.Ingridient_mass, 
+        "Ingridient_mass_unit": instance.Ingridient_mass_unit,
+        "coressedOff": instance.crossedOff
+        
+
+      };
+    }).toList();
+
+  // Objects of Ingredients to String 
+  String stringList = json.encode(objectsOfIngredients);
+
+  addSavedShoppingListtoLists(name, stringList); 
+
+
+
+  }
   addSavedShoppingListtoLists(String name, String savedShoppingListsJson) async {
     await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
     widget.refreshShoppingLists();
@@ -412,7 +433,7 @@ class _meal_pageState extends State<homePage2> {
                                                           //height: MediaQuery.of(context).size.height / 7,
                                                           width: MediaQuery.of(context).size.width / 1.3 ,
                                                           child: ListView.builder(
-                                                            itemCount: saved_shoppings_lists.length,
+                                                            itemCount: widget.getSavedShoppingLists.length,
                                                             itemBuilder:(context, index) => Padding(
                                                               padding: const EdgeInsets.all(2.0),
                                                               child: Container(
@@ -423,11 +444,24 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: saveShoppingListToSavedLists,))));
+                                                                       List bla = widget.getSavedShoppingLists[index]["savedShoppingListsJson"];
+                                                                       print(bla);
+                                                                       List<shoppingIngredient> list2 = [];
+                                                                       list2.addAll(bla.map((instance) {
+                                                                         return shoppingIngredient(
+                                                                            Ingridient_name: instance["Ingridient_name"],
+                                                                            Ingridient_mass: (instance["Ingridient_mass"]),
+                                                                            Ingridient_mass_unit: instance["Ingridient_mass_unit"],
+                                                                            crossedOff: false,
+                                                                        );
+                                                                             }).toList());
+                                                                       
+                                                                       
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], oldShoppingList:list2, getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: _addSavedShoppingListtoLists, old: true,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(
-                                                                    child: Text(saved_shoppings_lists[index],style: TextStyle(fontWeight: FontWeight.bold),)
+                                                                    child: Text(widget.getSavedShoppingLists[index]["name"],style: TextStyle(fontWeight: FontWeight.bold),)
                                                                     ),
                                                                 ),
                                                               ),
@@ -475,7 +509,7 @@ class _meal_pageState extends State<homePage2> {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getOneMeal, savedShoppingList: saveShoppingListToSavedLists,))));
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
                                           
                                         }, 
                                         child: Container(
