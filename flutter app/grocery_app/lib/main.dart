@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _refreshMeals();
+    _refreshSavedShoppingLists();
     print("number of items: ${_meals.length}");
   }
 

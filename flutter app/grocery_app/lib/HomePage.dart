@@ -29,6 +29,11 @@ class _meal_pageState extends State<homePage2> {
     
    
 
+  Future<void> addSavedShoppingList(String name, String savedShoppingListsJson ) async {
+    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
+    widget.refreshShoppingLists;
+  }
+
   addSavedShoppingListtoLists(String name, String savedShoppingListsJson) async {
     await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
     widget.refreshShoppingLists();
@@ -104,12 +109,12 @@ class _meal_pageState extends State<homePage2> {
 
   saveShoppingListToSavedLists(List<shoppingIngredient> list) {
 
-    listOfSavedShoppingLists.add(list);
+   // listOfSavedShoppingLists.add(list);
   }
   
   List<MealModel> displayed_meal_list = List.from(main_meal_list);
 
-   late List<List<shoppingIngredient>> listOfSavedShoppingLists;
+   
    int selected_Index_Nav = 0; 
    bool HomePage = true;
    var data;
@@ -332,7 +337,7 @@ class _meal_pageState extends State<homePage2> {
                         scrollDirection: Axis.vertical,
                         physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: listOfSavedShoppingLists.length,
+                        itemCount: widget.getSavedShoppingLists.length,
                         itemBuilder: (context, index) => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -344,7 +349,7 @@ class _meal_pageState extends State<homePage2> {
                               //shape: Border.all(),
                               visualDensity: VisualDensity(vertical: -1),
                               //tileColor: Colors.amber,
-                              title: Text(saved_shoppings_lists[index],style: TextStyle(fontWeight: FontWeight.bold),)
+                              title: Text(widget.getSavedShoppingLists[index]["name"], style: TextStyle(color: Colors.black,),)
                             ),
                           ),
                         )),
