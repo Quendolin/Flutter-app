@@ -80,6 +80,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
     widget.refreshShoppingLists();
   } 
+
+  _deleteShoppingList(int id ) async {
+    await SQLHelper.deleteSavedShoppingList(id);
+    widget.refreshShoppingLists();
+  }
    
   PlaceholderFunction() {
 
@@ -140,7 +145,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
 
    double checkContaierHeight() {
-    containerHeight = saved_shoppings_lists.length * (MediaQuery.of(context).size.height / 16.2);
+    containerHeight = widget.getSavedShoppingLists.length * (MediaQuery.of(context).size.height / 16.2);
     if (containerHeight > 5 * (MediaQuery.of(context).size.height / 16.2)) {
       containerHeight = 5 * (MediaQuery.of(context).size.height / 16.2);
     }
@@ -365,7 +370,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                     height: MediaQuery.of(context).size.height / 35 ,
                   ),
                   const Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.only(left:13.0),
                       child: Text("Gespeicherte Einkaufslisten", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
@@ -392,10 +397,38 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                           ),
                           child: Center(
                             child: ListTile(
+                              
                               //shape: Border.all(),
                               visualDensity: VisualDensity(vertical: -1),
                               //tileColor: Colors.amber,
-                              title: Text(widget.getSavedShoppingLists[index]["name"], style: TextStyle(color: Colors.black,),)
+                              title: Text(widget.getSavedShoppingLists[index]["name"], style: TextStyle(color: Colors.black,),),
+                              trailing: SizedBox(
+                    
+                                width: MediaQuery.of(context).size.width / 4,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.edit, color: Colors.black,),
+                                      onPressed: () {
+                                        data =_getOneMeal(widget.callback2[index]["id"]);
+                               
+                              
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: data, update: true,  )));
+                               
+                                      },    
+                                     ),  
+                                    IconButton(
+                                      icon: Icon(Icons.delete, color: Colors.black),
+                                      onPressed: () {
+                                      _deleteShoppingList(widget.getSavedShoppingLists[index]["id"]);
+                                      checkContaierHeight();
+                                      }
+                                    )
+                                  ],
+                                ),
+                              ), 
                             ),
                           ),
                         )),
