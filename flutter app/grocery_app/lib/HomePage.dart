@@ -29,10 +29,7 @@ class _meal_pageState extends State<homePage2> {
     
    
 
-  Future<void> addSavedShoppingList(String name, String savedShoppingListsJson ) async {
-    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
-    widget.refreshShoppingLists;
-  }
+  
 
   addSavedShoppingListtoLists(String name, String savedShoppingListsJson) async {
     await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);

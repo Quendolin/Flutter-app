@@ -30,6 +30,24 @@ class shoppingcardState extends State<shoppingcard> {
 
 
 
+  AddorUpdateShoppingList(String name) async {
+    var objectsOfIngredients = finalIngredientList.map((instance) {
+      return shoppingIngredient(
+        Ingridient_name: instance.Ingridient_name,
+        Ingridient_mass: instance.Ingridient_mass, 
+        Ingridient_mass_unit: instance.Ingridient_mass_unit,
+        crossedOff: instance.crossedOff
+        );
+    }).toList();
+
+  // Objects of Ingredients to String 
+  String stringList = json.encode(objectsOfIngredients); 
+
+  widget.saveShoppingListToSavedLists(name, stringList);
+
+
+  }
+
   checkCrossedOutIngredient(int index) {
         setState(() {
           finalIngredientList[index].crossedOff = !finalIngredientList[index].crossedOff;
@@ -122,6 +140,9 @@ class shoppingcardState extends State<shoppingcard> {
   List<spices> temporarySpicesList = [];
   List<shoppingIngredient> temporaryIngriedientlist = [];
   bool generated = false;
+
+  TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context)  {
       
@@ -341,9 +362,10 @@ class shoppingcardState extends State<shoppingcard> {
                                                       builder: (context) =>  AlertDialog(
                                                         title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
                                                         content: TextField(
+                                                          controller: _controller,
                                                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                                                           decoration: InputDecoration(
-                                                            
+                                                          
                                                           
                                                           filled: false,
                                                           enabledBorder: OutlineInputBorder(
@@ -359,13 +381,18 @@ class shoppingcardState extends State<shoppingcard> {
                                                         actions: [
                                                           TextButton(
                                                             onPressed:() {
-                                                              widget.saveShoppingListToSavedLists(finalIngredientList);
+                                                              String name = _controller.text;
+                                                              AddorUpdateShoppingList(name);
+                                                              
                                                               // Funktion für Speicherung der Liste 
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
+                                                              setState(() {
+                                                                
+                                                              });
                                                             },
                                                             child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
                                                             )
