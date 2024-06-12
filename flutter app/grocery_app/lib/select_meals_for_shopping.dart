@@ -21,8 +21,9 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
   List<shoppingIngredient> temporaryIngriedientlist = [];
   ingredientsShoppingListCalculation(List<shoppingIngredient> list, String name) {
+     Map<String, shoppingIngredient> finalIngredientMap ={};
     for (var ingredients in list) {
-      Map<String, shoppingIngredient> finalIngredientMap ={};
+     
 
        if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
         double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass);
@@ -49,12 +50,13 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       
       
     }
-      List<shoppingIngredient> finalIngredientList = [];
+      
       finalIngredientList = finalIngredientMap.values.toList();
-      widget.savedShoppingList(name, finalIngredientList);
+      
       
 
     }
+      widget.savedShoppingList(name, finalIngredientList);
   }
   
   shoppingListToSavedList(String name) async {
@@ -77,9 +79,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
          }).toList());
     }
       ingredientsShoppingListCalculation(temporaryIngriedientlist, name);
-      setState(() {
-        
-      });
+  
   }
   
   select_meal(var data) async {
@@ -92,16 +92,29 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     int id = dbItem["id"];
     String name = dbItem["title"];
 
-    selectedMeal instance = selectedMeal(meal_title: name, meal_id: id, meal_size: 1);
-    selected_meals_list.add(instance); 
-    setState(() {});
+    //check ob Meal bereits ausgewählt ist
+
+    for (var i in selected_meals_list) {
+      if (id == i.meal_id) {
+        doNotAdd = true;
+        print("acces denied");
+        break;
+      } 
+    }
+
+    if (doNotAdd == false) {
+       selectedMeal instance = selectedMeal(meal_title: name, meal_id: id, meal_size: 1);
+      selected_meals_list.add(instance); 
+      setState(() {});
+    }
   }
   
-
+  List<shoppingIngredient> finalIngredientList = [];
   TextEditingController _controller = TextEditingController();
   int mealSize = 1;
   List selected_meals_list = []; 
   bool genrated = false; 
+  bool doNotAdd = false;  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,9 +163,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                       onTap:() {
                         var data = widget.getItem(widget.callback[index]["id"]);
                         select_meal(data);
-                        setState(() {
-                          
-                        });
+                        
                       },
                       titleAlignment: ListTileTitleAlignment.center,
                       
@@ -194,6 +205,12 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                     ),                     
                   child: Center(
                     child: ListTile(
+                      onTap: () {
+                        setState(() {
+                          selected_meals_list.removeAt(index);
+                        });
+                        
+                      },
                       title: Text(selected_meals_list[index].meal_title!, style: TextStyle( color: Colors.black),),
                       trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -287,6 +304,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                             shoppingListToSavedList(name);    
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            
 
                             },
                             child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
