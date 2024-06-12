@@ -30,6 +30,29 @@ class _meal_pageState extends State<homePage2> {
     
    
 
+datatoAcessebleData(int index) async {
+  List<Map> item =  await _getOneSavedShoppingList(widget.getSavedShoppingLists[index]["id"]);
+  List bla2 = json.decode(item[0]["savedShoppingListsJson"]);
+  
+  list2.addAll(bla2.map((instance) {
+  return shoppingIngredient(
+  Ingridient_name: instance["Ingridient_name"], 
+  Ingridient_mass: (instance["Ingridient_mass"]),
+  Ingridient_mass_unit: instance["Ingridient_mass_unit"],
+  crossedOff: false,
+  );
+  }).toList());
+
+ setState(() {
+   
+ });
+}
+
+Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
+  final data = await SQLHelper.getOneSavedShoppingList(id);
+  return data;
+
+  }
   
   _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients) {
 
@@ -132,7 +155,7 @@ class _meal_pageState extends State<homePage2> {
   
   List<MealModel> displayed_meal_list = List.from(main_meal_list);
 
-   
+   List<shoppingIngredient> list2 = [];
    int selected_Index_Nav = 0; 
    bool HomePage = true;
    var data;
@@ -444,20 +467,12 @@ class _meal_pageState extends State<homePage2> {
                                                                 ),
                                                                 child: ListTile(
                                                                   onTap: () {
-                                                                       List bla = widget.getSavedShoppingLists[index]["savedShoppingListsJson"];
-                                                                       print(bla);
-                                                                       List<shoppingIngredient> list2 = [];
-                                                                       list2.addAll(bla.map((instance) {
-                                                                         return shoppingIngredient(
-                                                                            Ingridient_name: instance["Ingridient_name"],
-                                                                            Ingridient_mass: (instance["Ingridient_mass"]),
-                                                                            Ingridient_mass_unit: instance["Ingridient_mass_unit"],
-                                                                            crossedOff: false,
-                                                                        );
-                                                                             }).toList());
                                                                        
                                                                        
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], oldShoppingList:list2, getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: _addSavedShoppingListtoLists, old: true,))));
+                                                                       datatoAcessebleData(index);
+                                                                       
+                                                                       
+                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: _addSavedShoppingListtoLists, old: true,))));
                                                                   },
                                                                   contentPadding: EdgeInsets.symmetric(),
                                                                   title: Center(
