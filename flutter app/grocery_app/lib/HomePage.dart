@@ -404,7 +404,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                   SizedBox(height: MediaQuery.of(context).size.height / 40,),
                   FloatingActionButton(
                     backgroundColor: HexColor("#d6e2de"),
-                    onPressed:() => null,
+                    onPressed:() {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => select_meals_for_shopping(callback: widget.callback2, spontaneous: false, getItem: _getOneMeal , savedShoppingList: _addSavedShoppingListtoLists)));
+                    },
                     child:Icon(Icons.add)
                     ),
                   const Spacer(),
@@ -529,7 +533,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
                                           
                                         }, 
                                         child: Container(

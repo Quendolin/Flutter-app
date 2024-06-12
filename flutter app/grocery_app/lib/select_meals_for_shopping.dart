@@ -10,7 +10,8 @@ class select_meals_for_shopping extends StatefulWidget {
   final List callback; 
   final Function savedShoppingList;
   final Function getItem;
-  const select_meals_for_shopping({super.key, required this.callback, required this.getItem, required this.savedShoppingList});
+  final bool spontaneous;
+  const select_meals_for_shopping({super.key, required this.callback, required this.getItem, required this.savedShoppingList, required this.spontaneous});
 
   @override
   State<select_meals_for_shopping> createState() => _select_meals_for_shoppingState();
@@ -18,10 +19,68 @@ class select_meals_for_shopping extends StatefulWidget {
 
 class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
+  List<shoppingIngredient> temporaryIngriedientlist = [];
+  ingredientsShoppingListCalculation(List<shoppingIngredient> list, String name) {
+    for (var ingredients in list) {
+      Map<String, shoppingIngredient> finalIngredientMap ={};
 
+       if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
+        double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass);
+        double additionalMass = double.parse(ingredients.Ingridient_mass);
+        double combinedMass = (existingMass + additionalMass);
+        // check ob switch zu int
+        if (combinedMass == combinedMass.toInt()) {
+           int combinedMassNew = combinedMass.toInt();
+           finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (combinedMassNew).toString();
+           } else {
+            finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass = (combinedMass).toString();
+           }
+             } else {
+        
+        double toInt = double.parse(ingredients.Ingridient_mass);
+        if (toInt == toInt.toInt()) {
+          int Int = toInt.toInt();
+          ingredients.Ingridient_mass = Int.toString();
+        }
+        
+        
+        // wenn Zuatat noch nicht Existiert 
+        finalIngredientMap[ingredients.Ingridient_name] = ingredients;
+      
+      
+    }
+      List<shoppingIngredient> finalIngredientList = [];
+      finalIngredientList = finalIngredientMap.values.toList();
+      widget.savedShoppingList(name, finalIngredientList);
+      
 
+    }
+  }
   
+  shoppingListToSavedList(String name) async {
+    
+    for (var i in selected_meals_list) {
+      int id = i.meal_id;
+      int size = i.meal_size;
 
+      List<Map> list = await widget.getItem(id);
+
+      List tempIngredientList = json.decode(list[0]["ingridientsJson"]);
+      
+          temporaryIngriedientlist.addAll(tempIngredientList.map((instance) {
+          return shoppingIngredient(
+            Ingridient_name: instance["Ingridient_name"],
+            Ingridient_mass: (double.parse(instance["Ingridient_mass"]) * size).toString(),
+            Ingridient_mass_unit: instance["Ingridient_mass_unit"],
+            crossedOff: false,
+          );
+         }).toList());
+    }
+      ingredientsShoppingListCalculation(temporaryIngriedientlist, name);
+      setState(() {
+        
+      });
+  }
   
   select_meal(var data) async {
     List<Map> list = await data;
@@ -38,6 +97,8 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     setState(() {});
   }
   
+
+  TextEditingController _controller = TextEditingController();
   int mealSize = 1;
   List selected_meals_list = []; 
   bool genrated = false; 
@@ -196,7 +257,45 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               child: InkWell(
                 onTap: () {
 
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
+                  if (widget.spontaneous == true) {
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
+                  } else {
+
+                    showDialog(
+                      context: context, 
+                      builder: (context) =>  AlertDialog(
+                        title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
+                        content: TextField(
+                        controller: _controller,
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                        decoration: InputDecoration(                                
+                          filled: false,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 1), 
+                            borderRadius: BorderRadius.circular(12)
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black, width: 2)
+                           )
+                          ),
+                         ),
+                        actions: [
+                          TextButton(
+                            onPressed:() {
+                            String name = _controller.text;
+                            shoppingListToSavedList(name);    
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+
+                            },
+                            child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
+                             )
+                            ],
+                          ));
+                    
+                  }
+                  
                   
                   
                 },
