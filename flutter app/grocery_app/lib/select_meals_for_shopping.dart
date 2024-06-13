@@ -63,7 +63,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     }
     // check ob eine neue shoppingList erstellt werden soll oder eine geupdated werden soll 
       if (widget.update2) {
-        widget.updateShoppingList(old_id, old_name, finalIngredientList, selected_meals_list);
+        widget.updateShoppingList(old_id, name, finalIngredientList, selected_meals_list);
       }  else {
         widget.savedShoppingList(name, finalIngredientList, selected_meals_list);
       }
@@ -123,8 +123,8 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   loadShoppingListData() async  {
     List<Map> list = await widget.ShoppingListData;
     print(list);
-    old_name = list[0]["name"];
     old_id = list[0]["id"];
+    _controller2.text = list[0]["name"];
 
 
     List mealList = json.decode(list[0]["originalMealListFromShoppingListJson"]);
@@ -141,6 +141,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   
   List<shoppingIngredient> finalIngredientList = [];
   TextEditingController _controller = TextEditingController();
+  TextEditingController _controller2 = TextEditingController();
   int mealSize = 1;
   List<selectedMeal> selected_meals_list = []; 
   bool genrated = false; 
@@ -167,8 +168,13 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       centerTitle: true,
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
-          Navigator.pop(context);
+          if (widget.update2) {
+            Navigator.pop(context);
+          } else {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }
+
         },
         icon: Icon(Icons.arrow_back, 
         color: Colors.white,
@@ -184,13 +190,50 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       body: Column(
         
         children: [
+          
+          widget.spontaneous == false? 
+          
+            Column(
+              children: [
+                 const Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left:13),
+                    child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  ),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(10.0),
+                   child: TextField(
+                    controller: _controller2 ,
+                    decoration: InputDecoration(
+                      fillColor: HexColor("#d6e2de"),
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1), 
+                        borderRadius: BorderRadius.circular(12)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.black, width: 2)
+                      )
+                      
+                    )
+                   
+                   
+                   ),
+                 ),
+                    
+              ],
+            )
+          : Container(),
           Align(
             alignment: Alignment.center,
             child: Text("Gespeicherte Gerichte", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
           ),
           Padding(padding: EdgeInsets.all(8),
           child: Container(
-            height: MediaQuery.of(context).size.height /2.5,
+            height:  widget.spontaneous == false ? MediaQuery.of(context).size.height /3.5 : MediaQuery.of(context).size.height /2.5 ,
             decoration: BoxDecoration(
               color: HexColor("#3c634c"),
               border: Border.all(),
@@ -329,11 +372,10 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                   } else {
 
                       if (widget.update2 == true) {
-                        shoppingListToSavedList(old_name);
+                        shoppingListToSavedList(_controller2.text);
+                        Navigator.pop(context);
                       } else {
-
-                      }
-                    showDialog(
+                        showDialog(
                       context: context, 
                       builder: (context) =>  AlertDialog(
                         title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
@@ -355,6 +397,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                         actions: [
                           TextButton(
                             onPressed:() {
+                            
                             String name = _controller.text;
                             shoppingListToSavedList(name);    
                             Navigator.pop(context);
@@ -366,6 +409,9 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                              )
                             ],
                           ));
+
+                      }
+                    
                     
                   }
                   

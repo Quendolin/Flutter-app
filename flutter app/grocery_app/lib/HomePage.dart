@@ -54,6 +54,40 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   return data;
 
   }
+
+  UpdateShoppingList(int id, String name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList) {
+
+     var objectsOfIngredients = ingredients.map((instance) {
+      return {
+        "Ingridient_name": instance.Ingridient_name,
+        "Ingridient_mass": instance.Ingridient_mass, 
+        "Ingridient_mass_unit": instance.Ingridient_mass_unit,
+        "coressedOff": instance.crossedOff
+        
+
+      };
+    }).toList();
+
+    var list3 = originalMealListFromShoppingList.map((e) {
+      return {
+        "meal_id": e.meal_id,
+        "meal_size": e.meal_size,
+        "meal_title": e.meal_title
+      }
+;
+    }).toList();
+
+  // Objects of Ingredients to String 
+  String stringList = json.encode(objectsOfIngredients);
+  String strMealList = json.encode(list3);
+  print(strMealList);
+
+  _updateShoppingList(id, name, stringList, strMealList);
+  
+    
+  
+
+  }
   
   _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList) {
 
@@ -426,7 +460,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                         
                                         Navigator.push(
                                 context,
-                                    MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: true, savedShoppingList: _addSavedShoppingListtoLists , ShoppingListData: data, getItem: _getOneMeal ,callback: widget.callback2, spontaneous: false , update: true, updateShoppingList: _updateShoppingList,   )));
+                                    MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: true, savedShoppingList: _addSavedShoppingListtoLists , ShoppingListData: data, getItem: _getOneMeal ,callback: widget.callback2, spontaneous: false , update: true, updateShoppingList: UpdateShoppingList,   )));
                                
                               
                                         
@@ -454,7 +488,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                     onPressed:() {
                       Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list()  ,updateShoppingList: _updateShoppingList, update: false, callback: widget.callback2, spontaneous: false, getItem: _getOneMeal , savedShoppingList: _addSavedShoppingListtoLists)));
+                      MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list()  ,updateShoppingList: UpdateShoppingList, update: false, callback: widget.callback2, spontaneous: false, getItem: _getOneMeal , savedShoppingList: _addSavedShoppingListtoLists)));
                     },
                     child:Icon(Icons.add)
                     ),
@@ -580,7 +614,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list(), updateShoppingList: _updateShoppingList, update: false, callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list(), updateShoppingList: UpdateShoppingList, update: false, callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
                                           
                                         }, 
                                         child: Container(
