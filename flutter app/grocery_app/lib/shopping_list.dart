@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grocery_app/add_ingridients_to_meal.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -127,6 +128,7 @@ class shoppingcardState extends State<shoppingcard> {
   bool generated = false;
 
   TextEditingController _controller = TextEditingController();
+  FocusNode textfield = FocusNode();
 
   @override
   Widget build(BuildContext context)  {
@@ -351,12 +353,24 @@ class shoppingcardState extends State<shoppingcard> {
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(12.0),
                                                   child: InkWell(
-                                                    onTap: () => showDialog(
+                                                    onTap: () { 
+                                                    textfield.requestFocus();
+                                                    showDialog(
                                                       context: context, 
                                                       builder: (context) =>  AlertDialog(
                                                         title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
                                                         content: TextField(
+                                                          onSubmitted: (name) {
+                                                            name = name.capitalize();
+                                                            widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                          },
                                                           controller: _controller,
+                                                          focusNode: textfield,
                                                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                                                           decoration: InputDecoration(
                                                           
@@ -376,6 +390,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                           TextButton(
                                                             onPressed:() {
                                                               String name = _controller.text;
+                                                              name = name.capitalize();
                                                               widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList);
                                                               
                                                               
@@ -390,7 +405,8 @@ class shoppingcardState extends State<shoppingcard> {
                                                             child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
                                                             )
                                                         ],
-                                                      )),
+                                                      ));
+                                                      },
                                                     child: Container(
                                                       alignment: Alignment.center,
                                                       height: MediaQuery.of(context).size.height / 7,

@@ -149,7 +149,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   String old_name = "";
   late int old_id;
 
-
+  FocusNode textfield = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -170,8 +170,10 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
         onPressed: () {
           if (widget.update2) {
             Navigator.pop(context);
-          } else {
+          } else if (widget.spontaneous) {
             Navigator.pop(context);
+            Navigator.pop(context);
+          } else {
             Navigator.pop(context);
           }
 
@@ -196,33 +198,36 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
             Column(
               children: [
                  const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left:13),
+                  alignment: Alignment.center,
+                  
+                    
                     child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                  ),
+                  
                  ),
                  Padding(
-                   padding: const EdgeInsets.all(10.0),
+                   padding: const EdgeInsets.all(8.0),
                    child: TextField(
                     controller: _controller2 ,
                     decoration: InputDecoration(
+                      
                       fillColor: HexColor("#d6e2de"),
                       filled: true,
                       enabledBorder: OutlineInputBorder(
+
                         borderSide: BorderSide(color: Colors.black, width: 1), 
                         borderRadius: BorderRadius.circular(12)
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.black, width: 2)
-                      )
+                      ),
                       
-                    )
+                    
                    
                    
                    ),
                  ),
+                )
                     
               ],
             )
@@ -375,12 +380,14 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                         shoppingListToSavedList(_controller2.text);
                         Navigator.pop(context);
                       } else {
+                        textfield.requestFocus();
                         showDialog(
                       context: context, 
                       builder: (context) =>  AlertDialog(
                         title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
                         content: TextField(
                         controller: _controller,
+                        focusNode: textfield,
                         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                         decoration: InputDecoration(                                
                           filled: false,

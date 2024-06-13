@@ -34,59 +34,26 @@ List<MealModel> main_meal_list = [
   ];
 
 
-  class Ingridients { 
-    String? Ingridient_title; 
-    int? Ingridient_mass; 
+  class Ingredient { 
+    final int id; 
+    final String name; 
     
-    Ingridients(
+    Ingredient({
+      required this.id,
+      required this.name
+    });
       
-      this.Ingridient_title,
-    );
+    Map<String, dynamic> toMap() {
+      return {
+        "id": id, 
+        "name": name
+      };
+    }
+    
 
   }
 
-List<Ingridients> Ingridients_name_list = [
 
-    Ingridients("Aalsuppe"),
-    Ingridients("Agavendicksaft"),
-    Ingridients("Ahornsirup"),
-    Ingridients("Ajvar"),
-    Ingridients("Ananas"),
-    Ingridients("Apfel"), 
-    Ingridients("Apfelkompott"), 
-    Ingridients("Apfelkraut"), 
-    Ingridients("Apfelsine"), 
-    Ingridients("Aprikose"), 
-    Ingridients("Artischocke"), 
-    Ingridients("Artischockenherz"), 
-    Ingridients("Aubergine"),
-    Ingridients("Ananas"),
-    Ingridients("Auflauf"), 
-    Ingridients("Austernpilz"),
-
-
-
-
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-    Ingridients("Ananas"),
-
-
-    
-    Ingridients("Cherimoya"),
-
-];
 
 
 class add_ingridients_list {

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart';
@@ -25,7 +26,7 @@ class _add_ingridients_to_mealState extends State<add_ingridients_to_meal> {
 
 List<String> ValidChars = ["1","2","3","4","5","6","7","8","9","0",".",","];
 
-List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name_list);
+List  displayed_add_ingridients_to_meal = [];
 
 
 
@@ -62,7 +63,7 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
                         if (a == array.length - 1) 
                         {
                          
-                          
+                            name = name.capitalize();
                             widget.callback(name, ingredients_amount, array.replaceAll(",", "."));
                             containerHeight = containerHeight + MediaQuery.of(context).size.height / 20;
                             widget.containerHeight4(containerHeight, 0.000);
@@ -95,7 +96,9 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
                         break;
                        }
                   }
+
                   if (array.length == 0) {textfield2.requestFocus();}
+                  
                   return containerHeight;
   }
 
@@ -130,10 +133,17 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
 
 
 
-  void updateList(String value) {
-    setState(() {
-      displayed_add_ingridients_to_meal = Ingridients_name_list.where((element) => element.Ingridient_title!.toLowerCase().contains(value.toLowerCase())).toList();
+  Future<void> getSuggestionsIngredient(String query) async {
+    if (query.isEmpty) {displayed_add_ingridients_to_meal = [];}
+    else {
+      final db = await SQLHelper.db();
+      final List<Map<String, dynamic>> maps = await db.query("Ingredients", where: "name LIKE ?", whereArgs: ['%$query%'], limit: 15);
+      displayed_add_ingridients_to_meal = List.generate(maps.length, (index) {
+      return maps[index]["name"];
     });
+    }
+    
+    
   }
 
   Ingridients_Selected_x(String ingredient_string) {
@@ -142,11 +152,11 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
     setState(() {
       
       _controller1.text = ingredient_string;
-      ingridients_selceted == false;
+      ingridients_selceted == true;
     });
-    ingridients_selceted = false; 
-    print(ingredient_string);
-    return _controller1.text; 
+     
+    
+    
   }
 
 
@@ -155,11 +165,11 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
 
     setState(() {
       
-      ingridients_selceted == true;
+      ingridients_selceted == false;
     });
-    ingridients_selceted = true; 
     
-    return ingridients_selceted; 
+    
+    
 
 
   }
@@ -174,7 +184,7 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
   
 
   
-  bool  ingridients_selceted = true;  
+  bool  ingridients_selceted = false;  
   int i = 1;
   int dunno = 0;
   bool error = false; 
@@ -214,7 +224,9 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
           onTap: () {
               Ingridients_Selected_y();
             },
-          onChanged: (value) => updateList(value),
+          onChanged: (value) => setState(() {
+            getSuggestionsIngredient(value);
+          }),
 
           autofocus: true,
           controller: _controller1, 
@@ -241,7 +253,7 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
            ),
          ),
 
-        if(ingridients_selceted == false) 
+        if (ingridients_selceted == true) 
         Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -254,7 +266,7 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
 
          
 
-        ingridients_selceted == true? 
+        ingridients_selceted == false? 
         
         // condition true 
         Expanded(
@@ -262,10 +274,10 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
           itemCount: displayed_add_ingridients_to_meal.length,
           itemBuilder: (context, index) => ListTile(
             
-            onTap: () {Ingridients_Selected_x(displayed_add_ingridients_to_meal[index].Ingridient_title!, );
+            onTap: () {Ingridients_Selected_x(displayed_add_ingridients_to_meal[index].name);
                       FocusScope.of(context).unfocus();
              } ,
-            title: Text(displayed_add_ingridients_to_meal[index].Ingridient_title!, style: TextStyle(color: Colors.white),),
+            title: Text(displayed_add_ingridients_to_meal[index].name!, style: TextStyle(color: Colors.white),),
           )
          )
          )
@@ -382,3 +394,8 @@ List<Ingridients> displayed_add_ingridients_to_meal = List.from(Ingridients_name
   }
 }
 
+extension StringExtensions on String { 
+  String capitalize() { 
+    return "${this[0].toUpperCase()}${this.substring(1)}"; 
+  } 
+} 

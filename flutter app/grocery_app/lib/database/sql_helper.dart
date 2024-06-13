@@ -1,4 +1,5 @@
 import "package:flutter/foundation.dart";
+import "package:grocery_app/meal_model.dart";
 import "package:sqflite/sqflite.dart" as sql;
 
 
@@ -13,7 +14,7 @@ class SQLHelper {
       spicesJson TEXT
       ) """
     );
-
+  
     await database.execute(
       """CREATE TABLE shoppingLists(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
@@ -22,6 +23,19 @@ class SQLHelper {
       originalMealListFromShoppingListJson TEXT
       ) """
     );
+
+    await database.execute(
+      """CREATE TABLE Ingredient(
+      id INTEGER PRIMARY KEY,
+      name TEXT,
+      )
+      """
+    );
+    await database.execute(
+      """CREATE INDEX index_name ON Ingredient(name);"""
+    );
+    
+    
   }
 
 
@@ -35,6 +49,19 @@ class SQLHelper {
       }
     );
   }
+
+  Future<List<Ingredient>> searchIngredient(String query) async {
+    final db = await SQLHelper.db();
+    
+    final List<Map<String, dynamic>> maps = await db.query("Ingredients", where: "name LIKE ?", whereArgs: ["%$query%"], limit: 15);
+    return List.generate(maps.length, (index) {
+      return Ingredient(
+        id: maps[index]["id"],
+        name: maps[index]["name"]
+        );
+    });
+  }
+
 // Button --> create instance of a sql table
   static Future<int> createMeal(String title, String description, String ingridientsJson, String spicesJson) async {
     final db = await SQLHelper.db();
