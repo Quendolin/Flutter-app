@@ -55,7 +55,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   }
   
-  _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients) {
+  _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList) {
 
     var objectsOfIngredients = ingredients.map((instance) {
       return {
@@ -68,16 +68,27 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       };
     }).toList();
 
+    var list3 = originalMealListFromShoppingList.map((e) {
+      return {
+        "meal_id": e.meal_id,
+        "meal_size": e.meal_size,
+        "meal_title": e.meal_title
+      }
+;
+    }).toList();
+
   // Objects of Ingredients to String 
   String stringList = json.encode(objectsOfIngredients);
+  String strMealList = json.encode(list3);
+  print(strMealList);
 
-  addSavedShoppingListtoLists(name, stringList); 
+  addSavedShoppingListtoLists(name, stringList, strMealList); 
 
 
 
   }
-  addSavedShoppingListtoLists(String name, String savedShoppingListsJson) async {
-    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson);
+  addSavedShoppingListtoLists(String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson) async {
+    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson, originalMealListFromShoppingListJson);
     widget.refreshShoppingLists();
   } 
 
@@ -90,6 +101,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   }
   
+
+  Future<void> _updateShoppingList(int id, String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson ) async {
+    await SQLHelper.updateSavedShoppingList(id, name, savedShoppingListsJson, originalMealListFromShoppingListJson);
+    widget.refreshShoppingLists();
+  }
 
 
   Future<void> _updateMeal(int id, String title_name, String description, ingridientsJson, String spicesJson) async {
@@ -154,10 +170,6 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   
 
 
-  saveShoppingListToSavedLists(List<shoppingIngredient> list) {
-
-   // listOfSavedShoppingLists.add(list);
-  }
   
   List<MealModel> displayed_meal_list = List.from(main_meal_list);
 
@@ -410,12 +422,14 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                     IconButton(
                                       icon: Icon(Icons.edit, color: Colors.black,),
                                       onPressed: () {
-                                        data =_getOneMeal(widget.callback2[index]["id"]);
+                                        data =_getOneSavedShoppingList(widget.getSavedShoppingLists[index]["id"]);
+                                        
+                                        Navigator.push(
+                                context,
+                                    MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: true, savedShoppingList: _addSavedShoppingListtoLists , ShoppingListData: data, getItem: _getOneMeal ,callback: widget.callback2, spontaneous: false , update: true, updateShoppingList: _updateShoppingList,   )));
                                
                               
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: data, update: true,  )));
+                                        
                                
                                       },    
                                      ),  
@@ -440,7 +454,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                     onPressed:() {
                       Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => select_meals_for_shopping(callback: widget.callback2, spontaneous: false, getItem: _getOneMeal , savedShoppingList: _addSavedShoppingListtoLists)));
+                      MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list()  ,updateShoppingList: _updateShoppingList, update: false, callback: widget.callback2, spontaneous: false, getItem: _getOneMeal , savedShoppingList: _addSavedShoppingListtoLists)));
                     },
                     child:Icon(Icons.add)
                     ),
@@ -566,7 +580,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                       flex: 1,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
+                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list(), updateShoppingList: _updateShoppingList, update: false, callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
                                           
                                         }, 
                                         child: Container(

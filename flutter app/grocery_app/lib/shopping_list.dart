@@ -376,7 +376,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                           TextButton(
                                                             onPressed:() {
                                                               String name = _controller.text;
-                                                              widget.saveShoppingListToSavedLists(name, finalIngredientList);
+                                                              widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList);
                                                               
                                                               
                                                               // Funktion für Speicherung der Liste 

@@ -11,7 +11,11 @@ class select_meals_for_shopping extends StatefulWidget {
   final Function savedShoppingList;
   final Function getItem;
   final bool spontaneous;
-  const select_meals_for_shopping({super.key, required this.callback, required this.getItem, required this.savedShoppingList, required this.spontaneous});
+  final Function updateShoppingList;
+  final Future<List<Map<String, dynamic>>> ShoppingListData;
+  bool update; 
+  final bool update2;
+  select_meals_for_shopping({super.key, required this.update2, required this.ShoppingListData, required this.updateShoppingList, required this.update, required this.callback, required this.getItem, required this.savedShoppingList, required this.spontaneous});
 
   @override
   State<select_meals_for_shopping> createState() => _select_meals_for_shoppingState();
@@ -20,6 +24,7 @@ class select_meals_for_shopping extends StatefulWidget {
 class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
   List<shoppingIngredient> temporaryIngriedientlist = [];
+
   ingredientsShoppingListCalculation(List<shoppingIngredient> list, String name) {
      Map<String, shoppingIngredient> finalIngredientMap ={};
     for (var ingredients in list) {
@@ -56,7 +61,13 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       
 
     }
-      widget.savedShoppingList(name, finalIngredientList);
+    // check ob eine neue shoppingList erstellt werden soll oder eine geupdated werden soll 
+      if (widget.update2) {
+        widget.updateShoppingList(old_id, old_name, finalIngredientList, selected_meals_list);
+      }  else {
+        widget.savedShoppingList(name, finalIngredientList, selected_meals_list);
+      }
+      
   }
   
   shoppingListToSavedList(String name) async {
@@ -108,15 +119,46 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       setState(() {});
     }
   }
+
+  loadShoppingListData() async  {
+    List<Map> list = await widget.ShoppingListData;
+    print(list);
+    old_name = list[0]["name"];
+    old_id = list[0]["id"];
+
+
+    List mealList = json.decode(list[0]["originalMealListFromShoppingListJson"]);
+    selected_meals_list = mealList.map((instance) {
+      return selectedMeal(
+        meal_title: instance["meal_title"],
+        meal_id: instance["meal_id"],
+        meal_size: instance["meal_size"]);
+    }).toList();
+    setState(() {
+      
+    });
+  }
   
   List<shoppingIngredient> finalIngredientList = [];
   TextEditingController _controller = TextEditingController();
   int mealSize = 1;
-  List selected_meals_list = []; 
+  List<selectedMeal> selected_meals_list = []; 
   bool genrated = false; 
   bool doNotAdd = false;  
+  String old_name = "";
+  late int old_id;
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    if (widget.update == true) {
+
+      loadShoppingListData();
+      widget.update = false; 
+    }
+
     return Scaffold(
       backgroundColor: HexColor("#31473A"),
       appBar:AppBar(
@@ -286,6 +328,11 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                     Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
                   } else {
 
+                      if (widget.update2 == true) {
+                        shoppingListToSavedList(old_name);
+                      } else {
+
+                      }
                     showDialog(
                       context: context, 
                       builder: (context) =>  AlertDialog(

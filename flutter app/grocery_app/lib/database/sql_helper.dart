@@ -18,7 +18,8 @@ class SQLHelper {
       """CREATE TABLE shoppingLists(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
       name TEXT, 
-      savedShoppingListsJson, Text
+      savedShoppingListsJson TEXT,
+      originalMealListFromShoppingListJson TEXT
       ) """
     );
   }
@@ -27,7 +28,7 @@ class SQLHelper {
   static Future<sql.Database> db() async {
 
     return sql.openDatabase(
-      "db_meals7.db",
+      "db_meals10.db",
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);
@@ -43,9 +44,9 @@ class SQLHelper {
     return id; 
   }
 
-  static Future<int> createSavesShppongList(String name, String savedShoppingListsJson) async {
+  static Future<int> createSavesShppongList(String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson ) async {
     final db = await SQLHelper.db();
-    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson};
+    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson, "originalMealListFromShoppingListJson": originalMealListFromShoppingListJson };
     final id = await db.insert("shoppingLists", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id; 
   }
@@ -74,9 +75,9 @@ class SQLHelper {
     return db.query("shoppingLists", where: "id=?", whereArgs: [id], limit: 1);
   }
 
-  static Future<int> updateSavedShoppingList(int id, String name, String savedShoppingListsJson) async {
+  static Future<int> updateSavedShoppingList(int id, String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson) async {
     final db = await SQLHelper.db();
-    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson}; 
+    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson, "originalMealListFromShoppingListJson": originalMealListFromShoppingListJson}; 
     final result = await db.update("shoppingLists", data, where: "id = ?", whereArgs: [id]);
     return result; 
   }
