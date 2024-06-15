@@ -26,8 +26,8 @@ class SQLHelper {
 
     await database.execute(
       """CREATE TABLE Ingredient(
-      id INTEGER PRIMARY KEY,
-      name TEXT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      name TEXT
       )
       """
     );
@@ -42,7 +42,7 @@ class SQLHelper {
   static Future<sql.Database> db() async {
 
     return sql.openDatabase(
-      "db_meals10.db",
+      "db_meals12.db",
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);

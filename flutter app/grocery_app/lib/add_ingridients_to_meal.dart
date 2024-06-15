@@ -137,7 +137,7 @@ List  displayed_add_ingridients_to_meal = [];
     if (query.isEmpty) {displayed_add_ingridients_to_meal = [];}
     else {
       final db = await SQLHelper.db();
-      final List<Map<String, dynamic>> maps = await db.query("Ingredients", where: "name LIKE ?", whereArgs: ['%$query%'], limit: 15);
+      final List<Map<String, dynamic>> maps = await db.query("Ingredient", where: "name LIKE ?", whereArgs: ['%$query%'], limit: 15);
       displayed_add_ingridients_to_meal = List.generate(maps.length, (index) {
       return maps[index]["name"];
     });
