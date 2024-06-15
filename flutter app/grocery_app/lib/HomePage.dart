@@ -33,7 +33,7 @@ class _meal_pageState extends State<homePage2> {
 datatoAcessebleData(int index) async {
   List<Map> item =  await _getOneSavedShoppingList(widget.getSavedShoppingLists[index]["id"]);
   List bla2 = json.decode(item[0]["savedShoppingListsJson"]);
-  
+  list2 = [];
   list2.addAll(bla2.map((instance) {
   return shoppingIngredient(
   Ingridient_name: instance["Ingridient_name"], 

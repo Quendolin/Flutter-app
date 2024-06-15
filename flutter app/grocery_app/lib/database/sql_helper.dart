@@ -34,6 +34,60 @@ class SQLHelper {
     await database.execute(
       """CREATE INDEX index_name ON Ingredient(name);"""
     );
+
+    List<Ingredient> list = [
+
+      Ingredient(id: 1, name: "Apfel"),
+      Ingredient(id: 2, name: "Avocado"),
+      Ingredient(id: 3, name: "Banane"),
+      Ingredient(id: 4, name: "Basilikum"),
+      Ingredient(id: 5, name: "Brot"),
+      Ingredient(id: 6, name: "Butter"),
+      Ingredient(id: 7, name: "Chili"),
+      Ingredient(id: 8, name: "Eier"),
+      Ingredient(id: 9, name: "Essig"),
+      Ingredient(id: 10, name: "Fisch"),
+      Ingredient(id: 11, name: "Garnele"),
+      Ingredient(id: 12, name: "Gurke"),
+      Ingredient(id: 13, name: "Hackfleisch"),
+      Ingredient(id: 14, name: "Honig"),
+      Ingredient(id: 15, name: "Joghurt"),
+      Ingredient(id: 16, name: "Kartoffeln"),
+      Ingredient(id: 17, name: "Käse"),
+      Ingredient(id: 18, name: "Knoblauch"),
+      Ingredient(id: 19, name: "Kräuter"),
+      Ingredient(id: 20, name: "Lachs"),
+      Ingredient(id: 21, name: "Lauch"),
+      Ingredient(id: 22, name: "Limette"),
+      Ingredient(id: 23, name: "Mandeln"),
+      Ingredient(id: 24, name: "Mehl"),
+      Ingredient(id: 25, name: "Milch"),
+      Ingredient(id: 26, name: "Minze"),
+      Ingredient(id: 27, name: "Nudeln"),
+      Ingredient(id: 28, name: "Oliven"),
+      Ingredient(id: 29, name: "Olivenöl"),
+      Ingredient(id: 30, name: "Orange"),
+      Ingredient(id: 31, name: "Paprika"),
+      Ingredient(id: 32, name: "Parmesan"),
+      Ingredient(id: 33, name: "Pfeffer"),
+      Ingredient(id: 34, name: "Pilze"),
+      Ingredient(id: 35, name: "Reis"),
+      Ingredient(id: 36, name: "Rosmarin"),
+      Ingredient(id: 37, name: "Salat"),
+      Ingredient(id: 38, name: "Salz"),
+      Ingredient(id: 39, name: "Schokolade"),
+      Ingredient(id: 40, name: "Schweinefleisch"),
+      Ingredient(id: 41, name: "Sellerie"),
+      Ingredient(id: 42, name: "Senf"),
+      Ingredient(id: 43, name: "Sojasauce"),
+      Ingredient(id: 44, name: "Spinat")
+  
+    ];
+
+    for (var i in list) {
+      await database.insert("Ingredient", i.toMap());
+    }
+    
     
     
   }
@@ -42,7 +96,7 @@ class SQLHelper {
   static Future<sql.Database> db() async {
 
     return sql.openDatabase(
-      "db_meals12.db",
+      "db_meals14.db",
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);

@@ -152,7 +152,7 @@ List  displayed_add_ingridients_to_meal = [];
     setState(() {
       
       _controller1.text = ingredient_string;
-      ingridients_selceted == true;
+      ingridients_selceted = true;
     });
      
     
@@ -274,10 +274,10 @@ List  displayed_add_ingridients_to_meal = [];
           itemCount: displayed_add_ingridients_to_meal.length,
           itemBuilder: (context, index) => ListTile(
             
-            onTap: () {Ingridients_Selected_x(displayed_add_ingridients_to_meal[index].name);
+            onTap: () {Ingridients_Selected_x(displayed_add_ingridients_to_meal[index]);
                       FocusScope.of(context).unfocus();
              } ,
-            title: Text(displayed_add_ingridients_to_meal[index].name!, style: TextStyle(color: Colors.white),),
+            title: Text(displayed_add_ingridients_to_meal[index], style: TextStyle(color: Colors.white),),
           )
          )
          )
@@ -345,7 +345,7 @@ List  displayed_add_ingridients_to_meal = [];
         ),
 
        
-        if (ingridients_selceted == false)  
+        if (ingridients_selceted == true)  
         
         Padding(
           padding: const EdgeInsets.all(8.0),
