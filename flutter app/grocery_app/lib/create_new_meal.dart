@@ -16,7 +16,7 @@ class create_new_meal extends StatefulWidget {
   final Future<List<Map<String, dynamic>>> ItemValues; 
   bool update;
   
-  
+
   
   // ignore: non_constant_identifier_names
    create_new_meal({super.key, required this.callback, required this.callback2, required this.ItemValues, required this.update, });
@@ -219,295 +219,299 @@ class _create_new_mealState extends State<create_new_meal> {
     
 
     
-    return  Scaffold(
-      backgroundColor:  HexColor("31473A"),
+    return  GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
       
-          body:ListView(
-            primary: true,
-          
-
-             
-            children: [ 
-              Column( 
-                 children: [
-            Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
-              
-              width: MediaQuery.of(context).size.width, 
-              height: MediaQuery.of(context).size.height / 10,
-              decoration: BoxDecoration(
-                color: HexColor("#d6e2de"),
-                border: Border.all(color: Colors.black, width: 1.5),
-                borderRadius: BorderRadius.circular(12)
-              ),
-              child: Center(
-                child: Text("Neue Mahlzeit!", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)), ),
-              ),
-          ),
-
-            Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-            padding: EdgeInsets.only(left: 13),
-            child: Text( "Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))
-          )
-         ),
-
-         Padding(
-           padding: EdgeInsets.all(10),
-           child: TextField(
-            controller: txtcon_name_neuer_Mahlzeit,
-            decoration: InputDecoration(
-              fillColor: HexColor("#d6e2de"),
-              filled: true,
-             
-              
-              enabledBorder: OutlineInputBorder(
+      child: Scaffold(
+        backgroundColor:  HexColor("31473A"),
+        
+            body:ListView(
+              primary: true,
+            
+      
+               
+              children: [ 
+                Column( 
+                   children: [
+              Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
                 
-                borderSide: BorderSide(color: Colors.black, width: 1), 
-                borderRadius: BorderRadius.circular(12)
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.black, width: 2)
-              )
-              
+                width: MediaQuery.of(context).size.width, 
+                height: MediaQuery.of(context).size.height / 10,
+                decoration: BoxDecoration(
+                  color: HexColor("#d6e2de"),
+                  border: Border.all(color: Colors.black, width: 1.5),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                child: Center(
+                  child: Text("Neue Mahlzeit!", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)), ),
+                ),
+            ),
+      
+              Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+              padding: EdgeInsets.only(left: 13),
+              child: Text( "Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))
             )
-           
-           
            ),
-         ),
-
-         
-
-         Padding(
-          padding: EdgeInsets.all(10),
-          child: TextField(
-            controller: txtcon_discription_Malhzeit,
-            decoration: InputDecoration(
-              fillColor: HexColor("#d6e2de"),
-              filled: true,
-              
-              
-              enabledBorder: OutlineInputBorder(
+      
+           Padding(
+             padding: EdgeInsets.all(10),
+             child: TextField(
+              controller: txtcon_name_neuer_Mahlzeit,
+              decoration: InputDecoration(
+                fillColor: HexColor("#d6e2de"),
+                filled: true,
+               
                 
-                borderSide: BorderSide(color: Colors.black, width: 1.5), 
-                borderRadius: BorderRadius.circular(12)
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.black, width: 2)
-              )
-              
-            )
-          ),
-         ),
-
-         Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-            padding: EdgeInsets.only(left: 13),
-            child: Text( "Zutaten", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
-         )
-         ),
-
-         Padding(
-          padding: EdgeInsets.all(10),
-
-            child:Container(
-              decoration: BoxDecoration(
-                color: HexColor("#3c634c"),
-                border: Border.all(width: 1.5, color: Colors.black),
-                borderRadius: BorderRadius.circular(12)
-              ),
-           
-              
-              width: MediaQuery.of(context).size.width, 
-              height: containerHeight,
-              child: 
-                ListView(
-                  children: [
-                    ListView.builder(
-                      padding: EdgeInsets.all(5),
-                      physics: const ClampingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: added_ingridients_list.length,
-                      itemBuilder: (context, index) =>Container(
-                        height: MediaQuery.of(context).size.height / 15,
-                        decoration: BoxDecoration( 
-                          color: HexColor("#d6e2de"),
-                          border: Border.all(color: Colors.black, width: 1.5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                          child: Center(
-                            child: ListTile(
-                            contentPadding: EdgeInsets.only(left: 12),
-                            //shape: RoundedRectangleBorder(
-                            //  borderRadius: BorderRadius.circular(20)
-                              
-                                                //  ),
-                            ///tileColor: Colors.brown,
-                            title:Row( children: [
-                              Expanded(
-                                flex:3, 
-                                child: Container(
-                                
-                                child: Text(added_ingridients_list[index].Ingridient_name!, style: TextStyle(color: Colors.black),)
-                                )),
-                                Expanded(
-                                  flex: 4,
-                                  child: Container(
-                                    child: Text("${added_ingridients_list[index].Ingridient_mass!} ${added_ingridients_list[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.black), )
-                                    ),
-                                ),
-                                
-                            ] ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.black,),
-                              onPressed: () {
-                            
-                                setState(() {
-                                 containerHeight = delete_ingredient_from_meal(index);
-                                });
-                              },
-                            ),
-                                                
-                                                ),
-                          ),
-                      )
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: FloatingActionButton.small(
-                        heroTag: "btn1",
-                        
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        onPressed:() {
-                          Navigator.push(context, 
-                          MaterialPageRoute(builder: (context) => add_ingridients_to_meal(callback: add_inngredient_to_meal_list, containerHeight: containerHeight, containerHeight4: _containerHeight, )));
-                          },
-                                    child: Icon(Icons.add),
-                                    ),
-                    ),
-                  ],
+                enabledBorder: OutlineInputBorder(
+                  
+                  borderSide: BorderSide(color: Colors.black, width: 1), 
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.black, width: 2)
                 )
                 
-              
+              )
+             
+             
+             ),
+           ),
+      
+           
+      
+           Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: txtcon_discription_Malhzeit,
+              decoration: InputDecoration(
+                fillColor: HexColor("#d6e2de"),
+                filled: true,
+                
+                
+                enabledBorder: OutlineInputBorder(
+                  
+                  borderSide: BorderSide(color: Colors.black, width: 1.5), 
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.black, width: 2)
+                )
+                
+              )
             ),
            ),
-
-            const Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-            padding: EdgeInsets.only(left: 13),
-            child: Text( "Gewürze", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
-            )
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
+      
+           Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+              padding: EdgeInsets.only(left: 13),
+              child: Text( "Zutaten", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
+           )
+           ),
+      
+           Padding(
+            padding: EdgeInsets.all(10),
+      
+              child:Container(
                 decoration: BoxDecoration(
-                  color:  HexColor("#3c634c"),
+                  color: HexColor("#3c634c"),
                   border: Border.all(width: 1.5, color: Colors.black),
                   borderRadius: BorderRadius.circular(12)
                 ),
-                height: containerHeight_spices,
-                child: ListView( 
-                  children: [
-                    ListView.builder(
-                      padding: EdgeInsets.all(5),
-                      physics: ClampingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: spices_list.length,
-                      itemBuilder: (context, index) =>Container(
-                        height: MediaQuery.of(context).size.height / 15,
-                        decoration: BoxDecoration( 
-                          color: HexColor("#d6e2de"),
-                          border: Border.all(color: Colors.black, width: 1.5),
-                          borderRadius: BorderRadius.circular(12)
+             
+                
+                width: MediaQuery.of(context).size.width, 
+                height: containerHeight,
+                child: 
+                  ListView(
+                    children: [
+                      ListView.builder(
+                        padding: EdgeInsets.all(5),
+                        physics: const ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: added_ingridients_list.length,
+                        itemBuilder: (context, index) =>Container(
+                          height: MediaQuery.of(context).size.height / 15,
+                          decoration: BoxDecoration( 
+                            color: HexColor("#d6e2de"),
+                            border: Border.all(color: Colors.black, width: 1.5),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Center(
-                            child: ListTile(
-                            contentPadding: EdgeInsets.only(left: 12),
-                            title: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left:155),
-                                        child: Container(
-                                                                        
-                                          child: Text(spices_list[index].spices_title!, style: TextStyle(color: Colors.black),)
-                                          ),
-                                      
-                                                                      
-                                                                      
-                                                                   ),
-                                    ],
+                            child: Center(
+                              child: ListTile(
+                              contentPadding: EdgeInsets.only(left: 12),
+                              //shape: RoundedRectangleBorder(
+                              //  borderRadius: BorderRadius.circular(20)
+                                
+                                                  //  ),
+                              ///tileColor: Colors.brown,
+                              title:Row( children: [
+                                Expanded(
+                                  flex:3, 
+                                  child: Container(
+                                  
+                                  child: Text(added_ingridients_list[index].Ingridient_name!, style: TextStyle(color: Colors.black),)
+                                  )),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      child: Text("${added_ingridients_list[index].Ingridient_mass!} ${added_ingridients_list[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.black), )
+                                      ),
                                   ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.black,),
-                              onPressed: () {
-                            
-                                setState(() {
-                                 containerHeight_spices = delete_spices(index);
-                                });
-                              },
+                                  
+                              ] ),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete, color: Colors.black,),
+                                onPressed: () {
+                              
+                                  setState(() {
+                                   containerHeight = delete_ingredient_from_meal(index);
+                                  });
+                                },
+                              ),
+                                                  
+                                                  ),
                             ),
-                                                
-                                                ),
-                          ),
-                      )
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: FloatingActionButton.small( 
-                        heroTag: "btn2",
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        onPressed:() {
-                          Navigator.push(context, 
-                          MaterialPageRoute(builder: (context) => add_spcies(add: add_spcies_to_meal )));
-                          },
-                        child: Icon(Icons.add),
+                        )
                       ),
-                    ),
-                  ],
-                ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FloatingActionButton.small(
+                          heroTag: "btn1",
+                          
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          onPressed:() {
+                            Navigator.push(context, 
+                            MaterialPageRoute(builder: (context) => add_ingridients_to_meal(callback: add_inngredient_to_meal_list, containerHeight: containerHeight, containerHeight4: _containerHeight, )));
+                            },
+                                      child: Icon(Icons.add),
+                                      ),
+                      ),
+                    ],
+                  )
+                  
                 
               ),
-            ),
-          
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: GestureDetector( 
-              onTap: () {
-                  //print(list[0]["id"]);
-                  AddorUpdateMeal();
-                Navigator.pop(context);
-              },
-             child: Container(
-              width: MediaQuery.of(context).size.width, 
-              height: MediaQuery.of(context).size.height / 9,
-              color: HexColor("#d6e2de"),
-              child: Center(
-                child: Icon(Icons.done, color: Colors.black),
-                 
-                  ),
-                  )
-                 )
              ),
-           
-           
-           
-          ]
-          
-         )
-         ]
+      
+              const Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+              padding: EdgeInsets.only(left: 13),
+              child: Text( "Gewürze", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
+              )
+              ),
+      
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color:  HexColor("#3c634c"),
+                    border: Border.all(width: 1.5, color: Colors.black),
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  height: containerHeight_spices,
+                  child: ListView( 
+                    children: [
+                      ListView.builder(
+                        padding: EdgeInsets.all(5),
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: spices_list.length,
+                        itemBuilder: (context, index) =>Container(
+                          height: MediaQuery.of(context).size.height / 15,
+                          decoration: BoxDecoration( 
+                            color: HexColor("#d6e2de"),
+                            border: Border.all(color: Colors.black, width: 1.5),
+                            borderRadius: BorderRadius.circular(12)
+                            ),
+                            child: Center(
+                              child: ListTile(
+                              contentPadding: EdgeInsets.only(left: 12),
+                              title: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left:155),
+                                          child: Container(
+                                                                          
+                                            child: Text(spices_list[index].spices_title!, style: TextStyle(color: Colors.black),)
+                                            ),
+                                        
+                                                                        
+                                                                        
+                                                                     ),
+                                      ],
+                                    ),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete, color: Colors.black,),
+                                onPressed: () {
+                              
+                                  setState(() {
+                                   containerHeight_spices = delete_spices(index);
+                                  });
+                                },
+                              ),
+                                                  
+                                                  ),
+                            ),
+                        )
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FloatingActionButton.small( 
+                          heroTag: "btn2",
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          onPressed:() {
+                            Navigator.push(context, 
+                            MaterialPageRoute(builder: (context) => add_spcies(add: add_spcies_to_meal )));
+                            },
+                          child: Icon(Icons.add),
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                ),
+              ),
+            
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: GestureDetector( 
+                onTap: () {
+                    //print(list[0]["id"]);
+                    AddorUpdateMeal();
+                  Navigator.pop(context);
+                },
+               child: Container(
+                width: MediaQuery.of(context).size.width, 
+                height: MediaQuery.of(context).size.height / 9,
+                color: HexColor("#d6e2de"),
+                child: Center(
+                  child: Icon(Icons.done, color: Colors.black),
+                   
+                    ),
+                    )
+                   )
+               ),
+             
+             
+             
+            ]
+            
+           )
+           ]
+        ),
+      
+      
       ),
-
-
     );
   }
 }

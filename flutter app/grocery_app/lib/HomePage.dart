@@ -31,9 +31,11 @@ class _meal_pageState extends State<homePage2> {
    
 
 datatoAcessebleData(int index) async {
+  list2 = [];
   List<Map> item =  await _getOneSavedShoppingList(widget.getSavedShoppingLists[index]["id"]);
   List bla2 = json.decode(item[0]["savedShoppingListsJson"]);
-  list2 = [];
+  
+  setState(() {
   list2.addAll(bla2.map((instance) {
   return shoppingIngredient(
   Ingridient_name: instance["Ingridient_name"], 
@@ -43,10 +45,11 @@ datatoAcessebleData(int index) async {
   );
   }).toList());
 
+  });
+  
   huan = true;
- setState(() {
-   
- });
+ 
+ 
 }
 
 Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {

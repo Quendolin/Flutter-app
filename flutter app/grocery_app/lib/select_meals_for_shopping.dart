@@ -173,6 +173,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   late int old_id;
 
   FocusNode textfield = FocusNode();
+  FocusNode _node = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -183,291 +184,263 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
       widget.update = false; 
     }
 
-    return Scaffold(
-      backgroundColor: HexColor("#31473A"),
-      appBar:AppBar(
-      backgroundColor: HexColor("#31473A"),
-      title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
-      centerTitle: true,
-      leading: IconButton(
-        onPressed: () {
-          if (widget.update2) {
-            Navigator.pop(context);
-          } else if (widget.spontaneous) {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          } else {
-            Navigator.pop(context);
-          }
-
-        },
-        icon: Icon(Icons.arrow_back, 
-        color: Colors.white,
-        )),
-      actions: <Widget> [
-        IconButton(
-          icon: Icon(Icons.search), 
+    return GestureDetector(
+    onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: HexColor("#31473A"),
+        appBar:AppBar(
+        backgroundColor: HexColor("#31473A"),
+        title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
+        centerTitle: true,
+        leading: IconButton(
           onPressed: () {
+            if (widget.update2) {
+              Navigator.pop(context);
+            } else if (widget.spontaneous) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            } else {
+              Navigator.pop(context);
+            }
+      
           },
-          ), 
-      ],
-    ),
-      body: Column(
-        
-        children: [
+          icon: Icon(Icons.arrow_back, 
+          color: Colors.white,
+          )),
+        actions: <Widget> [
+          IconButton(
+            icon: Icon(Icons.search), 
+            onPressed: () {
+            },
+            ), 
+        ],
+      ),
+        body: Column(
           
-          widget.spontaneous == false? 
-          
-            Column(
-              children: [
-                 const Align(
-                  alignment: Alignment.center,
-                  
-                    
-                    child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                  
-                 ),
-                 Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: TextField(
-                    controller: _controller2 ,
-                    decoration: InputDecoration(
-                      
-                      fillColor: HexColor("#d6e2de"),
-                      filled: true,
-                      enabledBorder: OutlineInputBorder(
-
-                        borderSide: BorderSide(color: Colors.black, width: 1), 
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.black, width: 2)
-                      ),
-                      
-                    
-                   
-                   
-                   ),
-                 ),
-                )
-                    
-              ],
-            )
-          : Container(),
-          Align(
-            alignment: Alignment.center,
-            child: Text("Gespeicherte Gerichte", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-          ),
-          Padding(padding: EdgeInsets.all(8),
-          child: Container(
-            height:  widget.spontaneous == false ? MediaQuery.of(context).size.height /3.5 : MediaQuery.of(context).size.height /2.5 ,
-            decoration: BoxDecoration(
-              color: HexColor("#3c634c"),
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12)
-            ),
-            child: ListView.builder(
-                itemCount: widget.callback.length,
-                itemBuilder: (context, index) => Padding(   
-                  padding: EdgeInsets.all(10),
-                  child: Container( 
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 13,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.5, color: Colors.black),
-                      borderRadius: BorderRadius.circular(12),
-                      color: HexColor("#d6e2de"),
-                    ),                          
-                  child: Center(
-                    child: ListTile(
-                      onTap:() {
-                        var data = widget.getItem(widget.callback[index]["id"]);
-                        select_meal(data);
-                        
-                      },
-                      titleAlignment: ListTileTitleAlignment.center,
-                      
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                      title: Text(widget.callback[index]["title"], style: TextStyle(color: Colors.black,), textAlign: TextAlign.center,),
-                      
-                     ),
-                  ),
-                  )
-                ) 
-              ),
-          ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text("Ausgewählte Gereichte", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-          ),
-          Padding(padding: EdgeInsets.all(8),
-          child: Container(
-            height: MediaQuery.of(context).size.height /3.2,
+          children: [
             
-            decoration: BoxDecoration(
-               color: HexColor("#3c634c"),
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12)
-            ),
-            child: ListView.builder(
-              itemCount: selected_meals_list.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 13,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.5, color: Colors.black),
-                      borderRadius: BorderRadius.circular(12),
-                      color: HexColor("#d6e2de"),
-                    ),                     
-                  child: Center(
-                    child: ListTile(
-                      onTap: () {
-                        setState(() {
-                          selected_meals_list.removeAt(index);
-                        });
+            widget.spontaneous == false? 
+            
+              Column(
+                children: [
+                   const Align(
+                    alignment: Alignment.center,
+                    
+                      
+                      child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                    
+                   ),
+                   Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: TextField(
+                      controller: _controller2,
+                      focusNode: _node,
+                      decoration: InputDecoration(
                         
-                      },
-                      title: Text(selected_meals_list[index].meal_title!, style: TextStyle( color: Colors.black),),
-                      trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Anzahl", style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.normal),),
-                              CupertinoButton(
-                               
-                               onPressed:() => showCupertinoModalPopup(
-                                context: context, 
-                                builder: (_) => SizedBox(
-                                  width: double.infinity,
-                                  height: MediaQuery.of(context).size.height / 5,
-                                  child: CupertinoPicker(
-                                    backgroundColor: HexColor("#d6e2de"),
-                                    itemExtent: 30,
-                                    scrollController: FixedExtentScrollController(
-                                      initialItem: selected_meals_list[index].meal_size! -1 
-                                    ),
-                                    children: const [
-                                      Text("1"),
-                                      Text("2"),
-                                      Text("3"),
-                                      Text("4"),
-                                      Text("5"),
-                                      
-                                    ],
-                                    onSelectedItemChanged: (int value) {
-                                      setState(() {
-                                        selected_meals_list[index].meal_size = value + 1; 
-                                      });
-                                    },
-                                  ),
-                                )
-                               ),
-                                
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: MediaQuery.of(context).size.height / 19,
-                                width: MediaQuery.of(context).size.width / 9,
-                                decoration: BoxDecoration(
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(8)
-                                ),
-                                child: Text(selected_meals_list[index].meal_size.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15) )
-                              ),
-                              ),
-                            ],
+                        fillColor: HexColor("#d6e2de"),
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+      
+                          borderSide: BorderSide(color: Colors.black, width: 1), 
+                          borderRadius: BorderRadius.circular(12)
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.black, width: 2)
+                        ),
+                        
+                      
+                     
+                     
+                     ),
+                   ),
+                  )
+                      
+                ],
+              )
+            : Container(),
+            Align(
+              alignment: Alignment.center,
+              child: Text("Gespeicherte Gerichte", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            ),
+            Padding(padding: EdgeInsets.all(8),
+            child: Container(
+              height:  widget.spontaneous == false ? MediaQuery.of(context).size.height /3.5 : MediaQuery.of(context).size.height /2.5 ,
+              decoration: BoxDecoration(
+                color: HexColor("#3c634c"),
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(12)
+              ),
+              child: ListView.builder(
+                  itemCount: widget.callback.length,
+                  itemBuilder: (context, index) => Padding(   
+                    padding: EdgeInsets.all(10),
+                    child: Container( 
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 13,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1.5, color: Colors.black),
+                        borderRadius: BorderRadius.circular(12),
+                        color: HexColor("#d6e2de"),
+                      ),                          
+                    child: Center(
+                      child: ListTile(
+                        onTap:() {
+                          var data = widget.getItem(widget.callback[index]["id"]);
+                          select_meal(data);
                           
-                      )
-                      )
+                        },
+                        titleAlignment: ListTileTitleAlignment.center,
+                        
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                        title: Text(widget.callback[index]["title"], style: TextStyle(color: Colors.black,), textAlign: TextAlign.center,),
+                        
+                       ),
+                    ),
+                    )
+                  ) 
+                ),
+            ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Text("Ausgewählte Gereichte", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            ),
+            Padding(padding: EdgeInsets.all(8),
+            child: Container(
+              height: MediaQuery.of(context).size.height /3.2,
+              
+              decoration: BoxDecoration(
+                 color: HexColor("#3c634c"),
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(12)
+              ),
+              child: ListView.builder(
+                itemCount: selected_meals_list.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 13,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1.5, color: Colors.black),
+                        borderRadius: BorderRadius.circular(12),
+                        color: HexColor("#d6e2de"),
+                      ),                     
+                    child: Center(
+                      child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            selected_meals_list.removeAt(index);
+                          });
+                          
+                        },
+                        title: Text(selected_meals_list[index].meal_title!, style: TextStyle( color: Colors.black),),
+                        trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Anzahl", style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.normal),),
+                                CupertinoButton(
+                                 
+                                 onPressed:() => showCupertinoModalPopup(
+                                  context: context, 
+                                  builder: (_) => SizedBox(
+                                    width: double.infinity,
+                                    height: MediaQuery.of(context).size.height / 5,
+                                    child: CupertinoPicker(
+                                      backgroundColor: HexColor("#d6e2de"),
+                                      itemExtent: 30,
+                                      scrollController: FixedExtentScrollController(
+                                        initialItem: selected_meals_list[index].meal_size! -1 
+                                      ),
+                                      children: const [
+                                        Text("1"),
+                                        Text("2"),
+                                        Text("3"),
+                                        Text("4"),
+                                        Text("5"),
+                                        
+                                      ],
+                                      onSelectedItemChanged: (int value) {
+                                        setState(() {
+                                          selected_meals_list[index].meal_size = value + 1; 
+                                        });
+                                      },
+                                    ),
+                                  )
+                                 ),
+                                  
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: MediaQuery.of(context).size.height / 19,
+                                  width: MediaQuery.of(context).size.width / 9,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                    borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child: Text(selected_meals_list[index].meal_size.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15) )
+                                ),
+                                ),
+                              ],
+                            
+                        )
+                        )
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: InkWell(
-                onTap: () {
-
-                  if (widget.spontaneous == true) {
-                    Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
-                  } else {
-
-                      if (widget.update2 == true) {
-                        shoppingListToSavedList(_controller2.text);
-                        Navigator.pop(context);
-                      } else {
-                        textfield.requestFocus();
-                        showDialog(
-                      context: context, 
-                      builder: (context) =>  AlertDialog(
-                        title: Center(child: Text("Name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
-                        content: TextField(
-                        controller: _controller,
-                        focusNode: textfield,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                        decoration: InputDecoration(                                
-                          filled: false,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black, width: 1), 
-                            borderRadius: BorderRadius.circular(12)
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.black, width: 2)
-                           )
-                          ),
-                         ),
-                        actions: [
-                          TextButton(
-                            onPressed:() {
-                            
-                            String name = _controller.text;
-                            shoppingListToSavedList(name);    
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            
-
-                            },
-                            child: Text("Ok", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)
-                             )
-                            ],
-                          ));
-
-                      }
+            
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: InkWell(
+                  onTap: () {
+      
+                    if (widget.spontaneous == true) {
+                      Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
+                    } else {
+      
+                          if (_controller2.text.isEmpty) {
+                            _node.requestFocus();
+                          } else {
+                               shoppingListToSavedList(_controller2.text);
+                               Navigator.pop(context);
+                          }
+                         
+                        
+      
+                        }
+                      
+                      
+                    },
                     
                     
-                  }
-                  
-                  
-                  
-                },
-                 
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 15,
-                  width: MediaQuery.of(context).size.width / 4,
-                  decoration: BoxDecoration(
-                    color: HexColor("#d6e2de"),
-                    border:Border.all(),
-                    borderRadius: BorderRadius.circular(12)
-                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(12.0),
-                      child: Center(
-                          child: Text("Fertig", style: TextStyle(fontWeight: FontWeight.bold,))
-                         ),
-                        )
-                       )
+                    
+                
+                   
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 15,
+                    width: MediaQuery.of(context).size.width / 4,
+                    decoration: BoxDecoration(
+                      color: HexColor("#d6e2de"),
+                      border:Border.all(),
+                      borderRadius: BorderRadius.circular(12)
+                     ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(12.0),
+                        child: Center(
+                            child: Text("Fertig", style: TextStyle(fontWeight: FontWeight.bold,))
+                           ),
+                          )
+                         )
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
