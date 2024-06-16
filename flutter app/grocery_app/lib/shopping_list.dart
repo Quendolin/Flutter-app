@@ -63,21 +63,22 @@ class shoppingcardState extends State<shoppingcard> {
          //Gewürze Liste 
 
          List tempSpicesList = json.decode(list[0]["spicesJson"]);
-          temporarySpicesList = tempSpicesList.map((instance) {
+          temporarySpicesList.addAll(tempSpicesList.map((instance) {
           return spices(spices_title: instance["spices_title"]);
-        }).toList();
+        }).toList());
         
     }
-    ingredientsShoppingListDone(temporaryIngriedientlist);
+    ingredientsShoppingListDone(temporaryIngriedientlist, temporarySpicesList);
     widget.new_ = false;  
     setState(() {
       
     });
   }
-  ingredientsShoppingListDone(List<shoppingIngredient> Ingredients) {
+  ingredientsShoppingListDone(List<shoppingIngredient> Ingredients, List<spices> spicesList) {
     
 
     Map<String, shoppingIngredient> finalIngredientMap ={};
+    Map<String, spices> finalSpicesMap = {};
 
     for (var ingredients in Ingredients) {
       // Wenn Zutat doppelt ist 
@@ -115,6 +116,20 @@ class shoppingcardState extends State<shoppingcard> {
       finalIngredientList = finalIngredientMap.values.toList();
       
 
+
+    for (var i in spicesList) {
+
+      if (finalSpicesMap.containsKey(i.spices_title)) {
+
+      } else {
+        finalSpicesMap[i.spices_title] = i;
+      }
+      
+
+    }
+
+    finalSpicesList = finalSpicesMap.values.toList();
+
   }
 
   
@@ -124,6 +139,7 @@ class shoppingcardState extends State<shoppingcard> {
 
   List<shoppingIngredient> finalIngredientList = [];
   List<spices> temporarySpicesList = [];
+  List<spices> finalSpicesList = [];
   List<shoppingIngredient> temporaryIngriedientlist = [];
   bool generated = false;
 
@@ -269,9 +285,10 @@ class shoppingcardState extends State<shoppingcard> {
                           ),
                       
                         ListView.builder(
-                          itemCount: 20,
-                          itemBuilder: (context, index) => const ListTile(
-                            title: Text("sdadas"),
+                          itemCount: finalSpicesList.length,
+                          itemBuilder: (context, index) => ListTile(
+                            
+                            title: Center(child: Text(finalSpicesList[index].spices_title, style: TextStyle(color: Colors.white),)),
                           ) 
                         )
                       ],

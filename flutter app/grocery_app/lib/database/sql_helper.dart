@@ -20,7 +20,8 @@ class SQLHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
       name TEXT, 
       savedShoppingListsJson TEXT,
-      originalMealListFromShoppingListJson TEXT
+      originalMealListFromShoppingListJson TEXT,
+      spicesOFShoppingListJson TEXT
       ) """
     );
 
@@ -96,7 +97,7 @@ class SQLHelper {
   static Future<sql.Database> db() async {
 
     return sql.openDatabase(
-      "db_meals14.db",
+      "db_meals15.db",
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);
@@ -125,9 +126,9 @@ class SQLHelper {
     return id; 
   }
 
-  static Future<int> createSavesShppongList(String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson ) async {
+  static Future<int> createSavesShppongList(String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson, String spicesOFShoppingListJson ) async {
     final db = await SQLHelper.db();
-    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson, "originalMealListFromShoppingListJson": originalMealListFromShoppingListJson };
+    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson, "originalMealListFromShoppingListJson": originalMealListFromShoppingListJson, "spicesOFShoppingListJson": spicesOFShoppingListJson };
     final id = await db.insert("shoppingLists", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id; 
   }
@@ -156,9 +157,9 @@ class SQLHelper {
     return db.query("shoppingLists", where: "id=?", whereArgs: [id], limit: 1);
   }
 
-  static Future<int> updateSavedShoppingList(int id, String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson) async {
+  static Future<int> updateSavedShoppingList(int id, String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson, String spicesOFShoppingListJson) async {
     final db = await SQLHelper.db();
-    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson, "originalMealListFromShoppingListJson": originalMealListFromShoppingListJson}; 
+    final data = {"name": name, "savedShoppingListsJson": savedShoppingListsJson, "originalMealListFromShoppingListJson": originalMealListFromShoppingListJson, "spicesOFShoppingListJson": spicesOFShoppingListJson}; 
     final result = await db.update("shoppingLists", data, where: "id = ?", whereArgs: [id]);
     return result; 
   }

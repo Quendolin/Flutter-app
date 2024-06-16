@@ -55,7 +55,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   }
 
-  UpdateShoppingList(int id, String name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList) {
+  UpdateShoppingList(int id, String name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList, List<spices> spicesList) {
 
      var objectsOfIngredients = ingredients.map((instance) {
       return {
@@ -77,19 +77,26 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 ;
     }).toList();
 
+    var objectsOfSpices = spicesList.map((e) {
+      return {
+        "spices_title": e.spices_title
+      };
+    }).toList();
+
   // Objects of Ingredients to String 
   String stringList = json.encode(objectsOfIngredients);
   String strMealList = json.encode(list3);
+  String strSpices = json.encode(objectsOfSpices);
   print(strMealList);
 
-  _updateShoppingList(id, name, stringList, strMealList);
+  _updateShoppingList(id, name, stringList, strMealList, strSpices);
   
     
   
 
   }
   
-  _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList) {
+  _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList, List<spices> spicesList) {
 
     var objectsOfIngredients = ingredients.map((instance) {
       return {
@@ -111,18 +118,25 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 ;
     }).toList();
 
+     var objectsOfSpices = spicesList.map((e) {
+      return {
+        "spices_title": e.spices_title
+      };
+    }).toList();
+
   // Objects of Ingredients to String 
   String stringList = json.encode(objectsOfIngredients);
   String strMealList = json.encode(list3);
-  print(strMealList);
+  String strSpices = json.encode(objectsOfSpices);
+  
 
-  addSavedShoppingListtoLists(name, stringList, strMealList); 
+  addSavedShoppingListtoLists(name, stringList, strMealList, strSpices); 
 
 
 
   }
-  addSavedShoppingListtoLists(String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson) async {
-    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson, originalMealListFromShoppingListJson);
+  addSavedShoppingListtoLists(String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson, String spicesOFShoppingListJson) async {
+    await SQLHelper.createSavesShppongList(name, savedShoppingListsJson, originalMealListFromShoppingListJson, spicesOFShoppingListJson);
     widget.refreshShoppingLists();
   } 
 
@@ -136,8 +150,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
   
 
-  Future<void> _updateShoppingList(int id, String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson ) async {
-    await SQLHelper.updateSavedShoppingList(id, name, savedShoppingListsJson, originalMealListFromShoppingListJson);
+  Future<void> _updateShoppingList(int id, String name, String savedShoppingListsJson, String originalMealListFromShoppingListJson, String spicesOFShoppingListJson ) async {
+    await SQLHelper.updateSavedShoppingList(id, name, savedShoppingListsJson, originalMealListFromShoppingListJson, spicesOFShoppingListJson);
     widget.refreshShoppingLists();
   }
 

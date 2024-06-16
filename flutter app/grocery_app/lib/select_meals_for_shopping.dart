@@ -25,8 +25,9 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
 
   List<shoppingIngredient> temporaryIngriedientlist = [];
 
-  ingredientsShoppingListCalculation(List<shoppingIngredient> list, String name) {
+  ingredientsShoppingListCalculation(List<shoppingIngredient> list, String name, List<spices> spicesList) {
      Map<String, shoppingIngredient> finalIngredientMap ={};
+     Map<String, spices> finalSpicesMap = {};
     for (var ingredients in list) {
      
 
@@ -57,20 +58,31 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     }
       
       finalIngredientList = finalIngredientMap.values.toList();
-      
-      
-
     }
+
+
+    // doppelte Gewürze aussortieren 
+
+    for (var i in spicesList) {
+
+      if (finalSpicesMap.containsKey(i.spices_title)) {
+        
+
+      } else {
+        finalSpicesMap[i.spices_title] = i;
+      }
+    }
+      finalSpicesList = finalSpicesMap.values.toList();
     // check ob eine neue shoppingList erstellt werden soll oder eine geupdated werden soll 
       if (widget.update2) {
-        widget.updateShoppingList(old_id, name, finalIngredientList, selected_meals_list);
+        widget.updateShoppingList(old_id, name, finalIngredientList, selected_meals_list, finalSpicesList);
       }  else {
-        widget.savedShoppingList(name, finalIngredientList, selected_meals_list);
+        widget.savedShoppingList(name, finalIngredientList, selected_meals_list, finalSpicesList);
       }
       
   }
   
-  shoppingListToSavedList(String name) async {
+  shoppingListToSavedList(String name,) async {
     
     for (var i in selected_meals_list) {
       int id = i.meal_id;
@@ -88,8 +100,17 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
             crossedOff: false,
           );
          }).toList());
+
+      List tempSpicesList = json.decode(list[0]["spicesJson"]);
+      temporarySpicesList.addAll(tempSpicesList.map((e) {
+
+        return spices(
+          spices_title: e["spices_title"]);
+      }).toList());
     }
-      ingredientsShoppingListCalculation(temporaryIngriedientlist, name);
+
+      
+      ingredientsShoppingListCalculation(temporaryIngriedientlist, name, temporarySpicesList);
   
   }
   
@@ -139,6 +160,8 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
     });
   }
   
+  List<spices> temporarySpicesList = [];
+  List<spices> finalSpicesList = [];
   List<shoppingIngredient> finalIngredientList = [];
   TextEditingController _controller = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
