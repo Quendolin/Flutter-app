@@ -252,7 +252,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     if (selected_Index_Nav == 1) {containerHeight = checkContaierHeight();}
     
     return Scaffold(
-      drawer: SideBar(),
+      drawer: SideBar(isLoggedIn: false,),
       appBar:AppBar(
       backgroundColor: HexColor("#31473A"),
       title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
