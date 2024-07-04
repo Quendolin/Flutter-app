@@ -149,7 +149,7 @@ class shoppingcardState extends State<shoppingcard> {
   @override
   Widget build(BuildContext context)  {
 
-    if ()
+    
       
     if (widget.new_ == true) {
       

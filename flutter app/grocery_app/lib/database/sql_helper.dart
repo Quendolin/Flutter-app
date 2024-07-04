@@ -80,7 +80,7 @@ class SQLHelper {
       Ingredient(id: 40, name: "Schweinefleisch"),
       Ingredient(id: 41, name: "Sellerie"),
       Ingredient(id: 42, name: "Senf"),
-      Ingredient(id: 43, name: "Sojasauce"),
+      Ingredient(id: 43, name: "Sojasoße"),
       Ingredient(id: 44, name: "Spinat")
   
     ];
