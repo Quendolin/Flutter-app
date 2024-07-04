@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:grocery_app/HomePageSideBar.dart';
 import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/create_new_meal.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:grocery_app/meal_page.dart';
 import 'package:grocery_app/shopping_list.dart';
-import 'package:grocery_app/search_page_meal.dart';
+
 import 'package:grocery_app/select_meals_for_shopping.dart';
 
 import 'package:hexcolor/hexcolor.dart';
@@ -233,6 +235,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
    
 
   bool huan = false; 
+  final PageController _pageController2 = PageController();
 
 
    //Future<List<Map<String, dynamic>>> await placeholder =  [{}]; 
@@ -240,7 +243,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   // shopping list variables: 
   List saved_shoppings_lists = ["asda", "sdadad","sdadada"];
-   late double containerHeight; 
+  double containerHeight = 0; 
   List<bool> selected = [];
 
   @override
@@ -249,18 +252,27 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     if (selected_Index_Nav == 1) {containerHeight = checkContaierHeight();}
     
     return Scaffold(
+      drawer: SideBar(),
       appBar:AppBar(
       backgroundColor: HexColor("#31473A"),
       title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
       centerTitle: true,
+      
+      leading: Builder( builder: (context) => IconButton(
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+        icon: Icon(Icons.menu, color: HexColor("#EDF4F2"),),
+      ),
+      ),
       actions: <Widget> [
         IconButton(
-          icon: Icon(Icons.search), 
+          icon: Icon(Icons.sync, color: HexColor("#EDF4F2")), 
           onPressed: () {
-            Navigator.push( context,
-            MaterialPageRoute(builder: (context) => search_page_meal()));
+            
           },
           ), 
+        
       ],
     ),
     bottomNavigationBar:Theme(
@@ -272,10 +284,15 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       child: BottomNavigationBar(
        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
         onTap: (index) {
-          selected_Index_Nav = index; 
+
+          setState(() {
+            _pageController2.animateToPage(index, duration: Duration(milliseconds: 150), curve: Curves.easeInOut);
+            
+          });
+           
         
-          print(index);
-          setState(() {});
+         
+          
         },
       
         currentIndex: selected_Index_Nav,
@@ -328,11 +345,21 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     ),
       
       backgroundColor: HexColor("31473A"),
-      body: selected_Index_Nav == 0 ?Column(
-        children: [
-        
-            
+
+      body: PageView(
+        pageSnapping: true,
+        controller: _pageController2,
+        onPageChanged: (value) {
+          setState(() {
+            selected_Index_Nav = value;
+          });
           
+        },
+      //selected_Index_Nav == 0 ?Column(
+        children: [
+          // Seite 1 
+          Column(
+            children: [ 
                 Expanded(
                 flex: 5,
                 child: ListView.builder(
@@ -347,39 +374,25 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                       border: Border.all(width: 1.5, color: Colors.black),
                       borderRadius: BorderRadius.circular(12),
                       color: HexColor("#d6e2de"),
-                      
-                    ),
-                    
-                    //padding: EdgeInsets.all(10),                              
-                  child: Center(
-                    child: ListTile(
-                      onTap:() {
-                        data =_getOneMeal(widget.callback2[index]["id"]);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => meal_page(db_ingridents_List: data,)));
-                      },
-                      
+                     ),                       
+                    child: Center(
+                      child: ListTile(
+                        onTap:() {
+                          data =_getOneMeal(widget.callback2[index]["id"]);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => meal_page(db_ingridents_List: data,)));
+                        },
                       titleAlignment: ListTileTitleAlignment.center,
-                      
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
-                     
-                      
-                    
-                    
-                    
-                    
-                    //leading: Image(image: AssetImage(displayed_meal_list[index].meal_image!)),
                       title: Text(widget.callback2[index]["title"], style: TextStyle(color: Colors.black,),),
-                      //subtitle: Text(widget.callback2[index]["description"]),
                       trailing: SizedBox(
-                    
                         width: MediaQuery.of(context).size.width / 4,
                         child: Row(
                           children: [
                             IconButton(
                               icon: Icon(Icons.edit, color: Colors.black,),
                               onPressed: () {
-                              //checkIdDatabase(widget.callback2[index]["id"], test),
+                            
                               data =_getOneMeal(widget.callback2[index]["id"]);
                                
                               
@@ -402,6 +415,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                 ) 
               )
             ),
+             
                Padding(
                  padding: const EdgeInsets.only(bottom: 15.0),
                  child: FloatingActionButton(
@@ -423,15 +437,13 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                   ),
                )
               ],
-            ): 
+            ),
+             
 
 
-            // Shopoing List Page:  
+            // Seite 2 Shopoing List Page:  
             Column(
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 35 ,
-                  ),
                   const Align(
                     alignment: Alignment.center,
                     child: Padding(
@@ -696,6 +708,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                   ) 
                 ],
             ),
+           ]
+         )
   );
  }
 }
