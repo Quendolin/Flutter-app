@@ -12,6 +12,7 @@ import 'package:grocery_app/shopping_list.dart';
 import 'package:grocery_app/select_meals_for_shopping.dart';
 
 import 'package:hexcolor/hexcolor.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 
 
@@ -268,8 +269,15 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       actions: <Widget> [
         IconButton(
           icon: Icon(Icons.sync, color: HexColor("#EDF4F2")), 
-          onPressed: () {
-            
+          onPressed: () async {
+            await Future.delayed(Duration.zero);
+            final session = Supabase.instance.client.auth.currentSession;
+            if (!mounted) return;
+            if (session != null) {
+              //Navigator.push(context, MaterialPageRoute(builder: builder))
+            } else {
+              // snyc! 
+            }
           },
           ), 
         
