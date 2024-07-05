@@ -54,6 +54,8 @@ dependencies:
   flutter_material_pickers: ^3.6.0
   firebase_storage: ^12.1.0
   firebase_core: ^3.1.1
+  supabase_flutter: ^2.5.7
+  
   
   
 
