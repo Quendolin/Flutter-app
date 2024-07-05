@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grocery_app/HomePageSideBar.dart';
+import 'package:grocery_app/Login_Page.dart';
 import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/create_new_meal.dart';
 import 'package:grocery_app/meal_model.dart';
@@ -270,13 +271,15 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         IconButton(
           icon: Icon(Icons.sync, color: HexColor("#EDF4F2")), 
           onPressed: () async {
+            
             await Future.delayed(Duration.zero);
             final session = Supabase.instance.client.auth.currentSession;
+            print(session);
             if (!mounted) return;
             if (session != null) {
-              //Navigator.push(context, MaterialPageRoute(builder: builder))
+              // sync!
             } else {
-              // snyc! 
+              Navigator.push(context,MaterialPageRoute(builder: (context) => LoginScreen()));
             }
           },
           ), 
