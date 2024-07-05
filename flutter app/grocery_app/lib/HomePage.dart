@@ -279,7 +279,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
             if (session != null) {
               // sync!
             } else {
-              Navigator.push(context,MaterialPageRoute(builder: (context) => LoginScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
             }
           },
           ), 

@@ -95,20 +95,34 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.only(left: 35.0, right: 35, top: 30),
               child: InkWell(
                 onTap: () async {
-                  try {
-                    final email = _conEmail.text.trim();
-                    final passwort = _conPasswort.text.trim();
-                    await Supabase.instance.client.auth.signUp(
+                  final email = _conEmail.text.trim();
+                  final passwort = _conPasswort.text.trim();
+                  await Future.delayed(Duration.zero);
+                  final session = Supabase.instance.client.auth.currentSession;
+                  if (session == null) {
+                    try {
+                      await Supabase.instance.client.auth.signUp(
                       email: email, 
                       password: passwort,
                       emailRedirectTo: "io.supabase.flutterquickstart://login-callback/"
                       );
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
-                    }
-                    }
-                  on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error,));}
-
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
+                      }
+                    } on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error,));
+                   }
+                  } else {
+                      try {
+                        await Supabase.instance.client.auth.signInWithPassword(
+                          email: email,
+                          password: passwort
+                        );
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("error")));
+                      } 
+                    
+                  }
+                  
                   
                  
                 },
