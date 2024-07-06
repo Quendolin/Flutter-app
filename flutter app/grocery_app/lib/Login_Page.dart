@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter/widgets.dart";
+import "package:google_sign_in/google_sign_in.dart";
+import "package:grocery_app/main.dart";
 import "package:hexcolor/hexcolor.dart";
 import "package:supabase_flutter/supabase_flutter.dart";
 
@@ -98,13 +100,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   final email = _conEmail.text.trim();
                   final passwort = _conPasswort.text.trim();
                   await Future.delayed(Duration.zero);
-                  final session = Supabase.instance.client.auth.currentSession;
+                  final session = supabase.auth.currentSession;
                   if (session == null) {
+                    print("keine session");
                     try {
-                      await Supabase.instance.client.auth.signUp(
+                      await supabase.auth.signUp(
                       email: email, 
-                      password: passwort,
-                      emailRedirectTo: "io.supabase.flutterquickstart://login-callback/"
+                      password: passwort
+                     // emailRedirectTo: "io.supabase.flutterquickstart://login-callback/"
                       );
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
@@ -113,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                    }
                   } else {
                       try {
-                        await Supabase.instance.client.auth.signInWithPassword(
+                        await supabase.auth.signInWithPassword(
                           email: email,
                           password: passwort
                         );
@@ -157,6 +160,45 @@ class _LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               ),
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+        
+                  /// Web Client ID that you registered with Google Cloud.
+                  const webClientId = '825452009662-v2r45g8c01rf46t98jbt3lpc8ps7noo8.apps.googleusercontent.com';
+
+                  /// iOS Client ID that you registered with Google Cloud.
+                  const iosClientId = '825452009662-srbqmpp6cmh7j5qs1hsupa5mvtcbgi24.apps.googleusercontent.com';
+
+                  // Google sign in on Android will work without providing the Android
+                  // Client ID registered on Google Cloud.
+
+                  final GoogleSignIn googleSignIn = GoogleSignIn(
+                    clientId: iosClientId,
+                    serverClientId: webClientId,
+                  );
+                  final googleUser = await googleSignIn.signIn();
+                  final googleAuth = await googleUser!.authentication;
+                  final accessToken = googleAuth.accessToken;
+                  final idToken = googleAuth.idToken;
+
+                  if (accessToken == null) {
+                    throw 'No Access Token found.';
+                  }
+                  if (idToken == null) {
+                    throw 'No ID Token found.';
+                  }
+
+                  await supabase.auth.signInWithIdToken(
+                    provider: OAuthProvider.google,
+                    idToken: idToken,
+                    accessToken: accessToken,
+                  );
+
+                }, 
+                child: Text("Google")),
+            )
             
           ],
       ),

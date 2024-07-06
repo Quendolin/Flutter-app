@@ -16,11 +16,11 @@ void main() async {
   await Supabase.initialize(
     url: "https://iriylhkcsjjigcvgicce.supabase.co", 
     anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyaXlsaGtjc2pqaWdjdmdpY2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAxNzc3ODgsImV4cCI6MjAzNTc1Mzc4OH0.NGDbvvkBvP_xjdPEMcCDnmlEuI6E89mv27U6jIx5dQA", 
-    
+  
  );
   runApp(const MyApp());
 }
-
+final supabase = Supabase.instance.client;
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.

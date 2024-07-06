@@ -54,6 +54,7 @@ dependencies:
   flutter_material_pickers: ^3.6.0
   
   supabase_flutter: ^2.5.7
+  google_sign_in: ^6.2.1
   
   
   

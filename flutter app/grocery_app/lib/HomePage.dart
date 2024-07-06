@@ -6,6 +6,7 @@ import 'package:grocery_app/HomePageSideBar.dart';
 import 'package:grocery_app/Login_Page.dart';
 import 'package:grocery_app/database/sql_helper.dart';
 import 'package:grocery_app/create_new_meal.dart';
+import 'package:grocery_app/main.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:grocery_app/meal_page.dart';
 import 'package:grocery_app/shopping_list.dart';
@@ -273,12 +274,14 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
           onPressed: () async {
             
             await Future.delayed(Duration.zero);
-            final session = Supabase.instance.client.auth.currentSession;
+            final session = supabase.auth.currentSession;
             print(session);
             if (!mounted) return;
             if (session != null) {
+              print("already registered");
               // sync!
             } else {
+              print("keine session");
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
             }
           },
