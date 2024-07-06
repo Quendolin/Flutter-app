@@ -248,6 +248,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   List saved_shoppings_lists = ["asda", "sdadad","sdadada"];
   double containerHeight = 0; 
   List<bool> selected = [];
+  late bool isAlreadyLoggedIn; 
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +256,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     if (selected_Index_Nav == 1) {containerHeight = checkContaierHeight();}
     
     return Scaffold(
-      drawer: SideBar(isLoggedIn: false,),
+      drawer: SideBar(),
       appBar:AppBar(
       backgroundColor: HexColor("#31473A"),
       title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
@@ -274,15 +275,16 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
           onPressed: () async {
             
             await Future.delayed(Duration.zero);
-            final session = supabase.auth.currentSession;
+            var session = supabase.auth.currentSession;
             print(session);
             if (!mounted) return;
+            
             if (session != null) {
               print("already registered");
               // sync!
             } else {
               print("keine session");
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: session == null ? false: true )));
             }
           },
           ), 

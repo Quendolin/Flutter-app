@@ -1,12 +1,48 @@
 import "package:flutter/material.dart";
+import "package:grocery_app/main.dart";
 import "package:hexcolor/hexcolor.dart";
 
-class SideBar extends StatelessWidget {
-  const SideBar({super.key, required this.isLoggedIn});
-  final bool isLoggedIn;
+
+class SideBar extends StatefulWidget {
+  const SideBar({super.key, });
+  
+
+  @override
+  State<SideBar> createState() => _SideBarState();
+}
+
+class _SideBarState extends State<SideBar> {
+  bool isLoggedIn = false;
+  String email = "";
   @override
   
+  void initState() {
+    super.initState();
+    checkAccountStatus();
+    
+  }
+  checkAccountStatus() {
+    final session = supabase.auth.currentSession;
+    session == null ? isLoggedIn = false : isLoggedIn = true;
+    session != null ? email = supabase.auth.currentUser!.email.toString() : null;
+    email = supabase.auth.currentUser!.email.toString();
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    signOut() async {
+      await supabase.auth.signOut();
+      setState(() {
+        isLoggedIn = false; 
+      });
+      
+    }
+
+    
+   
+   
     
     return Drawer(
       child: Material(
@@ -33,8 +69,8 @@ class SideBar extends StatelessWidget {
                       ),
                       title: isLoggedIn == true ? Column(
                         children: [
-                          Text("Vor und Nachname", style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 20),),
-                          Text("emailadresse", style: TextStyle(color: HexColor("#EDF4F2"), ))
+                           if (isLoggedIn == true) Text("Angemeldet mit", style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 10)),
+                           isLoggedIn == true ? Text(email, style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 18)): Text("Anmelden", style: TextStyle(color: HexColor("#EDF4F2")) )
                         ],
                       ) : IconButton(
                             onPressed: () {
@@ -61,6 +97,13 @@ class SideBar extends StatelessWidget {
                       },
                       leading: Icon(Icons.settings, color: HexColor("#EDF4F2")),
                       title: Text("Account", style: TextStyle(color: HexColor("#EDF4F2")),),
+                    ),
+                    ListTile(
+                      onTap: () => signOut(),
+                      leading: Opacity(
+                        opacity: 0,
+                        child: Icon(Icons.check)),
+                      title: Text("Abmelden", style: TextStyle(color: HexColor("#EDF4F2") ),),
                     )
                   ],
                 ),
@@ -72,3 +115,5 @@ class SideBar extends StatelessWidget {
     );
   }
 }
+
+

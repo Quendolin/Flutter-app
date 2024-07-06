@@ -8,7 +8,8 @@ import "package:supabase_flutter/supabase_flutter.dart";
 
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key, required this.SignedIn});
+  bool SignedIn;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -18,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController _conPasswort = TextEditingController();
   TextEditingController _conEmail = TextEditingController();
+  bool default_signIn = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Image.asset("assets/images/Mahlzeit_Logo-removebg-preview.png",)
                 ),
             ),
-            const Align(
+             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.only(left:40.0),
-                child: Text("Einloggen", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                padding: const EdgeInsets.only(left:40.0),
+                child: default_signIn == true? Text( "Einloggen", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)) : Text("Registrieren", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
               )
               ),
             Padding(
@@ -101,16 +103,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   final passwort = _conPasswort.text.trim();
                   await Future.delayed(Duration.zero);
                   final session = supabase.auth.currentSession;
-                  if (session == null) {
-                    print("keine session");
+                  if (default_signIn == false) {
                     try {
                       await supabase.auth.signUp(
                       email: email, 
-                      password: passwort
-                     // emailRedirectTo: "io.supabase.flutterquickstart://login-callback/"
+                      password: passwort,
+                      emailRedirectTo: "io.supabase.flutterquickstart://login-callback/"
                       );
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
+                        Navigator.pop(context);
                       }
                     } on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error,));
                    }
@@ -120,6 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           email: email,
                           password: passwort
                         );
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Succelfull")));
+                        Navigator.pop(context);
                       } catch (error) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("error")));
                       } 
@@ -145,60 +149,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: const EdgeInsets.all( 5),
-                    child: Text("Keinen Account?"),
+                    child: default_signIn == false ? Text("Keinen Account?") : Text("schon einen Account?"),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5),
                     child: InkWell(
                       onTap: () {
-                     
+                        setState(() {
+                          default_signIn = !default_signIn;  
+                        });
+                         
+                        
                       },
-                      child: Text("Registration", style: TextStyle(fontWeight: FontWeight.bold))
+                      child: default_signIn == false ? Text("Registration", style: TextStyle(fontWeight: FontWeight.bold)) : Text("Einloggen", style: TextStyle(fontWeight: FontWeight.bold))
                     ),
                   )
                 ],
               ),
 
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-        
-                  /// Web Client ID that you registered with Google Cloud.
-                  const webClientId = '825452009662-v2r45g8c01rf46t98jbt3lpc8ps7noo8.apps.googleusercontent.com';
-
-                  /// iOS Client ID that you registered with Google Cloud.
-                  const iosClientId = '825452009662-srbqmpp6cmh7j5qs1hsupa5mvtcbgi24.apps.googleusercontent.com';
-
-                  // Google sign in on Android will work without providing the Android
-                  // Client ID registered on Google Cloud.
-
-                  final GoogleSignIn googleSignIn = GoogleSignIn(
-                    clientId: iosClientId,
-                    serverClientId: webClientId,
-                  );
-                  final googleUser = await googleSignIn.signIn();
-                  final googleAuth = await googleUser!.authentication;
-                  final accessToken = googleAuth.accessToken;
-                  final idToken = googleAuth.idToken;
-
-                  if (accessToken == null) {
-                    throw 'No Access Token found.';
-                  }
-                  if (idToken == null) {
-                    throw 'No ID Token found.';
-                  }
-
-                  await supabase.auth.signInWithIdToken(
-                    provider: OAuthProvider.google,
-                    idToken: idToken,
-                    accessToken: accessToken,
-                  );
-
-                }, 
-                child: Text("Google")),
-            )
+            
             
           ],
       ),
