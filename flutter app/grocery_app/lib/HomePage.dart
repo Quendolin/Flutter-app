@@ -226,6 +226,12 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   
 
   syncAllMeals() async {
+
+      // check for query result data from user with uuid  
+      // check user id uploaded meals 
+      // check local id is identical with internal database 
+      // if this is true update Row otherwise add row 
+      // check database to cloud database 
     
       for (var meal in widget.callback2) {
         String name = meal["title"];
@@ -281,7 +287,6 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   int myIndex =  0; 
 
   // shopping list variables: 
-  List saved_shoppings_lists = ["asda", "sdadad","sdadada"];
   double containerHeight = 0; 
   List<bool> selected = [];
   late bool isAlreadyLoggedIn; 
