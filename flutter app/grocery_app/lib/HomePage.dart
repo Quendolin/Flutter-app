@@ -226,27 +226,51 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   
 
   syncAllMeals() async {
+    final response_meal = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
+    final response_shoppingLists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
+    //meals 
+    final local_meals = widget.callback2;
+    //savedShoppingLists
+    final local_ShoppingLists = widget.getSavedShoppingLists;
 
-      // check for query result data from user with uuid  
-      // check user id uploaded meals 
-      // check local id is identical with internal database 
-      // if this is true update Row otherwise add row 
-      // check database to cloud database 
     
-      for (var meal in widget.callback2) {
-        String name = meal["title"];
-        int meal_id = meal["id"].toInt();
-        final ingridientsJson = toJson(meal["ingridientsJson"]);
-        final spicesJson = toJson(meal["spicesJson"]); 
-        await supabase.from("meals").insert({
-          "name": name, 
-          "ingredientsJson": ingridientsJson, 
-          "spicesJson": spicesJson,
-          "local_id": meal_id
-          });
-      }
+    // Sync Meals 
 
+    for (var localMeal in local_meals) {
+      int local__meal_id = localMeal["id"];
+
+       for (var meal in response_meal) {
+        print(meal["local_id"]);
+        print(meal["local_id"].runtimeType);
+         
+       if (local__meal_id == meal["local_id"]) {
+        // update Row in cloud
+        updateMealtoCloud(local__meal_id);
+        break;
+       } else if (local__meal_id != meal["local_id"]) {
+        // insert meal in cloud 
+        insertMealToCloud(local__meal_id);
+       } 
     }
+  }
+    // Sync ShoppingLists 
+    
+    for (var localShoppingList in local_ShoppingLists) {
+      int local_shoppingList_id = localShoppingList["id"];
+      for (var shoppingListCloud in response_shoppingLists) {
+        // check for already existings rows
+        if (local_shoppingList_id == shoppingListCloud["local_id"]) {
+          updateShoppingListInCloud(local_shoppingList_id);
+        }
+        // insert a new shopping List
+        else {
+          insertShoppingListToCloud(local_shoppingList_id);
+        }
+      }
+    }
+   
+
+  /*
 
   syncAllShoppingLists() async {
     for (var shoppingList in widget.getSavedShoppingLists) {
@@ -264,9 +288,94 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         "local_id": id 
         });
     }
+  */
 
+    // check if meal exists only in cloud -> delete
+    checkWetherDeleteMealfromCloud(response_meal, local_meals);
+    checkWetherDeleteShoppingListfromCloud(response_shoppingLists, local_ShoppingLists);
+  }
+  checkWetherDeleteShoppingListfromCloud(final response, final local_ShoppingLists) async {
+    
+    for(var i in response) {  
+      int cloud_id = i["local_id"];
+      int c = 0;
+      if (local_ShoppingLists.isEmpty) {
+       await supabase.from("shoppingsLists").delete().eq("user_id", supabase.auth.currentUser!.id);  
+      }
+      for (var e in local_ShoppingLists) {
+        
+        if (cloud_id != e["id"] && c == local_ShoppingLists.length ) {
+          await supabase.from("shoppingList").delete().eq("local_id", cloud_id);
+        }
+        c = c+1; 
+      }
+    }
+  } 
+
+  checkWetherDeleteMealfromCloud(final response, final local_meals) async {
+    
+    for (var i in response) {
+      int cloud_id = i["local_id"];
+      for (var e in local_meals) {
+        if (cloud_id != e["id"]) {
+          // delete meal from database
+          await supabase.from("meals").delete().eq("local_id", cloud_id);
+        } 
+      }
+
+    }
   }
 
+  insertMealToCloud(int id) async {
+    final meal = _getOneMeal(id);
+    List<Map> list = await meal;
+    final values = {
+      "name": list[0]["title"],
+      "ingredientsJson": toJson(list[0]["ingridientsJson"]),
+      "spicesJson": toJson(list[0]["spicesJson"]),
+      "local_id": id
+    };
+    await supabase.from("meals").insert(values);
+    print("inserted");
+  }
+
+  updateMealtoCloud(int id) async {
+    final meal = _getOneMeal(id);
+    List<Map> list = await meal;
+    final values = {
+      "name": list[0]["title"],
+      "ingredientsJson": toJson(list[0]["ingridientsJson"]),
+      "spicesJson": toJson(list[0]["spicesJson"])
+    };
+    await supabase.from("meals").update(values).eq("local_id", id);
+    print("updated meals");
+  }
+
+  insertShoppingListToCloud(int id) async {
+    final shoppingList = _getOneSavedShoppingList(id);
+    List<Map> list = await shoppingList;
+    final values = {
+      "name": list[0]["name"],
+      "ingredientsShoppingList": toJson(list[0]["savedShoppingListsJson"]),
+      "originalMealListsJson": toJson(list[0]["originalMealListFromShoppingListJson"]),
+      "spicesOfShoppingListJson": toJson( list[0]["spicesOFShoppingListJson"]),
+      "local_id": id
+    };
+    await supabase.from("shoppingLists").insert(values);
+  }
+
+  updateShoppingListInCloud(int id) async {
+    final shoppingList = _getOneSavedShoppingList(id);
+    List<Map> list = await shoppingList;
+    final values = {
+      "name": list[0]["name"],
+      "ingredientsShoppingList": toJson(list[0]["savedShoppingListsJson"]),
+      "originalMealListsJson": toJson(list[0]["originalMealListFromShoppingListJson"]),
+      "spicesOfShoppingListJson": toJson(list[0]["spicesOFShoppingListJson"])
+    };
+    await supabase.from("shoppingsLists").update(values).eq("local_id", id);
+    print("updated Lists");
+  }
 
   
   List<MealModel> displayed_meal_list = List.from(main_meal_list);
@@ -327,7 +436,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
               print("already registered");
               
               syncAllMeals(); 
-              syncAllShoppingLists();
+              //syncAllShoppingLists();
         
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("sync")));
               // sync!
