@@ -25,7 +25,7 @@ class _SideBarState extends State<SideBar> {
     final session = supabase.auth.currentSession;
     session == null ? isLoggedIn = false : isLoggedIn = true;
     session != null ? email = supabase.auth.currentUser!.email.toString() : null;
-    email = supabase.auth.currentUser!.email.toString();
+    
     
   }
 

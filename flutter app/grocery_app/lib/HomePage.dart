@@ -225,6 +225,40 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
   
 
+  syncAllMeals(final user, final id) async {
+    
+      for (var meal in widget.callback2) {
+        String name = meal["title"];
+        int meal_id = int.parse(meal["id"]);
+        final ingridientsJson = toJson(meal["ingridientsJson"]);
+        final spicesJson = toJson(meal["spicesJson"]); 
+        await supabase.from("meals").insert({
+          "name": name, 
+          "ingredientsJson": ingridientsJson, 
+          "spicesJson": spicesJson,
+          "local_id": meal_id
+          });
+      }
+
+    }
+
+  syncAllShoppingLists(final user, final id) async {
+    for (var shoppingList in widget.getSavedShoppingLists) {
+      String name = shoppingList["name"];
+      final shoppingListIngredient = toJson(shoppingList["savedShoppingListsJson"]);
+      final originalMealListFromShoppingListJson = toJson(shoppingList["originalMealListFromShoppingListJson"]);
+      final spicesOfShoppingListJson = toJson(shoppingList["spicesOFShoppingListJson"]);
+      await supabase.from("shoppingsLists").insert({
+        
+        "name": name, 
+        "ingredientsShoppingList": shoppingListIngredient, 
+        "originalMealListsJson": originalMealListFromShoppingListJson,
+        "spicesOfShoppingListJson": spicesOfShoppingListJson
+        });
+    }
+
+  }
+
 
   
   List<MealModel> displayed_meal_list = List.from(main_meal_list);
@@ -252,6 +286,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   @override
   Widget build(BuildContext context) {
+
+    
+
      
     if (selected_Index_Nav == 1) {containerHeight = checkContaierHeight();}
     
@@ -275,12 +312,19 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
           onPressed: () async {
             
             await Future.delayed(Duration.zero);
-            var session = supabase.auth.currentSession;
+            final session = supabase.auth.currentSession;
             print(session);
             if (!mounted) return;
             
             if (session != null) {
               print("already registered");
+              
+              final json = toJson("sdsdadasdad");
+              final user = Supabase.instance.client.auth.currentUser;
+              final id = user!.id;
+              syncAllMeals(user, id); 
+              //await supabase.from("meals").insert({"user_id":  id,  "name": "meal1", "ingredientsJson":json, "spicesJson": json});
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("sync")));
               // sync!
             } else {
               print("keine session");
