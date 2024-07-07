@@ -225,11 +225,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
   
 
-  syncAllMeals(final user, final id) async {
+  syncAllMeals() async {
     
       for (var meal in widget.callback2) {
         String name = meal["title"];
-        int meal_id = int.parse(meal["id"]);
+        int meal_id = meal["id"].toInt();
         final ingridientsJson = toJson(meal["ingridientsJson"]);
         final spicesJson = toJson(meal["spicesJson"]); 
         await supabase.from("meals").insert({
@@ -242,9 +242,10 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
     }
 
-  syncAllShoppingLists(final user, final id) async {
+  syncAllShoppingLists() async {
     for (var shoppingList in widget.getSavedShoppingLists) {
       String name = shoppingList["name"];
+      int id = shoppingList["id"].toInt();
       final shoppingListIngredient = toJson(shoppingList["savedShoppingListsJson"]);
       final originalMealListFromShoppingListJson = toJson(shoppingList["originalMealListFromShoppingListJson"]);
       final spicesOfShoppingListJson = toJson(shoppingList["spicesOFShoppingListJson"]);
@@ -253,7 +254,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         "name": name, 
         "ingredientsShoppingList": shoppingListIngredient, 
         "originalMealListsJson": originalMealListFromShoppingListJson,
-        "spicesOfShoppingListJson": spicesOfShoppingListJson
+        "spicesOfShoppingListJson": spicesOfShoppingListJson,
+        "local_id": id 
         });
     }
 
@@ -319,11 +321,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
             if (session != null) {
               print("already registered");
               
-              final json = toJson("sdsdadasdad");
-              final user = Supabase.instance.client.auth.currentUser;
-              final id = user!.id;
-              syncAllMeals(user, id); 
-              //await supabase.from("meals").insert({"user_id":  id,  "name": "meal1", "ingredientsJson":json, "spicesJson": json});
+              syncAllMeals(); 
+              syncAllShoppingLists();
+        
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("sync")));
               // sync!
             } else {
