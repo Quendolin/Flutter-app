@@ -238,16 +238,15 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
     for (var localMeal in local_meals) {
       int local__meal_id = localMeal["id"];
-
+      int b = 1;
+       if (response_meal.isEmpty) { insertMealToCloud(local__meal_id);}
        for (var meal in response_meal) {
-        print(meal["local_id"]);
-        print(meal["local_id"].runtimeType);
          
        if (local__meal_id == meal["local_id"]) {
         // update Row in cloud
         updateMealtoCloud(local__meal_id);
-        break;
-       } else if (local__meal_id != meal["local_id"]) {
+        
+       } else if (b == response_meal.length) {
         // insert meal in cloud 
         insertMealToCloud(local__meal_id);
        } 
@@ -257,13 +256,16 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     
     for (var localShoppingList in local_ShoppingLists) {
       int local_shoppingList_id = localShoppingList["id"];
+      if (response_shoppingLists.isEmpty) { insertShoppingListToCloud(local_shoppingList_id);}
       for (var shoppingListCloud in response_shoppingLists) {
+        int c = 1; 
         // check for already existings rows
         if (local_shoppingList_id == shoppingListCloud["local_id"]) {
           updateShoppingListInCloud(local_shoppingList_id);
+          break;
         }
         // insert a new shopping List
-        else {
+        else if(c == response_shoppingLists.length) {
           insertShoppingListToCloud(local_shoppingList_id);
         }
       }
@@ -298,15 +300,17 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     
     for(var i in response) {  
       int cloud_id = i["local_id"];
-      int c = 0;
+      int c = 1;
       if (local_ShoppingLists.isEmpty) {
        await supabase.from("shoppingsLists").delete().eq("user_id", supabase.auth.currentUser!.id);  
       }
       for (var e in local_ShoppingLists) {
         
+        if (cloud_id == e["id"]) {break;}
         if (cloud_id != e["id"] && c == local_ShoppingLists.length ) {
-          await supabase.from("shoppingList").delete().eq("local_id", cloud_id);
+          await supabase.from("shoppingsLists").delete().eq("local_id", cloud_id);
         }
+        
         c = c+1; 
       }
     }
@@ -316,13 +320,18 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     
     for (var i in response) {
       int cloud_id = i["local_id"];
-      for (var e in local_meals) {
-        if (cloud_id != e["id"]) {
-          // delete meal from database
-          await supabase.from("meals").delete().eq("local_id", cloud_id);
-        } 
+      int c = 1;
+     if (local_meals.isEmpty) { 
+        await supabase.from("meals").delete().eq("user_id", supabase.auth.currentUser!.id);
       }
+      for (var e in local_meals) {
+        if (cloud_id == e["id"]) {break;}
+        if (cloud_id != e["id"] && c == local_meals.length) {
+          await supabase.from("meals").delete().eq("local_id", cloud_id);
+        }
 
+      }
+      
     }
   }
 
@@ -361,7 +370,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       "spicesOfShoppingListJson": toJson( list[0]["spicesOFShoppingListJson"]),
       "local_id": id
     };
-    await supabase.from("shoppingLists").insert(values);
+    await supabase.from("shoppingsLists").insert(values);
   }
 
   updateShoppingListInCloud(int id) async {
