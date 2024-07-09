@@ -122,8 +122,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         "meal_id": e.meal_id,
         "meal_size": e.meal_size,
         "meal_title": e.meal_title
-      }
-;
+      };
     }).toList();
 
      var objectsOfSpices = spicesList.map((e) {
@@ -196,9 +195,10 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   }
 
-  Future<void> _getAllMeals() async {
+   _getAllMeals() async {
     final data = await SQLHelper.getAllMeals();
     print(data);
+    return data;
     }
 
   Future<List<Map<String, dynamic>>> _getOneMeal(int id) async {
@@ -235,7 +235,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
     
     // Sync Meals 
-
+    // update or insert in Database
     for (var localMeal in local_meals) {
       int local__meal_id = localMeal["id"];
       int b = 1;
@@ -250,15 +250,48 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         // insert meal in cloud 
         insertMealToCloud(local__meal_id); 
        } 
+       b = b+1;
     }
+    
   }
+    // insert meals from cloud to local
+     for (var i in response_meal) {
+      int cloud_id = i["local_id"];
+      int c = 1;
+     if (local_meals.isEmpty) { 
+        final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
+        for (i in meals) {
+          _addMeal(i["name"], "", i["ingredientsJson"].toString(), i["spicesJson"].toString());
+          final allMeals = _getAllMeals(); 
+          int length = allMeals.length;
+          int a = allMeals[length]["id"]; 
+          final values = {
+            "local_id": a
+          };
+          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloud_id});
+
+        }
+      }
+      for (var e in local_meals) {
+        if (cloud_id == e["id"]) {break;}
+        if (cloud_id != e["id"] && c == local_meals.length) {
+          await supabase.from("meals").delete().eq("local_id", cloud_id);
+        }
+
+      }
+      
+    }
+
+
+
     // Sync ShoppingLists 
     
     for (var localShoppingList in local_ShoppingLists) {
       int local_shoppingList_id = localShoppingList["id"];
+      int c = 1; 
       if (response_shoppingLists.isEmpty) { insertShoppingListToCloud(local_shoppingList_id);}
       for (var shoppingListCloud in response_shoppingLists) {
-        int c = 1; 
+        
         // check for already existings rows
         if (local_shoppingList_id == shoppingListCloud["local_id"]) {
           updateShoppingListInCloud(local_shoppingList_id);
@@ -268,33 +301,18 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         else if(c == response_shoppingLists.length) {
           insertShoppingListToCloud(local_shoppingList_id);
         }
+
+        c = c +1;
       }
     }
    
 
-  /*
+  
 
-  syncAllShoppingLists() async {
-    for (var shoppingList in widget.getSavedShoppingLists) {
-      String name = shoppingList["name"];
-      int id = shoppingList["id"].toInt();
-      final shoppingListIngredient = toJson(shoppingList["savedShoppingListsJson"]);
-      final originalMealListFromShoppingListJson = toJson(shoppingList["originalMealListFromShoppingListJson"]);
-      final spicesOfShoppingListJson = toJson(shoppingList["spicesOFShoppingListJson"]);
-      await supabase.from("shoppingsLists").insert({
-        
-        "name": name, 
-        "ingredientsShoppingList": shoppingListIngredient, 
-        "originalMealListsJson": originalMealListFromShoppingListJson,
-        "spicesOfShoppingListJson": spicesOfShoppingListJson,
-        "local_id": id 
-        });
-    }
-  */
 
     // check if meal exists only in cloud -> delete
-    checkWetherDeleteMealfromCloud(response_meal, local_meals);
-    checkWetherDeleteShoppingListfromCloud(response_shoppingLists, local_ShoppingLists);
+   // checkWetherDeleteMealfromCloud(response_meal, local_meals);
+   // checkWetherDeleteShoppingListfromCloud(response_shoppingLists, local_ShoppingLists);
   }
   checkWetherDeleteShoppingListfromCloud(final response, final local_ShoppingLists) async {
     
@@ -329,7 +347,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         if (cloud_id != e["id"] && c == local_meals.length) {
           await supabase.from("meals").delete().eq("local_id", cloud_id);
         }
-
+        c = c +1;
       }
       
     }
