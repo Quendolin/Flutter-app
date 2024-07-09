@@ -263,7 +263,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         for (i in meals) {
           _addMeal(i["name"], "", i["ingredientsJson"].toString(), i["spicesJson"].toString());
           final allMeals = _getAllMeals(); 
-          int length = allMeals.length;
+          int length = await allMeals.length;
           int a = allMeals[length]["id"]; 
           final values = {
             "local_id": a
