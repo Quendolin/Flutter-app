@@ -248,7 +248,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         
        } else if (b == response_meal.length) {
         // insert meal in cloud 
-        insertMealToCloud(local__meal_id);
+        insertMealToCloud(local__meal_id); 
        } 
     }
   }
