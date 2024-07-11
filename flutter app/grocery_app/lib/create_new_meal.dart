@@ -78,7 +78,7 @@ class _create_new_mealState extends State<create_new_meal> {
     
       List<Map> list = await widget.ItemValues;
       txtcon_name_neuer_Mahlzeit.text = list[0]["title"];
-      txtcon_discription_Malhzeit.text =  list[0]["description"];
+      
       
       List ingridientsList = json.decode(list[0]["ingridientsJson"]);
        //ingridients_list = json.decode(ingridients_list);
@@ -130,9 +130,9 @@ class _create_new_mealState extends State<create_new_meal> {
 
       if (list.isEmpty) {
 
-        widget.callback(txtcon_name_neuer_Mahlzeit.text, txtcon_discription_Malhzeit.text, strings_map, spices_String);
+        widget.callback(txtcon_name_neuer_Mahlzeit.text, strings_map, spices_String);
       } else {
-        widget.callback2(list[0]["id"], txtcon_name_neuer_Mahlzeit.text, txtcon_discription_Malhzeit.text, strings_map, spices_String);
+        widget.callback2(list[0]["id"], txtcon_name_neuer_Mahlzeit.text, strings_map, spices_String);
       }
      
       
@@ -182,7 +182,7 @@ class _create_new_mealState extends State<create_new_meal> {
 
   
   TextEditingController txtcon_name_neuer_Mahlzeit = TextEditingController();
-  TextEditingController txtcon_discription_Malhzeit = TextEditingController();
+  
 
   List spices_list = [];
   List<add_ingridients_list> added_ingridients_list = [];
@@ -284,28 +284,7 @@ class _create_new_mealState extends State<create_new_meal> {
       
            
       
-           Padding(
-            padding: EdgeInsets.all(10),
-            child: TextField(
-              controller: txtcon_discription_Malhzeit,
-              decoration: InputDecoration(
-                fillColor: HexColor("#d6e2de"),
-                filled: true,
-                
-                
-                enabledBorder: OutlineInputBorder(
-                  
-                  borderSide: BorderSide(color: Colors.black, width: 1.5), 
-                  borderRadius: BorderRadius.circular(12)
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.black, width: 2)
-                )
-                
-              )
-            ),
-           ),
+           
       
            Align(
               alignment: Alignment.centerLeft,
@@ -347,11 +326,7 @@ class _create_new_mealState extends State<create_new_meal> {
                             child: Center(
                               child: ListTile(
                               contentPadding: EdgeInsets.only(left: 12),
-                              //shape: RoundedRectangleBorder(
-                              //  borderRadius: BorderRadius.circular(20)
-                                
-                                                  //  ),
-                              ///tileColor: Colors.brown,
+                            
                               title:Row( children: [
                                 Expanded(
                                   flex:3, 

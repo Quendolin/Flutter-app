@@ -34,10 +34,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
             ),
              Align(
+              
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left:40.0),
-                child: default_signIn == true? Text( "Einloggen", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)) : Text("Registrieren", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
+                child: default_signIn == true? Text( "Einloggen", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)) : Text("Registration", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
               )
               ),
             Padding(
@@ -81,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     
                     fillColor:  HexColor("#d6e2de"),
                     
-                    hintText: "passwort",
+                    hintText:"passwort",
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   final email = _conEmail.text.trim();
                   final passwort = _conPasswort.text.trim();
                   await Future.delayed(Duration.zero);
-                  final session = supabase.auth.currentSession;
+                  
                   if (default_signIn == false) {
                     try {
                       await supabase.auth.signUp(
@@ -124,13 +125,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Succelfull")));
                         Navigator.pop(context);
-                      } catch (error) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("error")));
+                      } on AuthException catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
                       } 
                     
                   }
                   
-                  
+                  Navigator.pop(context);
                  
                 },
                 child: Container(
@@ -151,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all( 5),
-                    child: default_signIn == false ? Text("Keinen Account?") : Text("schon einen Account?"),
+                    child: default_signIn == false ? Text("schon einen Account?") : Text("Keinen Account?"),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5),
@@ -163,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                          
                         
                       },
-                      child: default_signIn == false ? Text("Registration", style: TextStyle(fontWeight: FontWeight.bold)) : Text("Einloggen", style: TextStyle(fontWeight: FontWeight.bold))
+                      child: default_signIn == false ? Text("Einloggen", style: TextStyle(fontWeight: FontWeight.bold)) : Text("Registration", style: TextStyle(fontWeight: FontWeight.bold))
                     ),
                   )
                 ],

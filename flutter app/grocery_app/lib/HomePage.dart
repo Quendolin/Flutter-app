@@ -203,7 +203,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   Future<void> _addMeal(String meal_title, String meal_description, String ingridientsJson, String spicesJson) async {
      
       
-      await SQLHelper.createMeal(meal_title, meal_description, ingridientsJson, spicesJson);
+      await SQLHelper.createMeal(meal_title, ingridientsJson, spicesJson);
       widget.callback1();
       
       
@@ -358,7 +358,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     }
 
 
-      
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sync")));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Verbindung")));
     }
@@ -478,14 +478,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
             print(session);
             if (!mounted) return;
             
-            if (session != null) {
-              print("already registered");
-              
+            if (session != null) {    
               syncAllMeals(); 
-              //syncAllShoppingLists();
-        
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("sync")));
-              // sync!
             } else {
               print("keine session");
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: session == null ? false: true )));

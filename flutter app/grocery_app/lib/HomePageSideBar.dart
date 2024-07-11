@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:grocery_app/Login_Page.dart";
 import "package:grocery_app/main.dart";
 import "package:hexcolor/hexcolor.dart";
 
@@ -69,12 +70,12 @@ class _SideBarState extends State<SideBar> {
                       ),
                       title: isLoggedIn == true ? Column(
                         children: [
-                           if (isLoggedIn == true) Text("Angemeldet mit", style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 10)),
-                           isLoggedIn == true ? Text(email, style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 18)): Text("Anmelden", style: TextStyle(color: HexColor("#EDF4F2")) )
+                           Text("Angemeldet mit", style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 10)),
+                           Text(email, style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 18))
                         ],
                       ) : IconButton(
                             onPressed: () {
-                              
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: false )));
                             },
                         icon:
                         Text("Anmelden", style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 20),),

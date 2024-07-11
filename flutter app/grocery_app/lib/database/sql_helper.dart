@@ -9,7 +9,6 @@ class SQLHelper {
     await database.execute("""CREATE TABLE items(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
       title TEXT,
-      description TEXT,
       ingridientsJson TEXT,
       spicesJson TEXT
       ) """
@@ -329,9 +328,9 @@ class SQLHelper {
   }
 
 // Button --> create instance of a sql table
-  static Future<int> createMeal(String title, String description, String ingridientsJson, String spicesJson) async {
+  static Future<int> createMeal(String title, String ingridientsJson, String spicesJson) async {
     final db = await SQLHelper.db();
-    final data = {"title": title, "description": description, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
+    final data = {"title": title, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
     final id = await db.insert("items", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
 
     return id; 
