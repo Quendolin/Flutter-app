@@ -170,6 +170,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
 
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        
+                      },
+                      child: IconButton(
+                        onPressed: () {}, icon: Image.asset("assets/images/ios_dark_sq_na@1x.png")),
+                    ),
+                     InkWell(
+                      onTap: () {
+                        
+                      },
+                       child: IconButton(
+                        onPressed: () {}, icon: Image.asset("assets/images/appleid_button@1x.png")),
+                     ),
+                  ],
+                ),
+              )
+
             
             
           ],
