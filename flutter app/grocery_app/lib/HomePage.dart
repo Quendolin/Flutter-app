@@ -262,7 +262,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (i in meals) {
           _addMeal(i["name"], "", i["ingredientsJson"].toString(), i["spicesJson"].toString());
-          final allMeals = _getAllMeals(); 
+          final allMeals = await _getAllMeals(); 
           int length = await allMeals.length;
           int a = allMeals[length]["id"]; 
           final values = {
@@ -271,13 +271,6 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
           await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloud_id});
 
         }
-      }
-      for (var e in local_meals) {
-        if (cloud_id == e["id"]) {break;}
-        if (cloud_id != e["id"] && c == local_meals.length) {
-          await supabase.from("meals").delete().eq("local_id", cloud_id);
-        }
-
       }
       
     }
