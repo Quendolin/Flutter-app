@@ -25,13 +25,33 @@ class SQLHelper {
       ) """
     );
 
+    
+
+    await database.execute(
+      """CREATE TABLE deleteMealsInCloud(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      meal_id INTEGER
+      )
+      """
+    );
+
+    await database.execute(
+       """CREATE TABLE deleteShoppingListsInCloud(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      list_id INTEGER
+      )
+      """
+    );
+
     await database.execute(
       """CREATE TABLE Ingredient(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       name TEXT
+      
       )
       """
     );
+
     await database.execute(
       """CREATE INDEX index_name ON Ingredient(name);"""
     );
@@ -288,7 +308,7 @@ class SQLHelper {
   static Future<sql.Database> db() async {
 
     return sql.openDatabase(
-      "db_meals15.db",
+      "db_meals18.db",
       version: 1,
       onCreate: (sql.Database database, int version) async {
         await createTables(database);
@@ -336,6 +356,25 @@ class SQLHelper {
     return db.query("shoppingLists", orderBy: "id");
   }
 
+  // initializing at the start
+
+
+  static Future<List<Map<String, dynamic>>> getAllDeleteMealWaitingRoom() async {
+    final db = await SQLHelper.db();
+    return db.query("deleteMealsInCloud", orderBy: "id");
+  }
+
+
+
+
+  // initializing at the start 
+ 
+  static Future<List<Map<String, dynamic>>> getAllDeleteShoppingListsWaitingRoom() async {
+    final db = await SQLHelper.db();
+    return db.query("deleteShoppingListsInCloud", orderBy: "id");
+  }
+
+
   
   
   static Future<List<Map<String, dynamic>>> getOneMeal(int id) async {
@@ -365,14 +404,33 @@ class SQLHelper {
 
   static Future<void> deleteSavedShoppingList(int id) async {
     final db = await SQLHelper.db();
+
+    try {
+      final data = {"list_id": id};
+      await db.insert("deleteShoppingListsInCloud", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    } catch (err) {
+      debugPrint("something went wrong when deleting an item: $err");
+    }
+
+
     try {
       await db.delete("shoppingLists", where: "id = ?", whereArgs: [id]);
     } catch (err) {
       debugPrint("something went wrong when deleting an item: $err");
     }
+
   }
   static Future<void> deleteMeal(int id) async {
     final db = await SQLHelper.db();
+
+    try {
+      final data = {"meal_id": id};
+      await db.insert("deleteMealsInCloud", data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+      
+    } catch (err) {
+      debugPrint("something went wrong when deleting an item: $err");
+    }
+
     try { 
       await db.delete("items", where: "id = ?", whereArgs: [id]);
     } catch (err) {

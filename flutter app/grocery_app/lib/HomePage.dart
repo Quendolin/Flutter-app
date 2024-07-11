@@ -21,10 +21,25 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class homePage2 extends StatefulWidget {
   final Function callback1;
   final List callback2;
+
   final Function refreshShoppingLists;
   final List getSavedShoppingLists;
+
+  final Function refreshDeleteMealWaitingRoom;
+  final List getDeleteMealWaitingRoom;
+
+  final Function refreshShoppingListsWaitingRoom;
+  final List getDeleteShoppingListWaitingRoom;
   
-   const homePage2({super.key, required this.callback1, required this.callback2, required this.getSavedShoppingLists, required this.refreshShoppingLists});
+   const homePage2({super.key, 
+    required this.callback1, 
+    required this.callback2, 
+    required this.getSavedShoppingLists, 
+    required this.refreshShoppingLists, 
+    required this.getDeleteMealWaitingRoom, 
+    required this.refreshDeleteMealWaitingRoom, 
+    required this.getDeleteShoppingListWaitingRoom, 
+    required this.refreshShoppingListsWaitingRoom});
 
   @override
   State<homePage2> createState() => _meal_pageState();
@@ -149,7 +164,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
   _deleteShoppingList(int id ) async {
     await SQLHelper.deleteSavedShoppingList(id);
+
     widget.refreshShoppingLists();
+    widget.refreshShoppingListsWaitingRoom();
   }
    
   PlaceholderFunction() {
@@ -176,6 +193,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     await SQLHelper.deleteMeal(id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("succesfully deleted")));
     widget.callback1();
+    widget.refreshDeleteMealWaitingRoom();
   }
      
   
@@ -226,12 +244,52 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   
 
   syncAllMeals() async {
+    bool isConnected = false;
+
+    try {
+      await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id); 
+      isConnected = true;
+      } catch (err) {
+      isConnected  = false;
+
+    }
+
+    if (isConnected) {
+
     final response_meal = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
     final response_shoppingLists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
     //meals 
     final local_meals = widget.callback2;
     //savedShoppingLists
     final local_ShoppingLists = widget.getSavedShoppingLists;
+
+    
+
+    final deleteMeals = widget.getDeleteMealWaitingRoom;
+    final deleteShoppingList = widget.getDeleteShoppingListWaitingRoom;
+    // temporary delete meal local list -> delete in cloud 
+    //meals 
+    for (final meal in deleteMeals) {
+      int id = meal["meal_id"];
+      final values = {
+        "user_id": supabase.auth.currentUser!.id,
+        "local_id": id
+      };
+      await supabase.from("meals").delete().match(values);
+    }
+
+    // shoppingLists
+    for (final shoppingList in deleteShoppingList) {
+      int id = shoppingList["list_id"];
+      final values = {
+        "user_id": supabase.auth.currentUser!.id,
+        "local_id": id
+      };
+      await supabase.from("shoppingsLists").delete().match(values);
+    }
+
+
+   
 
     
     // Sync Meals 
@@ -261,12 +319,12 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
      if (local_meals.isEmpty) { 
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (i in meals) {
-          _addMeal(i["name"], "", i["ingredientsJson"].toString(), i["spicesJson"].toString());
+          await _addMeal(i["name"], "", i["ingredientsJson"].toString(), i["spicesJson"].toString());
           final allMeals = await _getAllMeals(); 
-          int length = await allMeals.length;
-          int a = allMeals[length]["id"]; 
+          final last =  [allMeals].last;
+          int integer = last[0]["id"];
           final values = {
-            "local_id": a
+            "local_id": integer
           };
           await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloud_id});
 
@@ -298,53 +356,21 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         c = c +1;
       }
     }
+
+
+      
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Verbindung")));
+    }
+    
    
 
   
 
 
-    // check if meal exists only in cloud -> delete
-   // checkWetherDeleteMealfromCloud(response_meal, local_meals);
-   // checkWetherDeleteShoppingListfromCloud(response_shoppingLists, local_ShoppingLists);
+   
   }
-  checkWetherDeleteShoppingListfromCloud(final response, final local_ShoppingLists) async {
-    
-    for(var i in response) {  
-      int cloud_id = i["local_id"];
-      int c = 1;
-      if (local_ShoppingLists.isEmpty) {
-       await supabase.from("shoppingsLists").delete().eq("user_id", supabase.auth.currentUser!.id);  
-      }
-      for (var e in local_ShoppingLists) {
-        
-        if (cloud_id == e["id"]) {break;}
-        if (cloud_id != e["id"] && c == local_ShoppingLists.length ) {
-          await supabase.from("shoppingsLists").delete().eq("local_id", cloud_id);
-        }
-        
-        c = c+1; 
-      }
-    }
-  } 
-
-  checkWetherDeleteMealfromCloud(final response, final local_meals) async {
-    
-    for (var i in response) {
-      int cloud_id = i["local_id"];
-      int c = 1;
-     if (local_meals.isEmpty) { 
-        await supabase.from("meals").delete().eq("user_id", supabase.auth.currentUser!.id);
-      }
-      for (var e in local_meals) {
-        if (cloud_id == e["id"]) {break;}
-        if (cloud_id != e["id"] && c == local_meals.length) {
-          await supabase.from("meals").delete().eq("local_id", cloud_id);
-        }
-        c = c +1;
-      }
-      
-    }
-  }
+  
 
   insertMealToCloud(int id) async {
     final meal = _getOneMeal(id);

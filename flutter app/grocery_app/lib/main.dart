@@ -53,6 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Map<String, dynamic>> _meals = [];
   List<Map<String, dynamic>> _savedShoppingLists = [];
+  List<Map<String, dynamic>> _deleteMealWaitingRoom = [];
+  List<Map<String, dynamic>> _deleteShoppingListWaitingRoom = [];
   bool _isLoading = true; 
 
   void _refreshSavedShoppingLists() async {
@@ -72,6 +74,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _refreshDeleteMealWaitingRoom() async {
+    final data = await SQLHelper.getAllDeleteMealWaitingRoom();
+    _deleteMealWaitingRoom = data;
+    _isLoading = false;
+  }
+
+  void _refreshDeleteShoppingListWaitingRoom() async {
+    final data = await SQLHelper.getAllDeleteShoppingListsWaitingRoom();
+    _deleteShoppingListWaitingRoom = data;
+    _isLoading = false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,7 +96,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     
-    return homePage2(callback1: _refreshMeals, callback2: _meals, getSavedShoppingLists: _savedShoppingLists, refreshShoppingLists: _refreshSavedShoppingLists,);
+    return homePage2(
+      callback1: _refreshMeals, 
+      callback2: _meals, 
+      getSavedShoppingLists: _savedShoppingLists,
+      refreshShoppingLists: _refreshSavedShoppingLists,
+      getDeleteMealWaitingRoom: _deleteMealWaitingRoom ,
+      refreshDeleteMealWaitingRoom: _refreshDeleteMealWaitingRoom,
+      getDeleteShoppingListWaitingRoom: _deleteShoppingListWaitingRoom,
+      refreshShoppingListsWaitingRoom: _refreshDeleteShoppingListWaitingRoom,
+      );
   }
  }
 
