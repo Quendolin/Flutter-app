@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:google_sign_in/google_sign_in.dart";
 import "package:grocery_app/Login_Page.dart";
 import "package:grocery_app/main.dart";
 import "package:hexcolor/hexcolor.dart";
@@ -34,6 +35,8 @@ class _SideBarState extends State<SideBar> {
   Widget build(BuildContext context) {
 
     signOut() async {
+      var googleSignedIn = await GoogleSignIn().isSignedIn();
+      if  (googleSignedIn) await GoogleSignIn().signOut();
       await supabase.auth.signOut();
       setState(() {
         isLoggedIn = false; 
@@ -100,7 +103,9 @@ class _SideBarState extends State<SideBar> {
                       title: Text("Account", style: TextStyle(color: HexColor("#EDF4F2")),),
                     ),
                     ListTile(
-                      onTap: () => signOut(),
+                      onTap: () {
+                        signOut();
+                      }, 
                       leading: Opacity(
                         opacity: 0,
                         child: Icon(Icons.check)),

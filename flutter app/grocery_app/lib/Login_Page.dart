@@ -1,10 +1,14 @@
+import "dart:convert";
+
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter/widgets.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:grocery_app/main.dart";
 import "package:hexcolor/hexcolor.dart";
+import "package:sign_in_with_apple/sign_in_with_apple.dart";
 import "package:supabase_flutter/supabase_flutter.dart";
+import 'package:crypto/crypto.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +20,77 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  googleSignIn() async {
+
+  /// Web Client ID that you registered with Google Cloud.
+  const webClientId = '825452009662-v2r45g8c01rf46t98jbt3lpc8ps7noo8.apps.googleusercontent.com';
+
+                         
+  /// iOS Client ID that you registered with Google Cloud.
+  const iosClientId = '825452009662-srbqmpp6cmh7j5qs1hsupa5mvtcbgi24.apps.googleusercontent.com';
+
+  // Google sign in on Android will work without providing the Android
+  // Client ID registered on Google Cloud.
+  try {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+    clientId: iosClientId,
+    serverClientId: webClientId,
+  );
+  final googleUser = await googleSignIn.signIn();
+  final googleAuth = await googleUser!.authentication;
+  final accessToken = googleAuth.accessToken;
+  final idToken = googleAuth.idToken;
+
+  if (accessToken == null) {
+    throw 'No Access Token found.';
+  }
+  if (idToken == null) {
+    throw 'No ID Token found.';
+  }
+
+  await supabase.auth.signInWithIdToken(
+    provider: OAuthProvider.google,
+    idToken: idToken,
+    accessToken: accessToken,
+  );
+  Navigator.pop(context);
+  } catch (err) {
+    print("error");
+  }
+  
+                        
+  }
+
+  appleSignIn() async {
+    final rawNonce = supabase.auth.generateRawNonce();
+    final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      nonce: hashedNonce,
+    );
+
+    final idToken = credential.identityToken;
+    if (idToken == null) {
+      throw const AuthException(
+          'Could not find ID Token from generated credential.');
+    }
+
+    await supabase.auth.signInWithIdToken(
+      provider: OAuthProvider.apple,
+      idToken: idToken,
+      nonce: rawNonce,
+    );
+
+    await supabase.auth.signInWithOAuth(
+      OAuthProvider.apple,
+      redirectTo: 
+    );
+  }
 
   TextEditingController _conPasswort = TextEditingController();
   TextEditingController _conEmail = TextEditingController();
@@ -175,20 +250,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: () {
+                     IconButton(
+                        onPressed: () {
+                          googleSignIn();
+            
                         
-                      },
-                      child: IconButton(
-                        onPressed: () {}, icon: Image.asset("assets/images/ios_dark_sq_na@1x.png")),
-                    ),
-                     InkWell(
-                      onTap: () {
-                        
-                      },
-                       child: IconButton(
-                        onPressed: () {}, icon: Image.asset("assets/images/appleid_button@1x.png")),
-                     ),
+                        }, icon: Image.asset("assets/images/ios_dark_sq_na@1x.png")),
+                    
+                     
+                       IconButton(
+                        onPressed: () {
+                          appleSignIn();
+                        }, 
+                        icon: Image.asset("assets/images/appleid_button@1x.png")),
+                     
                   ],
                 ),
               )
