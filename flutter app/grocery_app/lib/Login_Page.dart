@@ -110,13 +110,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // HexColor("#d6e2de"), //HexColor("31473A")///,
+      backgroundColor: HexColor("31473A"), 
       body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 50.0),
               child: Center(
-                child: Image.asset("assets/images/Mahlzeit_Logo-removebg-preview.png",)
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 2.7,
+                  child: Image.asset("assets/images/Mahlzeit_Logo.png",))
                 ),
             ),
              Align(
@@ -124,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left:40.0),
-                child: default_signIn == true? Text( "Einloggen", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)) : Text("Registration", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
+                child: default_signIn == true? Text( "Einloggen", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: HexColor("#d6e2de"))) : Text("Registration", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: HexColor("#d6e2de")))
               )
               ),
             Padding(
@@ -198,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       emailRedirectTo: "io.supabase.flutterquickstart://login-callback"
                       );
                       if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
                         Navigator.pop(context);
                        
                       }
@@ -241,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all( 5),
-                    child: default_signIn == false ? Text("schon einen Account?") : Text("Keinen Account?"),
+                    child: default_signIn == false ? Text("schon einen Account?", style: TextStyle(color: HexColor("#d6e2de")),) : Text("Keinen Account?", style: TextStyle(color: HexColor("#d6e2de"))),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5),
@@ -253,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                          
                         
                       },
-                      child: default_signIn == false ? Text("Einloggen", style: TextStyle(fontWeight: FontWeight.bold)) : Text("Registration", style: TextStyle(fontWeight: FontWeight.bold))
+                      child: default_signIn == false ? Text("Einloggen", style: TextStyle(fontWeight: FontWeight.bold, color: HexColor("#d6e2de") )) : Text("Registration", style: TextStyle(fontWeight: FontWeight.bold, color: HexColor("#d6e2de")))
                     ),
                   )
                 ],
