@@ -195,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       await supabase.auth.signUp(
                       email: email, 
                       password: passwort,
-                      emailRedirectTo: "io.supabase.flutterquickstart://login-callback/"
+                      emailRedirectTo: "io.supabase.flutterquickstart://login-callback"
                       );
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
