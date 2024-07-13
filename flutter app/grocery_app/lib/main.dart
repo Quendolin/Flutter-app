@@ -14,8 +14,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   await Supabase.initialize(
-    url: "https://qwikmwlwayniszhgybui.supabase.co", 
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aWttd2x3YXluaXN6aGd5YnVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyOTQxMDcsImV4cCI6MjAzNTg3MDEwN30.GcXxd9WeYLqeXM-IAi--N9v3SvBVLnCA_wxo50kSCCI", 
+    url: "https://ejdvmkusfhrksgpucedy.supabase.co", 
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqZHZta3VzZmhya3NncHVjZWR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA4MjY4MzAsImV4cCI6MjAzNjQwMjgzMH0.jSvT4GEurjNI5nhJ-Ay8M6hvoibhJDvwWtcGtgfDD0M", 
+    
   
  );
   runApp(const MyApp());

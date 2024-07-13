@@ -1,4 +1,5 @@
 import "dart:convert";
+import "dart:io";
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -63,6 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   appleSignIn() async {
+    /*
+
+    if (Platform.isIOS) { 
     final rawNonce = supabase.auth.generateRawNonce();
     final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
 
@@ -80,16 +84,23 @@ class _LoginScreenState extends State<LoginScreen> {
           'Could not find ID Token from generated credential.');
     }
 
-    await supabase.auth.signInWithIdToken(
+
+      
+      await supabase.auth.signInWithIdToken(
       provider: OAuthProvider.apple,
       idToken: idToken,
-      nonce: rawNonce,
-    );
+      nonce: rawNonce
+      );
 
-    await supabase.auth.signInWithOAuth(
-      OAuthProvider.apple,
-      redirectTo: 
-    );
+   } else {
+
+     await supabase.auth.signInWithOAuth(
+        OAuthProvider.apple,
+        redirectTo: "io.supabase.flutterquickstart://login-callback/"
+        );
+   }
+
+    */
   }
 
   TextEditingController _conPasswort = TextEditingController();
@@ -189,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verifizierungsmail gesendet")));
                         Navigator.pop(context);
+                       
                       }
                     } on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error,));
                    }
@@ -198,15 +210,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           email: email,
                           password: passwort
                         );
+                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Succelfull")));
                         Navigator.pop(context);
                       } on AuthException catch (error) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+                        
                       } 
                     
                   }
                   
-                  Navigator.pop(context);
+                  
                  
                 },
                 child: Container(

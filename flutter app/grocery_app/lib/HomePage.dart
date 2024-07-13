@@ -180,8 +180,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
 
 
-  Future<void> _updateMeal(int id, String title_name, String description, ingridientsJson, String spicesJson) async {
-    await SQLHelper.updateMeal(id, title_name, description, ingridientsJson, spicesJson);
+  Future<void> _updateMeal(int id, String title_name, String ingridientsJson, String spicesJson) async {
+    await SQLHelper.updateMeal(id, title_name, ingridientsJson, spicesJson);
     widget.callback1();
   }
 
@@ -200,7 +200,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
    
   
   // add meal to sql database 
-  Future<void> _addMeal(String meal_title, String meal_description, String ingridientsJson, String spicesJson) async {
+  Future<void> _addMeal(String meal_title, String ingridientsJson, String spicesJson) async {
      
       
       await SQLHelper.createMeal(meal_title, ingridientsJson, spicesJson);
@@ -319,7 +319,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
      if (local_meals.isEmpty) { 
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (i in meals) {
-          await _addMeal(i["name"], "", i["ingredientsJson"].toString(), i["spicesJson"].toString());
+          await _addMeal(i["name"], i["ingredientsJson"].toString(), i["spicesJson"].toString());
           final allMeals = await _getAllMeals(); 
           final last =  [allMeals].last;
           int integer = last[0]["id"];

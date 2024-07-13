@@ -393,9 +393,9 @@ class SQLHelper {
     return result; 
   }
 
-  static Future<int> updateMeal(int id, String? title, String? description, String? ingridientsJson, String spicesJson) async {
+  static Future<int> updateMeal(int id, String? title, String? ingridientsJson, String spicesJson) async {
     final db = await SQLHelper.db();
-    final data = {"title": title, "description": description, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
+    final data = {"title": title, "ingridientsJson": ingridientsJson, "spicesJson": spicesJson};
     final result = await db.update("items", data, where: "id = ?", whereArgs: [id]);
     return result;
   }
