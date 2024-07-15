@@ -158,11 +158,12 @@ class _create_new_mealState extends State<create_new_meal> {
 
 
         if (added_ingridients_list.length < 5 && widget.update == false && containerHeight2 != 0.000) {
-          if (containerHeight2 < containerHeight) { int i = 1;} 
+          if (containerHeight2 < containerHeight) {} 
           else {containerHeight = containerHeight2;}
         }
         if (spices_list.length < 3 && widget.update == false && containerHeight_spices2 != 0.000) { 
-          if (containerHeight_spices2 < (MediaQuery.of(context).size.height / 20 * 3) + MediaQuery.of(context).size.height /10.5) {int i = 1;}
+        
+          if (containerHeight_spices2 < (MediaQuery.of(context).size.height / 20 * 3) + MediaQuery.of(context).size.height /10.5) {}
            if (containerHeight_spices2 > (MediaQuery.of(context).size.height / 20 * 3) + MediaQuery.of(context).size.height /10.5) {
             containerHeight_spices = containerHeight_spices - MediaQuery.of(context).size.height / 20;
           }
@@ -181,7 +182,9 @@ class _create_new_mealState extends State<create_new_meal> {
 
 
   
-  TextEditingController txtcon_name_neuer_Mahlzeit = TextEditingController();
+  // ignore: non_constant_identifier_names
+  final TextEditingController txtcon_name_neuer_Mahlzeit = TextEditingController();
+  final FocusNode  _focusNodeName = FocusNode();
   
 
   List spices_list = [];
@@ -261,6 +264,7 @@ class _create_new_mealState extends State<create_new_meal> {
              padding: EdgeInsets.all(10),
              child: TextField(
               controller: txtcon_name_neuer_Mahlzeit,
+              focusNode: _focusNodeName,
               decoration: InputDecoration(
                 fillColor: HexColor("#d6e2de"),
                 filled: true,
@@ -332,12 +336,12 @@ class _create_new_mealState extends State<create_new_meal> {
                                   flex:3, 
                                   child: Container(
                                   
-                                  child: Text(added_ingridients_list[index].Ingridient_name!, style: TextStyle(color: Colors.black),)
+                                  child: Text(added_ingridients_list[index].Ingridient_name, style: TextStyle(color: Colors.black),)
                                   )),
                                   Expanded(
                                     flex: 4,
                                     child: Container(
-                                      child: Text("${added_ingridients_list[index].Ingridient_mass!} ${added_ingridients_list[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.black), )
+                                      child: Text("${added_ingridients_list[index].Ingridient_mass} ${added_ingridients_list[index].Ingridient_mass_unit}", style: TextStyle(color: Colors.black), )
                                       ),
                                   ),
                                   
@@ -352,7 +356,7 @@ class _create_new_mealState extends State<create_new_meal> {
                                 },
                               ),
                                                   
-                                                  ),
+                             ),
                             ),
                         )
                       ),
@@ -360,7 +364,7 @@ class _create_new_mealState extends State<create_new_meal> {
                         alignment: Alignment.bottomCenter,
                         child: FloatingActionButton.small(
                           heroTag: "btn1",
-                          
+                          backgroundColor: HexColor("#d6e2de"),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           onPressed:() {
                             Navigator.push(context, 
@@ -442,6 +446,7 @@ class _create_new_mealState extends State<create_new_meal> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: FloatingActionButton.small( 
+                          backgroundColor: HexColor("#d6e2de"),
                           heroTag: "btn2",
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           onPressed:() {
@@ -460,15 +465,32 @@ class _create_new_mealState extends State<create_new_meal> {
              Padding(
                padding: const EdgeInsets.all(8.0),
                child: GestureDetector( 
-                onTap: () {
-                    //print(list[0]["id"]);
-                    AddorUpdateMeal();
+                 onTap: () { 
+                 
+                    
+                  if (txtcon_name_neuer_Mahlzeit.text.isEmpty) {
+                    _focusNodeName.requestFocus();
+                    return;
+                    
+                  }
+
+                  if (added_ingridients_list.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Zutat"), duration: Duration(milliseconds: 300),));
+                    return;
+                  }  
+                  
+                  AddorUpdateMeal();
                   Navigator.pop(context);
                 },
                child: Container(
                 width: MediaQuery.of(context).size.width, 
                 height: MediaQuery.of(context).size.height / 9,
-                color: HexColor("#d6e2de"),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius:  BorderRadius.circular(12),
+                  color: HexColor("#d6e2de"),
+                ),
+                
                 child: Center(
                   child: Icon(Icons.done, color: Colors.black),
                    

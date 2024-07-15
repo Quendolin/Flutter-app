@@ -14,7 +14,7 @@ class _add_spciesState extends State<add_spcies> {
 
   updateList(String value) {
     setState(() {
-      spices_add1 = spices_add.where((element) => element.spices_title!.toLowerCase().contains(value.toLowerCase())).toList();
+      spices_add1 = spices_add.where((element) => element.spices_title.toLowerCase().contains(value.toLowerCase())).toList();
     });
   }
 
@@ -75,11 +75,11 @@ class _add_spciesState extends State<add_spcies> {
                 itemCount: spices_add1.length,
                 itemBuilder: (context, index) => ListTile(
                   onTap: () {
-                    spice_con.text = spices_add1[index].spices_title!;
+                    spice_con.text = spices_add1[index].spices_title;
                     widget.add(spice_con.text);
                     Navigator.pop(context);
                   },
-                  title: Text(spices_add1[index].spices_title!, style: const TextStyle(color: Colors.white))
+                  title: Text(spices_add1[index].spices_title, style: const TextStyle(color: Colors.white))
             
             )
            ) 

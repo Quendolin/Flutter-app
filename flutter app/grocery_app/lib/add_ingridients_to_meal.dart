@@ -1,10 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:grocery_app/database/sql_helper.dart';
-import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:http/http.dart';
-import 'package:openfoodfacts/openfoodfacts.dart';
+
+
 
 // ignore: must_be_immutable
 class add_ingridients_to_meal extends StatefulWidget {

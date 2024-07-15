@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:grocery_app/HomePageSideBar.dart';
 import 'package:grocery_app/Login_Page.dart';
 import 'package:grocery_app/database/sql_helper.dart';
@@ -15,7 +13,6 @@ import 'package:grocery_app/select_meals_for_shopping.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 
 
 class homePage2 extends StatefulWidget {
@@ -205,12 +202,6 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       
       await SQLHelper.createMeal(meal_title, ingridientsJson, spicesJson);
       widget.callback1();
-      
-      
-      print("modell wurde erstellt");
-      
-      displayed_meal_list = List.from(main_meal_list); 
-
   }
 
    _getAllMeals() async {
@@ -256,11 +247,14 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
     if (isConnected) {
 
+    // ignore: non_constant_identifier_names
     final response_meal = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
+    // ignore: non_constant_identifier_names
     final response_shoppingLists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
     //meals 
     final local_meals = widget.callback2;
     //savedShoppingLists
+    // ignore: non_constant_identifier_names
     final local_ShoppingLists = widget.getSavedShoppingLists;
 
     
@@ -295,6 +289,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     // Sync Meals 
     // update or insert in Database
     for (var localMeal in local_meals) {
+      // ignore: non_constant_identifier_names
       int local__meal_id = localMeal["id"];
       int b = 1;
        if (response_meal.isEmpty) { insertMealToCloud(local__meal_id);}
@@ -315,7 +310,6 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     // insert meals from cloud to local
      for (var i in response_meal) {
       int cloud_id = i["local_id"];
-      int c = 1;
      if (local_meals.isEmpty) { 
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (i in meals) {
@@ -338,6 +332,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     // Sync ShoppingLists 
     
     for (var localShoppingList in local_ShoppingLists) {
+      // ignore: non_constant_identifier_names
       int local_shoppingList_id = localShoppingList["id"];
       int c = 1; 
       if (response_shoppingLists.isEmpty) { insertShoppingListToCloud(local_shoppingList_id);}
@@ -420,16 +415,19 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       "spicesOfShoppingListJson": toJson(list[0]["spicesOFShoppingListJson"])
     };
     await supabase.from("shoppingsLists").update(values).eq("local_id", id);
-    print("updated Lists");
   }
 
   
-  List<MealModel> displayed_meal_list = List.from(main_meal_list);
+
 
    List<shoppingIngredient> list2 = [];
+   // ignore: non_constant_identifier_names
    int selected_Index_Nav = 0; 
+   // ignore: non_constant_identifier_names
    bool HomePage = true;
+   // ignore: prefer_typing_uninitialized_variables
    var data;
+   // ignore: non_constant_identifier_names
    late bool gespeicherte_liste = false;
    bool first = true;
    
@@ -449,16 +447,13 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   @override
   Widget build(BuildContext context) {
 
-    
-
-     
     if (selected_Index_Nav == 1) {containerHeight = checkContaierHeight();}
     
     return Scaffold(
-      drawer: SideBar(),
+      drawer: const SideBar(),
       appBar:AppBar(
       backgroundColor: HexColor("#31473A"),
-      title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
+      title: Text("Mahlzeit", style: TextStyle(color: HexColor("#EDF4F2"))),
       centerTitle: true,
       
       leading: Builder( builder: (context) => IconButton(
@@ -482,7 +477,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
               syncAllMeals(); 
             } else {
               print("keine session");
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: session == null ? false: true )));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: session == null ? false: true, sideBar: false, )));
             }
           },
           ), 
@@ -516,7 +511,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         showSelectedLabels: false ,
         showUnselectedLabels: false,
         unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.white,
+        selectedItemColor: HexColor("#EDF4F2"),
         type: BottomNavigationBarType.fixed,
         
       
@@ -633,6 +628,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                Padding(
                  padding: const EdgeInsets.only(bottom: 15.0),
                  child: FloatingActionButton(
+                  
                   onPressed:() {
                     Navigator.push(
                       context,
@@ -640,7 +636,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                   }, 
                   autofocus: true,
                   heroTag: "btn3",
-                  backgroundColor: Colors.white,
+                  backgroundColor: HexColor("#d6e2de"),
                   highlightElevation: 10,
                   shape: RoundedRectangleBorder(
                    side: BorderSide(color: Colors.black),

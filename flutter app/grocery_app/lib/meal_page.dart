@@ -140,12 +140,12 @@ class _meal_pageState extends State<meal_page> {
                             flex:1, 
                             child: Container(
                             
-                            child: Text(ingridients_list_from_meal[index].Ingridient_name!, style: TextStyle(color: Colors.white),)
+                            child: Text(ingridients_list_from_meal[index].Ingridient_name, style: TextStyle(color: Colors.white),)
                             )),
                             Expanded(
                               flex: 1,
                               child: Container(
-                                child: Text("${ingridients_list_from_meal[index].Ingridient_mass!} ${ingridients_list_from_meal[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white), )
+                                child: Text("${ingridients_list_from_meal[index].Ingridient_mass} ${ingridients_list_from_meal[index].Ingridient_mass_unit}", style: TextStyle(color: Colors.white), )
                                 ),
                             ),
                             
@@ -161,14 +161,14 @@ class _meal_pageState extends State<meal_page> {
           SizedBox(
             height: MediaQuery.of(context).size.height / 50,
           ),
-          Align(
+          if (spices_list_from_meal.isNotEmpty) const Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left: 14.0),
                 child: Text("Gewürze", style: TextStyle(color: Colors.white), ),
               ),
             ),
-             Padding(
+            if (spices_list_from_meal.isNotEmpty) Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 height: containerHeight_spcices,

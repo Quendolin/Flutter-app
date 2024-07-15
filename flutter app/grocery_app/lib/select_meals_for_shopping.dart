@@ -1,11 +1,12 @@
 import 'dart:convert';
 import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
-import 'package:flutter_material_pickers/flutter_material_pickers.dart';
+
 import 'package:grocery_app/meal_model.dart';
 import 'package:grocery_app/shopping_list.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class select_meals_for_shopping extends StatefulWidget {
   final List callback; 
   final Function savedShoppingList;
@@ -163,7 +164,6 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
   List<spices> temporarySpicesList = [];
   List<spices> finalSpicesList = [];
   List<shoppingIngredient> finalIngredientList = [];
-  TextEditingController _controller = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
   int mealSize = 1;
   List<selectedMeal> selected_meals_list = []; 
@@ -236,11 +236,9 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                       controller: _controller2,
                       focusNode: _node,
                       decoration: InputDecoration(
-                        
                         fillColor: HexColor("#d6e2de"),
                         filled: true,
                         enabledBorder: OutlineInputBorder(
-      
                           borderSide: BorderSide(color: Colors.black, width: 1), 
                           borderRadius: BorderRadius.circular(12)
                         ),
@@ -248,10 +246,6 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Colors.black, width: 2)
                         ),
-                        
-                      
-                     
-                     
                      ),
                    ),
                   )
@@ -259,7 +253,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                 ],
               )
             : Container(),
-            Align(
+            const Align(
               alignment: Alignment.center,
               child: Text("Gespeicherte Gerichte", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
             ),
@@ -336,7 +330,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                           });
                           
                         },
-                        title: Text(selected_meals_list[index].meal_title!, style: TextStyle( color: Colors.black),),
+                        title: Text(selected_meals_list[index].meal_title, style: TextStyle( color: Colors.black),),
                         trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -352,7 +346,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                                       backgroundColor: HexColor("#d6e2de"),
                                       itemExtent: 30,
                                       scrollController: FixedExtentScrollController(
-                                        initialItem: selected_meals_list[index].meal_size! -1 
+                                        initialItem: selected_meals_list[index].meal_size -1 
                                       ),
                                       children: const [
                                         Text("1"),
@@ -396,31 +390,25 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
+                    
+                    if (selected_meals_list.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Kein Gericht ausgewählt"), duration: Duration(milliseconds: 300),));
+                      return;
+                    }
       
                     if (widget.spontaneous == true) {
                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
                     } else {
-      
                           if (_controller2.text.isEmpty) {
                             _node.requestFocus();
                           } else {
                                shoppingListToSavedList(_controller2.text);
                                Navigator.pop(context);
                           }
-                         
-                        
-      
                         }
-                      
-                      
                     },
-                    
-                    
-                    
-                
-                   
                   child: Container(
                     height: MediaQuery.of(context).size.height / 15,
                     width: MediaQuery.of(context).size.width / 4,
@@ -432,10 +420,10 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                     child: const Padding(
                       padding: EdgeInsets.all(12.0),
                         child: Center(
-                            child: Text("Fertig", style: TextStyle(fontWeight: FontWeight.bold,))
-                           ),
-                          )
-                         )
+                            child: Text("Fertig", style: TextStyle(fontWeight: FontWeight.bold))
+                      ),
+                    )
+                  )
                 ),
               ),
             )

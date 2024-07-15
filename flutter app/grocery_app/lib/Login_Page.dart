@@ -1,5 +1,4 @@
-import "dart:convert";
-import "dart:io";
+
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -7,14 +6,17 @@ import "package:flutter/widgets.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:grocery_app/main.dart";
 import "package:hexcolor/hexcolor.dart";
+// ignore: unused_import
 import "package:sign_in_with_apple/sign_in_with_apple.dart";
 import "package:supabase_flutter/supabase_flutter.dart";
-import 'package:crypto/crypto.dart';
 
 
+
+// ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key, required this.SignedIn});
+  LoginScreen({super.key, required this.SignedIn, required this.sideBar});
   bool SignedIn;
+  bool sideBar;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -55,7 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
     idToken: idToken,
     accessToken: accessToken,
   );
-  Navigator.pop(context);
+  if (widget.sideBar == true) {
+    Navigator.pop(context);
+    Navigator.pop(context);
+  } else {
+    Navigator.pop(context);
+  }
+  
   } catch (err) {
     print("error");
   }
@@ -201,7 +209,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
-                        Navigator.pop(context);
+                        if (widget.sideBar) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        } else {
+                          Navigator.pop(context);
+                        }
+
+                        
                        
                       }
                     } on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error,));
@@ -212,9 +227,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           email: email,
                           password: passwort
                         );
-                        Navigator.pop(context);
+                        
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Succelfull")));
-                        Navigator.pop(context);
+                         if (widget.sideBar) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        } else {
+                          Navigator.pop(context);
+                        }
                       } on AuthException catch (error) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
                         
@@ -268,7 +288,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                      IconButton(
                         onPressed: () {
-                          googleSignIn();
+                          
+                          
+                            googleSignIn();
+                     
+                          
             
                         
                         }, icon: Image.asset("assets/images/ios_dark_sq_na@1x.png")),
@@ -276,7 +300,10 @@ class _LoginScreenState extends State<LoginScreen> {
                      
                        IconButton(
                         onPressed: () {
-                          appleSignIn();
+                          setState(() {
+                            appleSignIn();
+                          });
+                          
                         }, 
                         icon: Image.asset("assets/images/appleid_button@1x.png")),
                      

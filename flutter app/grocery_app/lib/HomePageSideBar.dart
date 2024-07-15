@@ -38,9 +38,9 @@ class _SideBarState extends State<SideBar> {
       var googleSignedIn = await GoogleSignIn().isSignedIn();
       if  (googleSignedIn) await GoogleSignIn().signOut();
       await supabase.auth.signOut();
-      setState(() {
+      
         isLoggedIn = false; 
-      });
+      
       
     }
 
@@ -57,9 +57,9 @@ class _SideBarState extends State<SideBar> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: MediaQuery.of(context).size.height / 1 - 16,
+                height: MediaQuery.of(context).size.height / 1.5,
                 decoration: BoxDecoration(
-                  border: Border.all()
+                  
                 ),
                 
                 child: ListView(
@@ -78,7 +78,7 @@ class _SideBarState extends State<SideBar> {
                         ],
                       ) : IconButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: false )));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: false, sideBar: true)));
                             },
                         icon:
                         Text("Anmelden", style: TextStyle(color: HexColor("#EDF4F2"), fontSize: 20),),
@@ -102,19 +102,76 @@ class _SideBarState extends State<SideBar> {
                       leading: Icon(Icons.settings, color: HexColor("#EDF4F2")),
                       title: Text("Account", style: TextStyle(color: HexColor("#EDF4F2")),),
                     ),
-                    ListTile(
-                      onTap: () {
-                        signOut();
-                      }, 
-                      leading: Opacity(
+                     isLoggedIn == true ? ListTile(
+                      onTap: () => 
+                        showDialog(
+                          context: context, 
+                          builder: (context) =>   AlertDialog(
+                            title: const Text("Von deinem Konto Abmelden?", style: TextStyle(fontSize: 20) ,),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        signOut();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      } ,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                        border: Border.all(),
+                                        borderRadius: BorderRadius.circular(12)
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text("Abmelden", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                padding: const EdgeInsets.only(left:20),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(12)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("Abbrechen", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
+                                    ),
+                                ),
+                              )
+                                ],
+                              ),
+                              
+                            ],
+                          )),
+                        
+                      
+                      leading: const Opacity(
                         opacity: 0,
                         child: Icon(Icons.check)),
                       title: Text("Abmelden", style: TextStyle(color: HexColor("#EDF4F2") ),),
+                    ) : ListTile(
+                      leading: const Opacity(
+                        opacity: 0,
+                        child: Icon(Icons.check)),
+                      title: Text("Anmelden", style: TextStyle(color: HexColor("#EDF4F2") )),
                     )
                   ],
                 ),
               ),
-            )
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height / 4,
+              child: Image.asset("assets/images/Mahlzeit_Logo.png"))
           ],
         ),
       ),

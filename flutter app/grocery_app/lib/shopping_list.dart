@@ -8,6 +8,7 @@ import 'package:grocery_app/add_ingridients_to_meal.dart';
 import 'package:grocery_app/meal_model.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class shoppingcard extends StatefulWidget {
   shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists, required this.oldShoppingList, required this.old, required this.huan});
   bool new_;
@@ -83,8 +84,8 @@ class shoppingcardState extends State<shoppingcard> {
     for (var ingredients in Ingredients) {
       // Wenn Zutat doppelt ist 
       if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
-        double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass!);
-        double additionalMass = double.parse(ingredients.Ingridient_mass!);
+        double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass);
+        double additionalMass = double.parse(ingredients.Ingridient_mass);
         double combinedMass = (existingMass + additionalMass);
         // check ob switch zu int
         if (combinedMass == combinedMass.toInt()) {
@@ -180,10 +181,7 @@ class shoppingcardState extends State<shoppingcard> {
             icon: Icon(Icons.arrow_back, color: Colors.white,)) ,
             actions: <Widget> [
               
-              IconButton(
-                icon: Icon(Icons.search), 
-                onPressed: () {},
-                 ), 
+             
                ],
            ),
           backgroundColor: HexColor("31473A"),
@@ -197,7 +195,7 @@ class shoppingcardState extends State<shoppingcard> {
                   children:  [
                     Padding(
                       padding: const EdgeInsets.only(right:40.0),
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
                           _pageController.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.easeIn);
                         },
@@ -215,7 +213,7 @@ class shoppingcardState extends State<shoppingcard> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left:40.0),
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
                           _pageController.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.easeIn);
                           
@@ -268,12 +266,12 @@ class shoppingcardState extends State<shoppingcard> {
                                   Expanded(
                                   flex:3, 
                                     child: Container(
-                                      child: Text(finalIngredientList[index].Ingridient_name!, style: TextStyle(color: Colors.white, decoration: finalIngredientList[index].crossedOff == false ? null : TextDecoration.lineThrough, decorationThickness: finalIngredientList[index].crossedOff == false ? null : 3 ),)
+                                      child: Text(finalIngredientList[index].Ingridient_name, style: TextStyle(color: Colors.white, decoration: finalIngredientList[index].crossedOff == false ? null : TextDecoration.lineThrough, decorationThickness: finalIngredientList[index].crossedOff == false ? null : 3 ),)
                                 )),
                                 Expanded(
                                   flex: 4,
                                   child: Container(
-                                    child: Text("${finalIngredientList[index].Ingridient_mass!} ${finalIngredientList[index].Ingridient_mass_unit!}", style: TextStyle(color: Colors.white, decoration: finalIngredientList[index].crossedOff == false ? null : TextDecoration.lineThrough, decorationThickness: finalIngredientList[index].crossedOff == false ? null : 3  ),  )
+                                    child: Text("${finalIngredientList[index].Ingridient_mass} ${finalIngredientList[index].Ingridient_mass_unit}", style: TextStyle(color: Colors.white, decoration: finalIngredientList[index].crossedOff == false ? null : TextDecoration.lineThrough, decorationThickness: finalIngredientList[index].crossedOff == false ? null : 3  ),  )
                                     ),
                                 ),
                                 
@@ -308,7 +306,7 @@ class shoppingcardState extends State<shoppingcard> {
                 padding: const EdgeInsets.only(left: 15.0,right: 15, bottom: 15),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all()
+                    //border: Border.all()
                   ),
                   child:  Center(
                     child: Row(
