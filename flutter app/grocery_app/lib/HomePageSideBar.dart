@@ -160,6 +160,7 @@ class _SideBarState extends State<SideBar> {
                         child: Icon(Icons.check)),
                       title: Text("Abmelden", style: TextStyle(color: HexColor("#EDF4F2") ),),
                     ) : ListTile(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(SignedIn: false, sideBar: true))),
                       leading: const Opacity(
                         opacity: 0,
                         child: Icon(Icons.check)),
