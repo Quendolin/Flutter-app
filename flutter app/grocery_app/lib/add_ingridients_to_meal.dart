@@ -286,6 +286,8 @@ List  displayed_add_ingridients_to_meal = [];
           
           padding: const EdgeInsets.all(8.0),
           child:Container(   
+            height: MediaQuery.of(context).size.height / 15 ,
+            
             child: Row( 
               children: [ 
             Expanded(
@@ -315,11 +317,11 @@ List  displayed_add_ingridients_to_meal = [];
              
               ),
                ),
-               Expanded(
-                flex: 1,
-                child: Container(
-                   width: MediaQuery.of(context).size.width, 
-                  height: MediaQuery.of(context).size.height / 14,
+               
+            
+                 Container(
+                   width: MediaQuery.of(context).size.width / 5, 
+                  height: MediaQuery.of(context).size.height / 16,
                   decoration: BoxDecoration( color:HexColor("#d6e2de"),
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(8),
@@ -336,7 +338,7 @@ List  displayed_add_ingridients_to_meal = [];
                   child: Text(ingredients_amount, style:TextStyle(color: Colors.black))
                   )
                   )
-                ) 
+                 
                 
                ]
                )

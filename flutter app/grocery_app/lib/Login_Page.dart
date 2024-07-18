@@ -1,5 +1,9 @@
 
 
+import "dart:convert";
+import "dart:io";
+import 'package:crypto/crypto.dart';
+
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter/widgets.dart";
@@ -72,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   appleSignIn() async {
-    /*
+    
 
     if (Platform.isIOS) { 
     final rawNonce = supabase.auth.generateRawNonce();
@@ -108,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
    }
 
-    */
+    
   }
 
   TextEditingController _conPasswort = TextEditingController();
