@@ -377,7 +377,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                         content: TextField(
                                                           onSubmitted: (name) {
                                                             name = name.capitalize();
-                                                            widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList);
+                                                            widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList, finalSpicesList);
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
                                                               Navigator.pop(context);
@@ -406,7 +406,7 @@ class shoppingcardState extends State<shoppingcard> {
                                                             onPressed:() {
                                                               String name = _controller.text;
                                                               name = name.capitalize();
-                                                              widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList);
+                                                              widget.saveShoppingListToSavedLists(name, finalIngredientList, widget.selectesMealList, finalSpicesList);
                                                               
                                                               
                                                               // Funktion für Speicherung der Liste 
