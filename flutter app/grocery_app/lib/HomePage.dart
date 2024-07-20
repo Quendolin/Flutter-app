@@ -210,6 +210,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     return data;
     }
 
+    _savedShoppingLists() async {
+      final data = await SQLHelper.getAllsavedShoppingLists();
+      return data;
+    }
+
   Future<List<Map<String, dynamic>>> _getOneMeal(int id) async {
     final data = await SQLHelper.getOneMeal(id);
     print(data);
@@ -252,10 +257,10 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     // ignore: non_constant_identifier_names
     final response_shoppingLists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
     //meals 
-    final local_meals = widget.callback2;
+    var local_meals = widget.callback2;
     //savedShoppingLists
     // ignore: non_constant_identifier_names
-    final local_ShoppingLists = widget.getSavedShoppingLists;
+    var local_ShoppingLists = widget.getSavedShoppingLists;
 
     
 
@@ -307,25 +312,40 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     }
     
   }
-    // insert meals from cloud to local
-     for (var i in response_meal) {
-      int cloud_id = i["local_id"];
-     if (local_meals.isEmpty) { 
+  
+  // if meals emmpty -> get all meals from the cloud 
+  local_meals = widget.callback2;
+  if (local_meals.isEmpty) { 
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
-        for (i in meals) {
-          await _addMeal(i["name"], i["ingredientsJson"].toString(), i["spicesJson"].toString());
+        for (var b in meals) {
+          await _addMeal(b["name"], b["ingredientsJson"].toString(), b["spicesJson"].toString());
           final allMeals = await _getAllMeals(); 
-          final last =  [allMeals].last;
-          int integer = last[0]["id"];
+          int integer =  allMeals.last[0]["id"];
+          
           final values = {
             "local_id": integer
           };
-          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloud_id});
+          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": integer});
 
         }
-      }
-      
-    }
+      } 
+    
+  if (local_ShoppingLists.isEmpty) {
+    final local_lists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
+        for (var b in local_lists) {
+          await _addMeal(b["name"], b["ingredientsJson"].toString(), b["spicesJson"].toString());
+          final allShoppingLists = await _savedShoppingLists(); 
+          int integer =  [allShoppingLists].last[0]["id"];
+          
+          final values = {
+            "local_id": integer
+          };
+          await supabase.from("shoppingsLists").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloud_id});
+          
+
+        }
+  }
+     
 
 
 
