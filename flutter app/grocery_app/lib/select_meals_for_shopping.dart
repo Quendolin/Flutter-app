@@ -190,7 +190,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
         backgroundColor: HexColor("#31473A"),
         appBar:AppBar(
         backgroundColor: HexColor("#31473A"),
-        title: Text("Mahlzeiten", style: TextStyle(color: HexColor("#EDF4F2"))),
+        title: Text("Mahlzeiten", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -399,7 +399,7 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
                     }
       
                     if (widget.spontaneous == true) {
-                      Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, huan: false, getItem: widget.getItem, selectesMealList: selected_meals_list, new_2: true, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], old: false,))));
+                      Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: true, getItem: widget.getItem, selectesMealList: selected_meals_list, saveShoppingListToSavedLists: widget.savedShoppingList, oldShoppingList: [], oldSpicesList: [],))));
                     } else {
                           if (_controller2.text.isEmpty) {
                             _node.requestFocus();

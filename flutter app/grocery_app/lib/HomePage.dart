@@ -52,7 +52,8 @@ datatoAcessebleData(int index) async {
   List<Map> item =  await _getOneSavedShoppingList(widget.getSavedShoppingLists[index]["id"]);
   List bla2 = json.decode(item[0]["savedShoppingListsJson"]);
   
-  setState(() {
+  
+
   list2.addAll(bla2.map((instance) {
   return shoppingIngredient(
   Ingridient_name: instance["Ingridient_name"], 
@@ -62,9 +63,19 @@ datatoAcessebleData(int index) async {
   );
   }).toList());
 
-  });
+ 
+
+  spicesList = [];
+  List bla3 = json.decode(item[0]["spicesOFShoppingListJson"]);
+
+  spicesList.addAll(bla3.map((instance) {
+    return spices(
+      spices_title: instance["spices_title"]
+      );
+    }
+  ).toList());
   
-  huan = true;
+
  
  
 }
@@ -115,6 +126,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   
 
   }
+
+  
   
   _addSavedShoppingListtoLists(name, List<shoppingIngredient> ingredients, List<selectedMeal> originalMealListFromShoppingList, List<spices> spicesList) {
 
@@ -314,35 +327,37 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
   
   // if meals emmpty -> get all meals from the cloud 
-  local_meals = widget.callback2;
   if (local_meals.isEmpty) { 
+        late int integer;
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (var b in meals) {
-          await _addMeal(b["name"], b["ingredientsJson"].toString(), b["spicesJson"].toString());
+          int cloudId = b["local_id"];
+          await _addMeal(b["name"], json.encode(b["ingredientsJson"]), json.encode(b["spicesJson"]));
           final allMeals = await _getAllMeals(); 
-          int integer =  allMeals.last[0]["id"];
+          integer =  allMeals.last["id"];
           
           final values = {
             "local_id": integer
           };
-          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": integer});
+          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloudId });
 
         }
       } 
+
+      
     
   if (local_ShoppingLists.isEmpty) {
-    final local_lists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
-        for (var b in local_lists) {
-          await _addMeal(b["name"], b["ingredientsJson"].toString(), b["spicesJson"].toString());
+    final cloudLists = await supabase.from("shoppingsLists").select().eq("user_id", supabase.auth.currentUser!.id);
+        for (var b in cloudLists) {
+          int cloudId = b["local_id"];
+          await addSavedShoppingListtoLists(b["name"], json.encode(b["ingredientsShoppingList"]) , json.encode(b["originalMealListsJson"]) , json.encode(b["spicesOfShoppingListJson"]));
           final allShoppingLists = await _savedShoppingLists(); 
-          int integer =  [allShoppingLists].last[0]["id"];
+          int integer =  allShoppingLists.last["id"];
           
           final values = {
             "local_id": integer
           };
-          await supabase.from("shoppingsLists").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloud_id});
-          
-
+          await supabase.from("shoppingsLists").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloudId});
         }
   }
      
@@ -441,6 +456,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
 
 
    List<shoppingIngredient> list2 = [];
+   List<spices> spicesList = [];
    // ignore: non_constant_identifier_names
    int selected_Index_Nav = 0; 
    // ignore: non_constant_identifier_names
@@ -452,7 +468,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
    bool first = true;
    
 
-  bool huan = false; 
+  
   final PageController _pageController2 = PageController();
 
 
@@ -473,7 +489,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       drawer: const SideBar(),
       appBar:AppBar(
       backgroundColor: HexColor("#31473A"),
-      title: Text("Mahlzeit", style: TextStyle(color: HexColor("#EDF4F2"))),
+      title: Text("Mahlzeit", style: TextStyle(color: Colors.white)),
       centerTitle: true,
       
       leading: Builder( builder: (context) => IconButton(
@@ -702,7 +718,10 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                           ),
                           child: Center(
                             child: ListTile(
-                              
+                              onTap: () {  
+                                datatoAcessebleData(index);
+                                Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(oldSpicesList: spicesList, new_: false, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, saveShoppingListToSavedLists: _addSavedShoppingListtoLists,))));
+                              },
                               //shape: Border.all(),
                               visualDensity: VisualDensity(vertical: -1),
                               //tileColor: Colors.amber,
@@ -752,168 +771,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                     child:Icon(Icons.add)
                     ),
                   const Spacer(),
-                  
+
                   GestureDetector(
                     onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list(), updateShoppingList: UpdateShoppingList, update: false, callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
                       
-                      showModalBottomSheet(
-                        context: context, 
-                        builder: (BuildContext context) {
-                          
-                          return StatefulBuilder(
-                            builder: (BuildContext context, StateSetter setState) {
-                              return Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
-                              color: HexColor("#d6e2de"),
-                              ),
-                              height: MediaQuery.of(context).size.height / 2.5,
-                              child: Center(
-                               
-                                child: Row(
-                                  children: [
-                                    
-                                     Expanded(
-                                      flex: 1,
-                                      child: GestureDetector(
-                                      
-                                        onTap: () {  
-                                          //Navigator.push(context, MaterialPageRoute(builder: ((context) => selecting_shoppingcard())));
-                                          showModalBottomSheet(
-                                            barrierColor: Colors.transparent,
-                                            context: context, 
-                                            builder: (BuildContext context) {
-                                            
-                                              
-                                              return StatefulBuilder(
-                                                builder: (BuildContext context, StateSetter setState) {
-                                                  return Container(
-                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
-                                                  color: HexColor("#d6e2de")),
-                                                height: MediaQuery.of(context).size.height / 2.5,
-                                                child: Center(
-                                                  child: Column(
-                                                   children: [
-                                                    Expanded(
-                                                      flex: 3,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(12.0),
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(width: 2),
-                                                            borderRadius: BorderRadius.circular(12)
-                                                          ),
-                                                          //height: MediaQuery.of(context).size.height / 7,
-                                                          width: MediaQuery.of(context).size.width / 1.3 ,
-                                                          child: ListView.builder(
-                                                            itemCount: widget.getSavedShoppingLists.length,
-                                                            itemBuilder:(context, index) => Padding(
-                                                              padding: const EdgeInsets.all(2.0),
-                                                              child: Container(
-                                                                decoration: BoxDecoration(
-                                                                  color: HexColor("#B7FAFF"),
-                                                                  border: Border.all(width:1 ),
-                                                                  borderRadius: BorderRadius.circular(12)
-                                                                ),
-                                                                child: ListTile(
-                                                                  onTap: () {
-                                                                       
-                                                                       
-                                                                       datatoAcessebleData(index);
-                                                                       
-                                                                       
-                                                                       Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(new_: false, huan: huan, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, new_2: false, saveShoppingListToSavedLists: _addSavedShoppingListtoLists, old: true,))));
-                                                                  },
-                                                                  contentPadding: EdgeInsets.symmetric(),
-                                                                  title: Center(
-                                                                    child: Text(widget.getSavedShoppingLists[index]["name"],style: TextStyle(fontWeight: FontWeight.bold),)
-                                                                    ),
-                                                                ),
-                                                              ),
-                                                            ),),
-                                                        ),
-                                                      )
-                                                    ),
-                                                    
-                                                   ],
-                                                  ),
-                                                ),
-                                                 );});
-                                             });
-                                                
-                                               
-                                          }, 
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          height: MediaQuery.of(context).size.height / 7,
-                                          width: MediaQuery.of(context).size.width / 10,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                               Padding(
-                                                 padding: const EdgeInsets.all(8.0),
-                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(),
-                                                    borderRadius: BorderRadius.circular(12)
-                                                  ),
-                                                   child: Icon(Icons.list, size: 69),
-                                                     
-                                                                                           
-                                                 ),
-                                               ),
-                                               Text("Gespeicherte Liste", style: TextStyle(fontWeight: FontWeight.bold)),
-                                               Text("verwenden", style: TextStyle(fontWeight: FontWeight.bold))
-                                            ]
-                                           
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: ((context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list(), updateShoppingList: UpdateShoppingList, update: false, callback: widget.callback2, spontaneous: true, getItem: _getOneMeal, savedShoppingList: _addSavedShoppingListtoLists))));
-                                          
-                                        }, 
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          height: MediaQuery.of(context).size.height / 7,
-                                          width: MediaQuery.of(context).size.width / 10,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                  child: Container(
-                                                    
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(),
-                                                      borderRadius: BorderRadius.circular(12)
-                                                    ),
-                                                    child: Icon(Icons.add, size: 69,)
-                                                    
-                                                  ),
-                                                ),
-                                              ),
-                                              
-                                                
-                                                Text("Spontane Liste", style: TextStyle(fontWeight: FontWeight.bold)),
-                                                Text("erstellen", style: TextStyle(fontWeight: FontWeight.bold),)
-                                              
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                             }
-                          ); 
-                        });
                     },
                     child: Align(
                       alignment: Alignment.center,

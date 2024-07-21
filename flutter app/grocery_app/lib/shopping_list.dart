@@ -10,13 +10,13 @@ import 'package:hexcolor/hexcolor.dart';
 
 // ignore: must_be_immutable, camel_case_types
 class shoppingcard extends StatefulWidget {
-  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.new_2, required this.saveShoppingListToSavedLists, required this.oldShoppingList, required this.old, required this.huan});
+  shoppingcard({super.key, required this.new_, required this.getItem,  required this.selectesMealList, required this.saveShoppingListToSavedLists, required this.oldShoppingList, required this.oldSpicesList,});
   bool new_;
-  bool new_2;
+  
   Function saveShoppingListToSavedLists;
   final List<shoppingIngredient> oldShoppingList;
-  bool old; 
-  bool huan; 
+  final List <spices> oldSpicesList;
+
   Function getItem;
   final List selectesMealList; 
   @override
@@ -70,7 +70,7 @@ class shoppingcardState extends State<shoppingcard> {
         
     }
     ingredientsShoppingListDone(temporaryIngriedientlist, temporarySpicesList);
-    widget.new_ = false;  
+    
     setState(() {
       
     });
@@ -133,11 +133,6 @@ class shoppingcardState extends State<shoppingcard> {
 
   }
 
-  
-
-  
-
-
   List<shoppingIngredient> finalIngredientList = [];
   List<spices> temporarySpicesList = [];
   List<spices> finalSpicesList = [];
@@ -148,23 +143,30 @@ class shoppingcardState extends State<shoppingcard> {
   FocusNode textfield = FocusNode();
 
   @override
-  Widget build(BuildContext context)  {
-
-    
-      
-    if (widget.new_ == true) {
-      
+  void initState() {
+    super.initState();
+    setState(() {
+       if (widget.new_) {
       generateShoppinglist();
     }
-    if (widget.old = true && widget.huan == true) {
-      
-      
+    if (!widget.new_) {
       finalIngredientList = List.from(widget.oldShoppingList);
-      widget.old = false; 
+      finalSpicesList = List.from(widget.oldSpicesList);
     }
-    
-    
-    
+    });
+   
+  }
+
+  
+
+  
+
+
+  
+
+  @override
+  Widget build(BuildContext context)  {
+
     return PopScope(
       canPop: false,
       child: Scaffold(  
@@ -174,9 +176,14 @@ class shoppingcardState extends State<shoppingcard> {
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                if (widget.new_ == false) {Navigator.pop(context);}
+                if (widget.new_) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  
+                  } else {
+                    
+                    Navigator.pop(context);
+                  }
               }, 
             icon: Icon(Icons.arrow_back, color: Colors.white,)) ,
             actions: <Widget> [
@@ -318,9 +325,7 @@ class shoppingcardState extends State<shoppingcard> {
                               padding: const EdgeInsets.all(20.0),
                               child: InkWell(
                                 onTap: () {
-                                    if (widget.new_2 == true)  {
-
-
+                                    if (widget.new_)  {
                                       showModalBottomSheet(
                                     context: context, 
                                     builder: (BuildContext context) {
@@ -441,9 +446,9 @@ class shoppingcardState extends State<shoppingcard> {
                                       );
                                     } 
                                     );
-                                    } else {Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);}
+                                    } else {
+                                      Navigator.pop(context);
+                                   }
                                     
                                     
                                 },

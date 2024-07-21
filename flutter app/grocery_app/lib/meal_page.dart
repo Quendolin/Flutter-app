@@ -21,7 +21,7 @@ class _meal_pageState extends State<meal_page> {
       print(list.runtimeType);
       //txtcon_name_neuer_Mahlzeit.text = list[0]["title"];
 
-  
+      
       List ingridientsList = json.decode(list[0]["ingridientsJson"]);
        //ingridients_list = json.decode(ingridients_list);
       ingridients_list_from_meal = ingridientsList.map((instance) {
