@@ -183,6 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fillColor:  HexColor("#d6e2de"),
                     
                     hintText:"passwort",
+            
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
