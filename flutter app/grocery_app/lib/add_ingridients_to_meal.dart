@@ -179,6 +179,7 @@ List  displayed_add_ingridients_to_meal = [];
 
   TextEditingController _controller1 = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
+  FocusNode _focusNode1 = FocusNode();
   FocusNode textfield2 = FocusNode();
   
 
@@ -193,6 +194,12 @@ List  displayed_add_ingridients_to_meal = [];
 
   @override
   Widget build(BuildContext context) {
+    if (_focusNode1.hasFocus) {
+      setState(() {
+        ingridients_selceted = false;
+      });
+      
+    }
     return  GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
@@ -229,6 +236,7 @@ List  displayed_add_ingridients_to_meal = [];
 
           autofocus: true,
           controller: _controller1, 
+          focusNode: _focusNode1,
             
             
           decoration: InputDecoration(
@@ -291,7 +299,7 @@ List  displayed_add_ingridients_to_meal = [];
             child: Row( 
               children: [ 
             Expanded(
-              flex: 3,
+             
               child:TextField(
                 keyboardType: TextInputType.number,
                 controller: _controller2,
@@ -310,23 +318,21 @@ List  displayed_add_ingridients_to_meal = [];
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.black, width: 2)
-              )
-              
+              ) 
             )
-             
-             
               ),
                ),
                
+        
             
-                 Container(
-                   width: MediaQuery.of(context).size.width / 5, 
-                  height: MediaQuery.of(context).size.height / 16,
-                  decoration: BoxDecoration( color:HexColor("#d6e2de"),
+            Container(
+              width: MediaQuery.of(context).size.width / 3, 
+              height: MediaQuery.of(context).size.height / 14,
+              decoration: BoxDecoration( color:HexColor("#d6e2de"),
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(8),
                   ), 
-                child:TextButton(
+              child:TextButton(
                   
                   onPressed: () {
                   
@@ -337,12 +343,14 @@ List  displayed_add_ingridients_to_meal = [];
                   },
                   child: Text(ingredients_amount, style:TextStyle(color: Colors.black))
                   )
+                  
                   )
                  
                 
                ]
                )
            )
+         
         ),
 
        

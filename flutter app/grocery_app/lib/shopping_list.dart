@@ -246,7 +246,7 @@ class shoppingcardState extends State<shoppingcard> {
                 Expanded(
                   flex: 6,
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Container(
                     decoration: BoxDecoration(
                       color: HexColor("#3c634c"),
@@ -267,6 +267,7 @@ class shoppingcardState extends State<shoppingcard> {
                           itemBuilder: (context, index) =>  
                             
                             ListTile(
+                              splashColor: Colors.transparent,
                               onTap: () => checkCrossedOutIngredient(index),
                               title: Row( 
                                 children: [
@@ -322,7 +323,7 @@ class shoppingcardState extends State<shoppingcard> {
                         
                           Center(
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(15.0),
                               child: InkWell(
                                 onTap: () {
                                     if (widget.new_)  {
@@ -453,7 +454,7 @@ class shoppingcardState extends State<shoppingcard> {
                                     
                                 },
                                 child: Container(
-                                  height: MediaQuery.of(context).size.height / 15,
+                                  height: MediaQuery.of(context).size.height / 13,
                                   width: MediaQuery.of(context).size.width / 4,
                                   decoration: BoxDecoration(
                                     

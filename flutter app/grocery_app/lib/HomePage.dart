@@ -244,9 +244,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   }
 
    double checkContaierHeight() {
-    containerHeight = widget.getSavedShoppingLists.length * (MediaQuery.of(context).size.height / 16.2);
-    if (containerHeight > 5 * (MediaQuery.of(context).size.height / 16.2)) {
-      containerHeight = 5 * (MediaQuery.of(context).size.height / 16.2);
+    containerHeight = widget.getSavedShoppingLists.length * (MediaQuery.of(context).size.height / 14.5);
+    if (containerHeight > 5 * (MediaQuery.of(context).size.height / 14.5)) {
+      containerHeight = 5 * (MediaQuery.of(context).size.height / 14.5);
     }
     return containerHeight;
   }
@@ -698,11 +698,11 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                     )),
                   
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Container(
                       height: containerHeight,
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1.5, color: Colors.black),
+                        border: Border.all(),
                         borderRadius: BorderRadius.circular(12)
                       ),
                       child: ListView.builder(
@@ -737,12 +737,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                         data =_getOneSavedShoppingList(widget.getSavedShoppingLists[index]["id"]);
                                         
                                         Navigator.push(
-                                context,
-                                    MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: true, savedShoppingList: _addSavedShoppingListtoLists , ShoppingListData: data, getItem: _getOneMeal ,callback: widget.callback2, spontaneous: false , update: true, updateShoppingList: UpdateShoppingList,   )));
-                               
-                              
-                                        
-                               
+                                          context,
+                                          MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: true, savedShoppingList: _addSavedShoppingListtoLists , ShoppingListData: data, getItem: _getOneMeal ,callback: widget.callback2, spontaneous: false , update: true, updateShoppingList: UpdateShoppingList,   )));
+
                                       },    
                                      ),  
                                     IconButton(

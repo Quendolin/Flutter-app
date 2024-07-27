@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
       callback2: _meals, 
       getSavedShoppingLists: _savedShoppingLists,
       refreshShoppingLists: _refreshSavedShoppingLists,
-      getDeleteMealWaitingRoom: _deleteMealWaitingRoom ,
+      getDeleteMealWaitingRoom: _deleteMealWaitingRoom,
       refreshDeleteMealWaitingRoom: _refreshDeleteMealWaitingRoom,
       getDeleteShoppingListWaitingRoom: _deleteShoppingListWaitingRoom,
       refreshShoppingListsWaitingRoom: _refreshDeleteShoppingListWaitingRoom,
