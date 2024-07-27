@@ -702,15 +702,17 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                     child: Container(
                       height: containerHeight,
                       decoration: BoxDecoration(
-                        border: Border.all(),
+                       
                         borderRadius: BorderRadius.circular(12)
                       ),
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
+                        
                         physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: widget.getSavedShoppingLists.length,
                         itemBuilder: (context, index) => Container(
+                          padding: EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(),
@@ -723,7 +725,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                                 Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(oldSpicesList: spicesList, new_: false, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, saveShoppingListToSavedLists: _addSavedShoppingListtoLists,))));
                               },
                               //shape: Border.all(),
-                              visualDensity: VisualDensity(vertical: -1),
+                              
                               //tileColor: Colors.amber,
                               title: Text(widget.getSavedShoppingLists[index]["name"], style: TextStyle(color: Colors.black,),),
                               trailing: SizedBox(
