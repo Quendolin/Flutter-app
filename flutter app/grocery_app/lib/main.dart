@@ -4,6 +4,7 @@
 // ignore_for_file: unused_field
 
 import "package:flutter/material.dart";
+import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:grocery_app/database/sql_helper.dart";
 import "package:grocery_app/HomePage.dart";
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,10 +16,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 
 void main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: "https://ejdvmkusfhrksgpucedy.supabase.co", 
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqZHZta3VzZmhya3NncHVjZWR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA4MjY4MzAsImV4cCI6MjAzNjQwMjgzMH0.jSvT4GEurjNI5nhJ-Ay8M6hvoibhJDvwWtcGtgfDD0M", 
+    url: dotenv.env["URL"]!, 
+    anonKey: dotenv.env["AnonKey"]!, 
     
   
  );
@@ -99,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget build(BuildContext context) {
-    
+
     return homePage2(
       callback1: _refreshMeals, 
       callback2: _meals, 

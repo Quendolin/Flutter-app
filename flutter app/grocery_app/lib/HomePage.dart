@@ -77,7 +77,7 @@ datatoAcessebleData(int index) async {
   
 
  
- 
+ Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(oldSpicesList: spicesList, new_: false, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, saveShoppingListToSavedLists: _addSavedShoppingListtoLists,))));
 }
 
 Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
@@ -720,9 +720,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                           ),
                           child: Center(
                             child: ListTile(
-                              onTap: () {  
+                              onTap: () async {  
                                 datatoAcessebleData(index);
-                                Navigator.push(context, MaterialPageRoute(builder: ((context) => shoppingcard(oldSpicesList: spicesList, new_: false, selectesMealList: [], oldShoppingList: list2, getItem: PlaceholderFunction, saveShoppingListToSavedLists: _addSavedShoppingListtoLists,))));
+                                
                               },
                               //shape: Border.all(),
                               

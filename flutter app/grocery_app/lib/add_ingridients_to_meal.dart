@@ -32,7 +32,7 @@ List  displayed_add_ingridients_to_meal = [];
 
  List  amount_list = [ 
   "Gramm",
-  "Stück",
+  "Exemplar/e",
   "Milliliter",
   "Esslöffel",
   "Liter",

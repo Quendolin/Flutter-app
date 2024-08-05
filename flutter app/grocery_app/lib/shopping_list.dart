@@ -86,7 +86,31 @@ class shoppingcardState extends State<shoppingcard> {
       if (finalIngredientMap.containsKey(ingredients.Ingridient_name)) {
         double existingMass = double.parse(finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass);
         double additionalMass = double.parse(ingredients.Ingridient_mass);
+
+
         double combinedMass = (existingMass + additionalMass);
+
+
+        if (ingredients.Ingridient_mass_unit == "Gramm") {
+         String number = combinedMass.toString();
+         String intergerPart = number.split(".")[0];
+         if (int.parse(intergerPart) == 4) {
+          finalIngredientMap[ingredients.Ingridient_mass_unit]!.Ingridient_mass_unit = "Kilo";
+         }
+        }
+
+        if (ingredients.Ingridient_mass_unit == "Milliliter") {
+         String number = combinedMass.toString();
+         String intergerPart = number.split(".")[0];
+         if (int.parse(intergerPart) == 4) {
+          finalIngredientMap[ingredients.Ingridient_mass_unit]!.Ingridient_mass_unit = "Liter";
+         }
+        }
+
+        
+
+
+
         // check ob switch zu int
         if (combinedMass == combinedMass.toInt()) {
            int combinedMassNew = combinedMass.toInt();
