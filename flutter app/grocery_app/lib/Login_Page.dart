@@ -61,17 +61,22 @@ class _LoginScreenState extends State<LoginScreen> {
     idToken: idToken,
     accessToken: accessToken,
   );
+ 
   if (widget.sideBar == true) {
     Navigator.pop(context);
     Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
   } else {
     Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
   }
   
   } catch (err) {
     print("error");
   }
   
+
+   
                         
   }
 
@@ -104,6 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
       nonce: rawNonce
       );
 
+     
+
    } else {
 
      await supabase.auth.signInWithOAuth(
@@ -112,6 +119,14 @@ class _LoginScreenState extends State<LoginScreen> {
         );
    }
 
+     if (widget.sideBar == true) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
+      } else {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
+  }
     
   }
 

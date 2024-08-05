@@ -94,16 +94,16 @@ class shoppingcardState extends State<shoppingcard> {
         if (ingredients.Ingridient_mass_unit == "Gramm") {
          String number = combinedMass.toString();
          String intergerPart = number.split(".")[0];
-         if (int.parse(intergerPart) == 4) {
-          finalIngredientMap[ingredients.Ingridient_mass_unit]!.Ingridient_mass_unit = "Kilo";
+         if (intergerPart.length == 4) {
+          finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass_unit = "Kilo";
          }
         }
 
         if (ingredients.Ingridient_mass_unit == "Milliliter") {
          String number = combinedMass.toString();
          String intergerPart = number.split(".")[0];
-         if (int.parse(intergerPart) == 4) {
-          finalIngredientMap[ingredients.Ingridient_mass_unit]!.Ingridient_mass_unit = "Liter";
+         if (intergerPart.length == 4) {
+          finalIngredientMap[ingredients.Ingridient_name]!.Ingridient_mass_unit = "Liter";
          }
         }
 
