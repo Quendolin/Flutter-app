@@ -198,7 +198,6 @@ class _select_meals_for_shoppingState extends State<select_meals_for_shopping> {
               Navigator.pop(context);
             } else if (widget.spontaneous) {
               Navigator.pop(context);
-              Navigator.pop(context);
             } else {
               Navigator.pop(context);
             }
