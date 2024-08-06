@@ -201,7 +201,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
   // delete item from database 
   void _deleteMeal(int id) async {
     await SQLHelper.deleteMeal(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("succesfully deleted")));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("succesfully deleted"), duration: Duration(milliseconds: 200),));
     widget.callback1();
     widget.refreshDeleteMealWaitingRoom();
   }
@@ -217,7 +217,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       widget.callback1();
   }
 
-   _getAllMeals() async {
+  Future _getAllMeals() async {
     final data = await SQLHelper.getAllMeals();
     print(data);
     return data;
@@ -316,7 +316,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
        if (local__meal_id == meal["local_id"]) {
         // update Row in cloud
         updateMealtoCloud(local__meal_id);
-        
+        return;
        } else if (b == response_meal.length) {
         // insert meal in cloud 
         insertMealToCloud(local__meal_id); 
@@ -332,6 +332,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (var b in meals) {
           int cloudId = b["local_id"];
+          String mealName = b["name"];
           await _addMeal(b["name"], json.encode(b["ingredientsJson"]), json.encode(b["spicesJson"]));
           final allMeals = await _getAllMeals(); 
           integer =  allMeals.last["id"];
@@ -339,7 +340,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
           final values = {
             "local_id": integer
           };
-          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "local_id": cloudId });
+          await supabase.from("meals").update(values).match({"user_id": supabase.auth.currentUser!.id, "name": mealName});
 
         }
       } 
@@ -376,7 +377,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         // check for already existings rows
         if (local_shoppingList_id == shoppingListCloud["local_id"]) {
           updateShoppingListInCloud(local_shoppingList_id);
-          break;
+          return;
         }
         // insert a new shopping List
         else if(c == response_shoppingLists.length) {
@@ -388,9 +389,9 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
     }
 
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sync")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sync"), duration: Duration(milliseconds: 200)));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Verbindung")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Verbindung"), duration: Duration(milliseconds: 200)));
     }
     
    
@@ -643,7 +644,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                               
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: data, update: true,  )));
+                                MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, getAllMeals: _getAllMeals() , ItemValues: data, update: true,  )));
                                
                             },    
                            ),  
@@ -668,7 +669,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                   onPressed:() {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: _future_list(), update: false,  )));
+                      MaterialPageRoute(builder: (context) => create_new_meal(callback: _addMeal, callback2: _updateMeal, ItemValues: _future_list(), update: false, getAllMeals: _getAllMeals(),  )));
                   }, 
                   autofocus: true,
                   heroTag: "btn3",
@@ -761,13 +762,21 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 40,),
                   FloatingActionButton(
-                    backgroundColor: HexColor("#d6e2de"),
+                    
                     onPressed:() {
                       Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => select_meals_for_shopping(update2: false, ShoppingListData: _future_list()  ,updateShoppingList: UpdateShoppingList, update: false, callback: widget.callback2, spontaneous: false, getItem: _getOneMeal , savedShoppingList: _addSavedShoppingListtoLists)));
                     },
-                    child:Icon(Icons.add)
+                    autofocus: true,
+                    heroTag: "btn10",
+                    backgroundColor: HexColor("#d6e2de"),
+                    highlightElevation: 10,
+                    shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(16)
+                   ),
+                   child: const Icon(Icons.add, color: Colors.black,),
                     ),
                   const Spacer(),
 

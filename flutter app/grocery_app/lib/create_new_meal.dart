@@ -15,11 +15,12 @@ class create_new_meal extends StatefulWidget {
   final Function callback2; // _updateItem 
   final Future<List<Map<String, dynamic>>> ItemValues; 
   bool update;
+  final Future<dynamic> getAllMeals;
   
 
   
   // ignore: non_constant_identifier_names
-   create_new_meal({super.key, required this.callback, required this.callback2, required this.ItemValues, required this.update, });
+   create_new_meal({super.key, required this.callback, required this.callback2, required this.ItemValues, required this.update, required this.getAllMeals, });
 
   @override
   State<create_new_meal> createState() => _create_new_mealState();
@@ -364,14 +365,19 @@ class _create_new_mealState extends State<create_new_meal> {
                         alignment: Alignment.bottomCenter,
                         child: FloatingActionButton.small(
                           heroTag: "btn1",
+                          autofocus: true,
                           backgroundColor: HexColor("#d6e2de"),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          highlightElevation: 10,
+                          shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(16)
+                           ),
+                          child: const Icon(Icons.add, color: Colors.black,),
                           onPressed:() {
                             Navigator.push(context, 
                             MaterialPageRoute(builder: (context) => add_ingridients_to_meal(callback: add_inngredient_to_meal_list, containerHeight: containerHeight, containerHeight4: _containerHeight, )));
                             },
-                                      child: Icon(Icons.add),
-                                      ),
+                        ),
                       ),
                     ],
                   )
@@ -446,14 +452,19 @@ class _create_new_mealState extends State<create_new_meal> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: FloatingActionButton.small( 
-                          backgroundColor: HexColor("#d6e2de"),
                           heroTag: "btn2",
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           onPressed:() {
                             Navigator.push(context, 
                             MaterialPageRoute(builder: (context) => add_spcies(add: add_spcies_to_meal )));
                             },
-                          child: Icon(Icons.add),
+                          autofocus: true,
+                          backgroundColor: HexColor("#d6e2de"),
+                          highlightElevation: 10,
+                          shape: RoundedRectangleBorder(
+                          side: const BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(16)
+                           ),
+                          child: const Icon(Icons.add, color: Colors.black,),
                         ),
                       ),
                     ],
@@ -465,7 +476,7 @@ class _create_new_mealState extends State<create_new_meal> {
              Padding(
                padding: const EdgeInsets.all(8.0),
                child: GestureDetector( 
-                 onTap: () { 
+                 onTap: () async { 
                  
                     
                   if (txtcon_name_neuer_Mahlzeit.text.isEmpty) {
@@ -475,12 +486,25 @@ class _create_new_mealState extends State<create_new_meal> {
                   }
 
                   if (added_ingridients_list.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Zutat"), duration: Duration(milliseconds: 300),));
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Keine Zutat"), duration: Duration(milliseconds: 200),));
                     return;
                   }  
+                  final meals = await widget.getAllMeals;
+                  int a = 1; 
+                  for (var i in meals ) {
+                    if (txtcon_name_neuer_Mahlzeit.text == i["title"]) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Name exestiert bereits"), duration: Duration(milliseconds: 200),));
+                      return;
+                    }
+                    if (a == meals.length) {
+                      AddorUpdateMeal();
+                      Navigator.pop(context);
+                    } else {
+                      a++;
+                    }
+                  }
                   
-                  AddorUpdateMeal();
-                  Navigator.pop(context);
+                  
                 },
                child: Container(
                 width: MediaQuery.of(context).size.width, 

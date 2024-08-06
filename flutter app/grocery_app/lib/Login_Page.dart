@@ -122,10 +122,10 @@ class _LoginScreenState extends State<LoginScreen> {
      if (widget.sideBar == true) {
         Navigator.pop(context);
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt"), duration: Duration(milliseconds: 200),));
       } else {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt"), duration: Duration(milliseconds: 200)));
   }
     
   }
@@ -228,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       emailRedirectTo: "io.supabase.flutterquickstart://login-callback"
                       );
                       if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt")));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt"), duration: Duration(milliseconds: 200)));
                         if (widget.sideBar) {
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -239,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         
                        
                       }
-                    } on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error,));
+                    } on AuthException catch (error) {ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), backgroundColor: Theme.of(context).colorScheme.error, duration: const Duration(milliseconds: 200)));
                    }
                   } else {
                       try {
@@ -248,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           password: passwort
                         );
                         
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Succelfull")));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Eingeloggt"), duration: Duration(milliseconds: 200)));
                          if (widget.sideBar) {
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pop(context);
                         }
                       } on AuthException catch (error) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message), duration: Duration(milliseconds: 200)));
                         
                       } 
                     
