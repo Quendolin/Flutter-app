@@ -331,7 +331,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
         late int integer;
         final meals = await supabase.from("meals").select().eq("user_id", supabase.auth.currentUser!.id);
         for (var b in meals) {
-          int cloudId = b["local_id"];
+          
           String mealName = b["name"];
           await _addMeal(b["name"], json.encode(b["ingredientsJson"]), json.encode(b["spicesJson"]));
           final allMeals = await _getAllMeals(); 
