@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   
   } catch (err) {
-    print("error");
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("error"), backgroundColor: Theme.of(context).colorScheme.error, duration: const Duration(milliseconds: 300)));
   }
   
 
