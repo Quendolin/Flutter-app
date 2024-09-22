@@ -1,4 +1,6 @@
-package com.mahlzeit.grocery_app
+
+package com.mahlzeit.groceryapp
+
 
 import io.flutter.embedding.android.FlutterActivity
 
