@@ -496,12 +496,20 @@ class _create_new_mealState extends State<create_new_meal> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Name exestiert bereits"), duration: Duration(milliseconds: 200),));
                       return;
                     }
+                    
+
+                    
                     if (a == meals.length) {
                       AddorUpdateMeal();
                       Navigator.pop(context);
                     } else {
                       a++;
                     }
+                  }
+
+                  if (meals.length == 0) {
+                    AddorUpdateMeal();
+                    Navigator.pop(context);
                   }
                   
                   
