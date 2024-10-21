@@ -12,6 +12,7 @@ import 'package:grocery_app/shopping_list.dart';
 import 'package:grocery_app/select_meals_for_shopping.dart';
 
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 
@@ -470,6 +471,7 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
    
 
   
+  
   final PageController _pageController2 = PageController();
 
 
@@ -554,6 +556,23 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       
       
         items: [
+          
+
+            BottomNavigationBarItem(
+            label: "2",
+            icon: Container(
+              width: 70,
+              height: 35,
+              
+              child: Center(
+                child: Icon(Ionicons.globe_outline, size: 35,),
+              ),
+            ),
+            
+
+            ),
+          
+
           BottomNavigationBarItem( 
             label: "1",
             backgroundColor: HexColor("#31473A"),
@@ -561,12 +580,8 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
               height: 35,
               width: 70,
             
-              decoration: BoxDecoration(
-                color: HexColor("#3c634c"), 
-                border:  selected_Index_Nav == 0 ? Border.all(width: 1.5) : null,
-                borderRadius: BorderRadius.circular(20)
-              ),
-              child: Icon(Icons.home, size: 35,),
+              
+              child: Icon(Ionicons.home_outline, size: 35,),
 
             )
           ),
@@ -576,15 +591,12 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
             icon: Container(
               height: 35,
               width: 70,
-              decoration: BoxDecoration(
-                color: HexColor("#3c634c"),
-                border: selected_Index_Nav == 1 ? Border.all(width: 1.5) : null,
-                borderRadius: BorderRadius.circular(20)
-              ),
-              child: Center(child: Icon(Icons.shopping_basket, size: 35,)),
+              
+              child: Center(child: Icon(Ionicons.cart_outline, size: 35,)),
 
             )
-          )
+          ),
+        
          
         ],
          )
@@ -604,6 +616,16 @@ Future<List<Map<String, dynamic>>> _getOneSavedShoppingList(int id) async {
       //selected_Index_Nav == 0 ?Column(
         children: [
           // Seite 1 
+
+          Column(
+
+          )
+
+
+
+
+
+          ,
           Column(
             children: [ 
                 Expanded(

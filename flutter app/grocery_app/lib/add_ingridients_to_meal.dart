@@ -299,50 +299,66 @@ List  displayed_add_ingridients_to_meal = [];
             child: Row( 
               children: [ 
             Expanded(
-             
-              child:TextField(
-                keyboardType: TextInputType.number,
-                controller: _controller2,
-                focusNode: textfield2,
-                decoration: InputDecoration(
-                fillColor: HexColor("#d6e2de"),
-                filled: true,
+              flex: 2,
+              child: Container(
+                 
+                 
+                 height: double.maxFinite,
+                 width: double.maxFinite,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _controller2,
+                    focusNode: textfield2,
+                    decoration: InputDecoration(
+                    fillColor: HexColor("#d6e2de"),
+                    filled: true,
+                    
+                    
+                  
+                  enabledBorder: OutlineInputBorder(
+                    
+                    borderSide: BorderSide(color: Colors.black, width: 1), 
+                    borderRadius: BorderRadius.circular(8)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.black, width: 2)
+                  ) 
+                              )
+                  ),
                 
-                
-              
-              enabledBorder: OutlineInputBorder(
-                
-                borderSide: BorderSide(color: Colors.black, width: 1), 
-                borderRadius: BorderRadius.circular(8)
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.black, width: 2)
-              ) 
-            )
               ),
                ),
                
         
             
-            Container(
-              width: MediaQuery.of(context).size.width / 3, 
-              height: MediaQuery.of(context).size.height / 14,
-              decoration: BoxDecoration( color:HexColor("#d6e2de"),
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(8),
+            Expanded(
+              flex: 1,
+             // width: MediaQuery.of(context).size.width / 3, 
+             // height: MediaQuery.of(context).size.height / 14,
+              
+              child:Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                decoration: BoxDecoration( 
+                  color:HexColor("#d6e2de"),
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(8),
                   ), 
-              child:TextButton(
-                  
-                  onPressed: () {
-                  
-                  Ingredient_amount_change(ingredients_amount);
-                  
-                    
-                    
-                  },
-                  child: Text(ingredients_amount, style:TextStyle(color: Colors.black))
-                  )
+                
+                  child:TextButton(
+                      
+                      onPressed: () {
+                      
+                      Ingredient_amount_change(ingredients_amount);
+                      
+                        
+                        
+                      },
+                      child: Text(ingredients_amount, style:TextStyle(color: Colors.black))
+                      ),
+                
+              )
                   
                   )
                  

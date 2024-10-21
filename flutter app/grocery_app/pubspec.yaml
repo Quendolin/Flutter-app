@@ -60,6 +60,7 @@ dependencies:
   voice_assistant: ^1.0.1
   crypto: ^3.0.3
   flutter_dotenv:
+  ionicons: ^0.2.2
   
   
   
