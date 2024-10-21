@@ -3,6 +3,7 @@
 import "dart:convert";
 import "dart:io";
 import 'package:crypto/crypto.dart';
+import "package:flutter/foundation.dart";
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -114,9 +115,10 @@ class _LoginScreenState extends State<LoginScreen> {
    } else {
 
      await supabase.auth.signInWithOAuth(
-        OAuthProvider.apple,
-        redirectTo: "io.supabase.flutterquickstart://login-callback/"
-        );
+      OAuthProvider.apple,
+      redirectTo: kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback', // Optionally set the redirect link to bring back the user via deeplink.
+      authScreenLaunchMode: kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication, // Launch the auth screen in a new webview on mobile.
+);
    }
 
      if (widget.sideBar == true) {
@@ -159,8 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 35.0, right: 35, top: 10),
               child: Container(
-                height: MediaQuery.of(context).size.height / 15,
+                
                 decoration: BoxDecoration(
+                  color:  HexColor("31473A"),
                   border: Border.all(),
                   borderRadius: BorderRadius.circular(18)
                 ),
@@ -171,11 +174,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "e-mail",
                     filled: true,
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(color: Colors.black, width: 0.5)
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(color: Colors.black, width: 1)
                     )
                   ),
@@ -185,31 +188,36 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 35.0, right: 35, top: 30),
               child: Container(
-                height: MediaQuery.of(context).size.height / 15,
+                // height: MediaQuery.of(context).size.height / 15,
                 decoration: BoxDecoration(
-                  border: Border.all(),
+                  color: HexColor("31473A"),
+                  border: Border.all(width: 1),
                   borderRadius: BorderRadius.circular(18)
-                ),
-                child: TextField(
-                  obscureText: true,
-                  controller: _conPasswort,
-                  decoration: InputDecoration(
-                    
-                    fillColor:  HexColor("#d6e2de"),
-                    
-                    hintText:"passwort",
-            
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18),
-                      borderSide: BorderSide(color: Colors.black, width: 0.5)
+                  
+                ), 
+                
+                  
+                  child: TextField(
+                    obscureText: true,
+                    controller: _conPasswort,
+                    decoration: InputDecoration(
+                      
+                      fillColor:  HexColor("#d6e2de"),
+                      
+                      hintText:"passwort",
+                              
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: Colors.black, width: 0.5)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: Colors.black, width: 1)
+                      )
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18),
-                      borderSide: BorderSide(color: Colors.black, width: 1)
-                    )
                   ),
-                ),
+                
               ),
             ),
             Padding(
@@ -271,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: MediaQuery.of(context).size.width ,
                   decoration: BoxDecoration(
                     border: Border.all(),
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(15),
                     color: HexColor("#d6e2de")
                   ),
                   child: Icon(Icons.check_outlined),
